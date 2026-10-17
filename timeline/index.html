@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Приморськ. Хроніка громади</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="description" content="Хроніка громади Приморська 2004–2022: новини міської ради, ГО «Приморськ 24/7», місцевих ЗМІ, шкіл і сіл, збережені з Wayback Machine.">
+<meta property="og:title" content="Приморськ. Громада, яку ми пам'ятаємо">
+<meta property="og:description" content="Тисячі новин громади Приморська 2004–2022, врятовані з архівів сайтів, яких більше немає.">
+<meta property="og:image" content="hero.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
+<link rel="preload" as="image" href="hero-sm.jpg" imagesrcset="hero-sm.jpg 1000w, hero.jpg 2000w" imagesizes="(max-width: 760px) 100vw, 1400px">
+<script>try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch {}</script>
+<style>
+  :root {
+    --bg: #f7f9f3; --card: #ffffff; --soft: #eaf2e6; --ink: #142d26; --muted: #64736a; --line: #dfe6da;
+    --green: #174f3e; --green-ink: #ffffff; --green-soft: #edf5e5; --amber: #efb544; --amber-ink: #174f3e; --amber-soft: #f6e3b5; --accent-text: #174f3e;
+    --shadow: 0 3px 14px rgba(36, 72, 51, .06); --shadow-hi: 0 12px 30px rgba(36, 72, 51, .14);
+    --mono: 'DM Mono', ui-monospace, monospace; --sans: 'Manrope', system-ui, sans-serif;
+    --c-mrprim: #17799a; --c-prim24: #5d7a2a; --c-pro_prim: #c0562f; --c-primorsk_in: #7b4fa3; --c-primorsk_zp: #8a6d1f; --c-prim24_blog: #5d7a2a; --c-imsu: #9a5b2e; --c-primorsk_forum: #8a6d1f; --c-prym: #9a5b2e; --c-travel: #0f8f8a; --c-regional: #52606d; --c-rcdt: #d0701c; --c-school3: #3d62b8; --c-licey: #2f8a3f; --c-school2: #3d62b8; --c-primroo: #3d62b8; --c-primrda: #0a3f55; --c-tavriya: #7a4f2a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0c1813; --card: #13231c; --soft: #102019; --ink: #e5eee8; --muted: #9aaba1; --line: #22362c;
+      --green: #1f6a52; --green-soft: #183028; --amber: #f2bf57; --amber-soft: #3a3120; --accent-text: #f2bf57;
+      --shadow: 0 3px 14px rgba(0, 0, 0, .3); --shadow-hi: 0 12px 30px rgba(0, 0, 0, .5);
+      --c-mrprim: #5bb7d6; --c-prim24: #a9bd68; --c-pro_prim: #ee8a5f; --c-primorsk_in: #b99be0; --c-primorsk_zp: #d9b85e; --c-prim24_blog: #a9bd68; --c-imsu: #e0a070; --c-primorsk_forum: #d9b85e; --c-prym: #e0a070; --c-travel: #5fd0c8; --c-regional: #a9b6c2; --c-rcdt: #f0a060; --c-school3: #8fa8f0; --c-licey: #7fcf8a; --c-school2: #8fa8f0; --c-primroo: #8fa8f0; --c-primrda: #7fc3dc; --c-tavriya: #d9a57a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0c1813; --card: #13231c; --soft: #102019; --ink: #e5eee8; --muted: #9aaba1; --line: #22362c;
+    --green: #1f6a52; --green-soft: #183028; --amber: #f2bf57; --amber-soft: #3a3120; --accent-text: #f2bf57;
+    --shadow: 0 3px 14px rgba(0, 0, 0, .3); --shadow-hi: 0 12px 30px rgba(0, 0, 0, .5);
+    --c-mrprim: #5bb7d6; --c-prim24: #a9bd68; --c-pro_prim: #ee8a5f; --c-primorsk_in: #b99be0; --c-primorsk_zp: #d9b85e; --c-prim24_blog: #a9bd68; --c-imsu: #e0a070; --c-primorsk_forum: #d9b85e; --c-prym: #e0a070; --c-travel: #5fd0c8; --c-regional: #a9b6c2; --c-rcdt: #f0a060; --c-school3: #8fa8f0; --c-licey: #7fcf8a; --c-school2: #8fa8f0; --c-primroo: #8fa8f0; --c-primrda: #7fc3dc; --c-tavriya: #d9a57a;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  button, input, select { font: inherit; color: inherit; }
+  :focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+  .wrap { width: min(1320px, calc(100% - 32px)); margin: 0 auto; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .label { font: 11px var(--mono); text-transform: uppercase; letter-spacing: .12em; color: var(--accent-text); }
+  h2.title { font: 800 clamp(28px, 4vw, 40px)/1.05 var(--sans); letter-spacing: -.06em; margin: 8px 0 0; }
+  .section-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 22px; flex-wrap: wrap; }
+  .section-head p { max-width: 340px; color: var(--muted); font-size: 13px; margin: 0; }
+  .all { font: 500 12px var(--mono); color: var(--accent-text); border-bottom: 1px solid currentColor; padding-bottom: 3px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 20px; border-radius: 12px; font-weight: 700; font-size: 14px; border: 0; cursor: pointer; }
+  .btn-amber { background: var(--amber); color: var(--amber-ink); }
+  .btn-amber:hover { filter: brightness(1.05); }
+  .btn-green { background: var(--green); color: #fff; }
+  .btn-glass { background: rgba(255, 255, 255, .14); color: #fff; border: 1px solid rgba(255, 255, 255, .35); backdrop-filter: blur(8px); }
+
+  /* ── Top strip + header ───────────────────────────────── */
+  .strip { height: 42px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font: 11px var(--mono); letter-spacing: .04em; color: var(--muted); }
+  .strip b { color: var(--accent-text); font-weight: 500; }
+  .masthead { height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .brand { display: flex; gap: 12px; align-items: center; font-weight: 800; letter-spacing: -.04em; font-size: 17px; line-height: 1.1; }
+  .mark { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 14px; background: #fffaf2; border: 1px solid var(--line); box-shadow: 0 4px 14px rgba(23, 79, 62, .12); }
+  .mark img { width: 42px; height: 42px; object-fit: contain; }
+  .brand small { display: block; margin-bottom: 3px; font: 600 10px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--accent-text); }
+  .masthead nav { display: flex; gap: 28px; align-items: center; font-size: 13px; font-weight: 700; }
+  .masthead nav a:hover { color: var(--accent-text); }
+  .theme { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); cursor: pointer; font-size: 16px; line-height: 1; }
+  .theme:hover { border-color: var(--amber); }
+  .masthead nav .pill { border: 1px solid var(--line); border-radius: 99px; padding: 9px 16px; background: var(--card); color: inherit; font: inherit; cursor: pointer; }
+
+  /* ── Hero ─────────────────────────────────────────────── */
+  .hero { position: relative; isolation: isolate; overflow: hidden; min-height: min(78vh, 760px); padding: 56px 52px 34px; margin-top: 6px; border-radius: 26px; color: #fff;
+    display: grid; grid-template-columns: 1fr; align-content: end; gap: 0; background: #174f3e; }
+  /* the coast fills the whole card; a deep-green tide rises from the bottom and the left so the type stays readable */
+  .hero-img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: center 58%; animation: hero-settle 3.2s cubic-bezier(.2, .7, .2, 1) both; }
+  .hero::before { content: ''; position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(180deg, rgba(10, 44, 34, .35) 0%, rgba(10, 44, 34, .1) 30%, rgba(10, 44, 34, .72) 72%, rgba(10, 44, 34, .94) 100%),
+                linear-gradient(90deg, rgba(10, 44, 34, .62) 0%, rgba(10, 44, 34, 0) 62%); }
+  .hero::after { content: 'Збережено з Wayback Machine'; position: absolute; right: 24px; top: 18px; color: rgba(255, 255, 255, .64); font: 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+  .eyebrow { display: flex; gap: 10px; align-items: center; font: 11px var(--mono); text-transform: uppercase; letter-spacing: .12em; color: #efb544; }
+  .eyebrow::before { content: ''; width: 8px; height: 8px; background: #efb544; border-radius: 50%; }
+  .hero h1 { font: 800 clamp(64px, 12vw, 176px)/.86 var(--sans); letter-spacing: -.07em; margin: 18px 0 0; }
+  .hero h1 em { display: block; font-style: normal; color: #efb544; font-size: clamp(30px, 3.6vw, 52px); line-height: 1.1; letter-spacing: -.045em; margin-top: .6em; }
+  .intro { color: #e4eee8; font-size: 17px; max-width: 560px; margin: 18px 0 0; }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 10px; margin: 26px 0 34px; }
+  /* arrival: the photo settles, the words rise once; nothing moves after that */
+  @keyframes hero-settle { from { transform: scale(1.1); } }
+  @keyframes hero-rise { from { transform: translateY(34px); } }  /* no fade: the words are readable from the first frame */
+  .hero .rise { animation: hero-rise 1.6s cubic-bezier(.16, .8, .24, 1) both; animation-delay: calc(var(--i, 0) * 220ms + 200ms); }
+
+  /* ── Search + metrics ─────────────────────────────────── */
+  .search { margin: 16px 0;  background: var(--amber); color: var(--amber-ink); border-radius: 18px; padding: 12px; display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+  .search input { border: 0; border-radius: 10px; background: #fff; color: #142d26; padding: 15px 18px; font-size: 15px; min-width: 0; }
+  .search input::placeholder { color: #7a857d; }
+  .search button { border: 0; border-radius: 10px; background: #174f3e; color: #fff; padding: 0 24px; font-weight: 700; font-size: 14px; cursor: pointer; }
+  .search-hint { grid-column: 1 / -1; font: 10px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: #315641; padding: 0 4px; }
+  .metrics { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr); margin: 4px 0 0; padding: 22px 0 0; list-style: none;
+    border-top: 1px solid rgba(255, 255, 255, .2); }
+  .metrics li { padding: 0 10px; text-align: center; }
+  .metrics b { display: block; font: 800 30px/1.1 var(--sans); letter-spacing: -.04em; color: #fff; font-variant-numeric: tabular-nums; }
+  .metrics span { font-size: 12px; color: #cfe0d6; }
+
+  /* ── Years ────────────────────────────────────────────── */
+  .archive { background: var(--soft); border-radius: 28px; padding: 42px 0 36px; }
+  .river { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 9px; }
+  .yr { background: var(--card); border-radius: 15px; min-height: 112px; padding: 14px 14px 12px; box-shadow: var(--shadow); display: flex; flex-direction: column; justify-content: space-between; gap: 10px; transition: transform .2s; }
+  .yr:hover { transform: translateY(-4px); }
+  .yr[aria-current="true"] { background: var(--green); color: #fff; }
+  .yr-btn { all: unset; cursor: pointer; display: flex; flex-direction: column; gap: 2px; font: 800 24px/1 var(--sans); letter-spacing: -.04em; }
+  .yr-count { margin-top: 6px; font: 500 12px/1.2 var(--sans); letter-spacing: 0; color: var(--muted); }
+  .yr-count b { font: 800 19px/1 var(--sans); letter-spacing: -.03em; color: var(--accent-text); }
+  .yr[aria-current="true"] .yr-count { color: #c6d7cf; }
+  .yr[aria-current="true"] .yr-count b { color: #efb544; }
+  .yr-note { align-self: flex-start; margin-top: 6px; font: 500 9.5px/1 var(--mono); font-style: normal; letter-spacing: .04em; text-transform: uppercase; color: var(--muted);
+    padding: 3px 6px; border-radius: 6px; border: 1px dashed var(--line); }
+  .yr-note.peak { color: #174f3e; background: #efb544; border: 0; }
+  .yr-btn:focus-visible { outline: 3px solid var(--amber); outline-offset: 4px; border-radius: 6px; }
+  .bars { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; height: 28px; align-items: end; }
+  .bar { all: unset; cursor: pointer; height: 100%; display: flex; align-items: flex-end; }
+  .bar i { display: block; width: 100%; min-height: 3px; border-radius: 4px; background: #e7c98b; transition: background .15s; }
+  .yr[aria-current="true"] .bar i { background: var(--amber); opacity: .75; }
+  .bar:hover i, .bar[aria-pressed="true"] i { background: var(--amber); opacity: 1; }
+  .yr:not([aria-current="true"]) .bar:hover i { background: var(--green); }
+  .bar:disabled { cursor: default; }
+  .bar:focus-visible { outline: 2px solid var(--amber); outline-offset: 1px; }
+  .yr-all { justify-content: center; }
+  .river-hint { font-size: 12px; color: var(--muted); margin: 14px 2px 0; }
+
+  /* ── Today ────────────────────────────────────────────── */
+  .today { margin-top: 48px; background: var(--green); color: #fff; border-radius: 28px; padding: 42px 0 46px; }
+  .today-head { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+  .today-head h2.title { color: #fff; margin: 0; }
+  .day-pill { display: grid; align-content: center; justify-items: center; gap: 4px; width: 66px; height: 66px; border-radius: 16px; background: #efb544; color: #174f3e; font: 500 10px/1 var(--mono); text-transform: uppercase; letter-spacing: .04em; flex: none; }
+  .day-pill b { font: 800 30px/1 var(--sans); letter-spacing: -.05em; }
+  .today-count { margin-left: auto; font: 11px var(--mono); text-transform: uppercase; letter-spacing: .06em; color: #cfe0d6; }
+  .today-list { display: grid; grid-auto-flow: column; grid-auto-columns: 272px; gap: 12px; overflow-x: auto; padding: 2px 2px 14px; scroll-snap-type: x mandatory;
+    scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, .3) transparent; }
+  .tcard { scroll-snap-align: start; height: 214px; display: flex; flex-direction: column; gap: 8px; padding: 16px 18px; border-radius: 16px;
+    background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .14); color: #fff; transition: background .2s, transform .2s; }
+  .tcard:hover { background: rgba(255, 255, 255, .14); transform: translateY(-3px); }
+  .t-year { display: flex; justify-content: space-between; align-items: baseline; font: 800 30px/1 var(--sans); letter-spacing: -.05em; color: #efb544; }
+  .t-year small { font: 10px var(--mono); letter-spacing: .04em; color: #efb544; text-transform: uppercase; }
+  .tcard h3 { margin: 0; font: 800 15px/1.3 var(--sans); letter-spacing: -.02em; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .tcard p { margin: 0; font-size: 12.5px; line-height: 1.45; color: #d7e5dc; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .tcard .src-pill { margin-top: auto; color: #e9f1ec; }
+  .tcard .src-pill::before { box-shadow: 0 0 0 2px rgba(255, 255, 255, .6); }
+  .today-empty { color: rgba(255, 255, 255, .75); }
+
+  /* ── Map ──────────────────────────────────────────────── */
+  .map-sec { margin-top: 56px; }
+  .map-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }
+  #map { height: 480px; border-radius: 22px; box-shadow: var(--shadow); z-index: 0; background: var(--soft); }
+  .map-side { background: var(--card); border-radius: 22px; padding: 18px 18px 8px; box-shadow: var(--shadow); font-size: 13px; color: var(--muted); }
+  .map-side > p { margin: 0 0 12px; }
+  .places { list-style: none; margin: 0; padding: 0; max-height: 330px; overflow: auto; }
+  .places li { display: flex; align-items: center; gap: 4px; }
+  .places button { all: unset; box-sizing: border-box; cursor: pointer; flex: 1; display: flex; justify-content: space-between; gap: 8px; padding: 7px 10px; border-radius: 10px; color: var(--ink); font-weight: 600; font-size: 14px; }
+  .places button:hover, .places button[aria-pressed="true"] { background: var(--green-soft); }
+  .places button:focus-visible { outline: 3px solid var(--amber); }
+  .places small { color: var(--muted); font: 11px var(--mono); }
+  .places .passport { flex: none; padding: 6px 10px; border-radius: 10px; color: var(--accent-text); font-weight: 800; }
+  .places .passport:hover { background: var(--amber); color: var(--amber-ink); }
+  .map-note { font-size: 12px; margin: 10px 0 8px; }
+  .leaflet-popup-content { font: 14px/1.4 var(--sans); }
+  .leaflet-popup-content b { font-weight: 800; }
+  .leaflet-popup-content button { margin-top: 8px; border: 0; border-radius: 8px; padding: 6px 12px; background: #efb544; color: #174f3e; font-weight: 700; cursor: pointer; }
+
+  /* ── Chronicle: filters + feed ────────────────────────── */
+  .chronicle { padding: 56px 0 30px; display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 40px; align-items: start; }
+  .panel { position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow: auto; padding: 4px 4px 12px; scrollbar-width: thin; }
+  .panel h3 { font: 11px var(--mono); text-transform: uppercase; letter-spacing: .12em; color: var(--accent-text); margin: 22px 0 10px; font-weight: 500; }
+  .panel h3:first-child { margin-top: 0; }
+  .panel p.hint { font-size: 13px; color: var(--muted); margin: -4px 0 8px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 7px 11px; border-radius: 9px; border: 1px solid var(--line); background: var(--card); cursor: pointer; line-height: 1.3; }
+  .chip:hover { border-color: var(--green); }
+  .chip[aria-pressed="true"] { background: var(--green); color: #fff; border-color: var(--green); }
+  .chip small { color: var(--muted); font: 10px var(--mono); }
+  .chip[aria-pressed="true"] small { color: inherit; opacity: .75; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  /* multi-select dropdowns: nothing ticked = everything */
+  .ms summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; }
+  .ms summary::-webkit-details-marker { display: none; }
+  .ms summary::after { content: '▾'; color: var(--muted); }
+  .ms[open] summary::after { content: '▴'; }
+  .ms summary span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ms-list { margin-top: 4px; max-height: 320px; overflow: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--card); padding: 4px; scrollbar-width: thin; }
+  .ms-g { font: 10px var(--mono); text-transform: uppercase; letter-spacing: .1em; color: var(--accent-text); padding: 10px 8px 4px; }
+  .ms-opt { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 7px; font-size: 13px; cursor: pointer; line-height: 1.3; }
+  .ms-opt:hover { background: var(--line); }
+  .ms-opt input { accent-color: var(--green); margin: 0; flex: none; }
+  .ms-opt small { margin-left: auto; color: var(--muted); font: 10px var(--mono); }
+  .select { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); }
+  .cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .cal .dow { font: 10px var(--mono); color: var(--muted); text-align: center; text-transform: uppercase; }
+  .cal button { aspect-ratio: 1; border: 0; border-radius: 8px; background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; padding: 0; }
+  .cal button:disabled { cursor: default; opacity: .4; }
+  .cal button[data-n] { color: var(--ink); background: color-mix(in srgb, var(--amber) calc(var(--lvl) * 1%), var(--card)); }
+  .cal button[aria-pressed="true"] { outline: 3px solid var(--green); outline-offset: 1px; }
+  .cal-title { font: 800 15px var(--sans); margin: 0 0 8px; }
+  .range { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .range label { font-size: 11px; color: var(--muted); display: grid; gap: 4px; }
+  .range input { width: 100%; padding: 8px; border-radius: 9px; border: 1px solid var(--line); background: var(--card); font-size: 13px; }
+  .link-btn { display: block; background: none; border: 0; padding: 0; color: var(--accent-text); font-weight: 700; font-size: 13px; cursor: pointer; margin-top: 12px; }
+  .filters-toggle { display: none; }
+
+  .feed-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .count { font: 800 clamp(24px, 3vw, 32px)/1 var(--sans); letter-spacing: -.05em; }
+  .feed-head .tools { display: flex; gap: 8px; }
+  .month-h { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 30px 0 4px; }
+  .month-h h2 { font: 800 clamp(22px, 2.6vw, 30px)/1 var(--sans); letter-spacing: -.05em; margin: 0; }
+  .month-h h2::first-letter { text-transform: uppercase; }
+  .month-h span { background: var(--amber); color: var(--amber-ink); border-radius: 20px; padding: 5px 10px; font: 10px var(--mono); text-transform: uppercase; white-space: nowrap; }
+
+  /* feed rows */
+  .story { display: grid; grid-template-columns: 94px minmax(0, 1fr) auto 34px; gap: 20px; align-items: start; background: var(--card); border-radius: 16px; margin: 12px 0; padding: 18px 20px; box-shadow: var(--shadow); transition: box-shadow .2s, transform .2s; }
+  .story:hover { box-shadow: var(--shadow-hi); transform: translateY(-2px); }
+  .date { font: 11px/1.5 var(--mono); color: var(--accent-text); padding-top: 4px; text-transform: uppercase; }
+  .story h3 { font: 800 18px/1.3 var(--sans); letter-spacing: -.035em; margin: 0 0 6px; }
+  .story p { margin: 0; font-size: 13px; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .s-meta { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin-top: 10px; }
+  .s-img { width: 132px; height: 92px; object-fit: cover; border-radius: 12px; background: var(--soft); }
+  .story .arrow { grid-column: -2; grid-row: 1; }
+  .arrow { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--green-soft); color: var(--green); font-size: 15px; transition: background .2s; }
+  .story:hover .arrow { background: var(--amber); color: var(--amber-ink); }
+  .src-pill { display: inline-flex; align-items: center; gap: 6px; font: 10px var(--mono); text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+  .src-pill::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--c); }
+  .badge { font: 10px var(--mono); padding: 2px 7px; border-radius: 6px; background: var(--green-soft); color: var(--muted); white-space: nowrap; }
+  .tag { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; color: var(--tc); background: color-mix(in srgb, var(--tc) 12%, transparent); }
+  .tag.place { --tc: #b0781c; }
+  mark { background: var(--amber-soft); color: inherit; border-radius: 3px; padding: 0 2px; }
+  .pager { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; margin: 28px 0 0; }
+  .pager button { min-width: 40px; height: 40px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font: 600 14px var(--sans); cursor: pointer; }
+  .pager button:hover:not(:disabled) { border-color: var(--green); }
+  .pager button[aria-current="page"] { background: var(--green); border-color: var(--green); color: #fff; }
+  .pager button:disabled { opacity: .35; cursor: default; }
+  .pager .gap { color: var(--muted); padding: 0 2px; }
+  .epilogue { background: var(--green); color: #fff; border-radius: 20px; padding: 30px 32px; margin: 8px 0 22px; box-shadow: var(--shadow); }
+  .epilogue .eyebrow { font: 11px var(--mono); text-transform: uppercase; letter-spacing: .12em; color: var(--amber); }
+  .epilogue h2 { font: 800 clamp(22px, 2.6vw, 30px)/1.15 var(--sans); letter-spacing: -.04em; margin: 10px 0 12px; color: var(--amber); }
+  .epilogue p { margin: 0; max-width: 62ch; line-height: 1.6; opacity: .92; }
+  .empty { text-align: center; padding: 60px 20px; color: var(--muted); }
+
+  /* tiles: history */
+  .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+  .card { display: flex; flex-direction: column; background: var(--card); border: 1px solid transparent; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); transition: transform .2s, box-shadow .2s; }
+  .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hi); }
+  .card .img { aspect-ratio: 16 / 10; overflow: hidden; background: var(--soft); }
+  .card .img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .card .body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font: 11px var(--mono); color: var(--muted); text-transform: uppercase; }
+  .card h3 { font: 800 16px/1.3 var(--sans); letter-spacing: -.03em; margin: 0; }
+  .card p { margin: 0; font-size: 13px; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 4px; }
+
+  /* ── Share, history ────────────────────────────── */
+  .share-card { margin-top: 40px; display: flex; gap: 24px; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 34px 36px; border-radius: 26px; color: #fff;
+    background: linear-gradient(90deg, rgba(10, 50, 38, .95), rgba(10, 50, 38, .72)), url(hero-sm.jpg) center 70% / cover; }
+  .share-card .label { color: #efb544; }
+  #donate { margin-bottom: 48px; }
+  .foot-bottom { display: flex; align-items: center; justify-content: space-between; gap: 20px 32px; flex-wrap: wrap;
+    margin-top: 34px; padding-top: 26px; border-top: 1px solid rgba(255,255,255,.14); }
+  .ngo { display: inline-flex; align-items: center; gap: 14px; color: #fff; text-decoration: none; }
+  .ngo img { width: 58px; height: 72px; object-fit: contain; padding: 7px; box-sizing: content-box; background: #fffaf2; border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.18); transition: transform .2s; }
+  .ngo span { font: 600 13px/1.3 var(--mono); text-transform: uppercase; letter-spacing: .06em; color: #b7d5c5; }
+  .ngo b { display: block; margin-top: 3px; font: 800 19px/1.15 var(--sans); letter-spacing: -.02em; text-transform: none; color: #fff; }
+  .ngo:hover img { transform: translateY(-2px); }
+  .ngo:hover b { color: #efb544; }
+  .donate-act { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .donate-qr { display: block; width: 132px; height: 132px; padding: 8px; background: #fff; border-radius: 14px; }
+  @media (max-width: 640px) { .donate-qr { display: none; } }  /* on a phone the button opens the jar directly */
+  .share-card h2.title { color: #fff; margin-bottom: 10px; }
+  .share-card p { max-width: 620px; margin: 0; color: #e4eee8; }
+  .about { margin-top: 56px; }
+
+  /* ── Footer ───────────────────────────────────────────── */
+  footer { margin-top: 80px; background: #174f3e; color: #e5efe8; border-radius: 24px 24px 0 0; padding: 44px 0 36px; font-size: 13px; }
+  footer h2 { font: 800 26px/1.1 var(--sans); letter-spacing: -.05em; color: #fff; margin: 0 0 10px; }
+  footer a { color: #efb544; }
+  footer .fine { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; text-align: right; max-width: 560px; font: 10px/1.6 var(--mono); color: #b7d5c5; text-transform: uppercase; letter-spacing: .06em; }
+  .sources-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 22px 0 0; padding: 0; list-style: none; }
+  .sources-list li { padding: 14px 16px; border-radius: 14px; background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .1); font-size: 12px; color: #b7d5c5; }
+  .sources-list b { display: block; color: #fff; font-size: 14px; }
+
+  /* ── Dialogs: reader, share ───────────────────────────── */
+  dialog { width: min(820px, 100%); max-width: 100%; max-height: 100%; height: 100%; margin: 0 auto; padding: 0; border: 0; background: var(--card); color: var(--ink); }
+  /* reader: wide, off the screen edges, as tall as the article (short ones sit centred) */
+  #reader { width: min(1280px, calc(100% - 48px)); height: fit-content; max-height: calc(100dvh - 48px); margin: auto; border-radius: 22px; box-shadow: 0 30px 80px rgba(0, 0, 0, .35); overflow: hidden; }
+  /* the inner box scrolls, so the rounded corners clip the scrollbar too */
+  #reader[open] { display: flex; flex-direction: column; }
+  .r-scroll { overflow: auto; flex: 1; min-height: 0; overscroll-behavior: contain; scrollbar-width: thin; }
+  .r-nav { display: flex; gap: 6px; }
+  .reader-bar .r-nav a { display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border-radius: 50%; background: var(--green-soft); color: var(--accent-text); }
+  .reader-bar .r-nav svg { display: block; }
+  .reader-bar .r-nav a:hover { background: var(--amber); color: var(--amber-ink); }
+  .reader-bar .r-nav a[aria-disabled="true"] { opacity: .3; pointer-events: none; }
+  .r-bar-right { display: flex; align-items: center; gap: 14px; }
+  .r-pager { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 28px; }
+  .r-pager a { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; border-radius: 14px; background: var(--green-soft); }
+  .r-pager a:hover { background: var(--amber-soft); }
+  .r-pager a.next { text-align: right; grid-column: 2; }
+  .r-pager small { font: 10px var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .r-pager b { font: 800 14px/1.3 var(--sans); letter-spacing: -.02em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  dialog::backdrop { background: rgba(8, 28, 20, .72); backdrop-filter: blur(4px); }
+  .reader-bar { position: sticky; top: 0; z-index: 2; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 20px;
+    background: color-mix(in srgb, var(--card) 90%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .reader-bar a, .reader-bar button { font-size: 13px; font-weight: 700; color: var(--accent-text); background: none; border: 0; cursor: pointer; padding: 6px 0; }
+  .r-hero { aspect-ratio: 16 / 8; background: var(--soft) center / cover no-repeat; }
+  .reader { padding: 28px clamp(20px, 5vw, 56px) 72px; }
+  .reader .meta .src-pill { color: var(--muted); }
+  .reader h2 { font: 800 clamp(26px, 4vw, 38px)/1.12 var(--sans); letter-spacing: -.05em; margin: 14px 0 24px; }
+  .article { font-size: 17px; line-height: 1.75; overflow-wrap: anywhere; }
+  .article img { display: block; max-width: 100%; height: auto; margin: 22px auto; border-radius: 14px; }
+  .article .video { margin: 22px 0; }
+  .article .video video, .article .video iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 14px; background: #000; display: block; margin: 0; }
+  .article .video figcaption { font: 11px var(--mono); color: var(--muted); margin-top: 6px; }
+  .article iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; margin: 22px 0; border-radius: 14px; }
+  .article .byline { font: 13px var(--mono); letter-spacing: .04em; color: var(--muted); margin: 0 0 18px; }
+  .article p.caption { font-size: 14px; color: var(--muted); margin: -10px 0 22px; text-align: center; }
+  .article ol.notes { font-size: 14px; line-height: 1.55; color: var(--muted); padding-left: 1.2em; }
+  .article sup { font-size: .7em; line-height: 0; }
+  .article .video-gone { margin: 22px 0; padding: 14px 18px; border-radius: 14px; border: 1px dashed currentColor; opacity: .7; font-size: 15px; }
+  .article table { border-collapse: collapse; width: 100%; font-size: 14px; display: block; overflow-x: auto; }
+  .article td, .article th { border: 1px solid var(--line); padding: 6px 8px; vertical-align: top; }
+  .article h3, .article h4 { font-weight: 800; letter-spacing: -.03em; line-height: 1.3; }
+  .article blockquote { margin: 20px 0; padding: 4px 0 4px 18px; border-left: 4px solid var(--amber); color: var(--muted); font-style: italic; }
+  .article a { color: var(--accent-text); text-decoration: underline; text-decoration-color: var(--amber); }
+  .orig-title { display: block; margin-top: 10px; font: 500 14px/1.4 var(--sans); letter-spacing: 0; color: var(--muted); }
+  .origin { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13px; }
+  .origin a { color: var(--accent-text); font-weight: 700; }
+  .origin .sep { margin: 0 10px; color: var(--muted); }
+  a.src-pill:hover { color: var(--accent-text); text-decoration: underline; }
+  .share-dlg { width: min(640px, 100%); height: auto; max-height: 100%; border-radius: 22px 22px 0 0; }
+  .share-body { padding: 20px 24px 28px; display: grid; gap: 14px; }
+  .share-body label { display: grid; gap: 6px; font-size: 14px; font-weight: 700; }
+  .share-body input:not([type=checkbox]), .share-body select, .share-body textarea { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); font-weight: 400; }
+  .share-body textarea { resize: vertical; }
+  .share-body .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .share-body .check { display: flex; gap: 8px; align-items: flex-start; font-weight: 500; }
+  .share-body .check input { margin-top: 4px; }
+  .req { color: #c45a42; }
+  .safety { margin: 0; font-size: 13px; padding: 12px 14px; border-radius: 12px; background: var(--amber-soft); }
+  .share-status { margin: 0; font-size: 14px; font-weight: 700; }
+
+  /* ── Responsive ───────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    .chronicle { grid-template-columns: 1fr; gap: 16px; }
+    .panel { position: static; max-height: none; display: none; background: var(--card); border-radius: 18px; padding: 18px; box-shadow: var(--shadow); }
+    .panel.open { display: block; }
+    .filters-toggle { display: inline-flex; }
+    .masthead nav a:not(.pill):not(.keep) { display: none; }
+  }
+  @media (max-width: 900px) { .map-grid { grid-template-columns: 1fr; } #map { height: 380px; } }
+  @media (max-width: 760px) {
+    footer .fine { align-items: flex-start; text-align: left; }
+    .strip span:last-child { display: none; }
+    .masthead { height: 62px; }
+    .masthead nav { gap: 12px; }
+    .masthead nav a.keep { display: none; }
+    .hero { padding: 120px 22px 28px; min-height: min(86vh, 720px); border-radius: 22px; }
+    .hero::after { font-size: 8px; right: 12px; top: 12px; }
+    .hero h1 { font-size: clamp(44px, 14.5vw, 84px); }
+    .intro { font-size: 16px; }
+    .hero-cta { margin: 22px 0 26px; }
+    .search { grid-template-columns: 1fr; }
+    .search button { padding: 13px; }
+    .metrics { grid-template-columns: repeat(2, 1fr); gap: 14px 0; padding-top: 18px; }
+    .metrics li { padding: 0 6px; }
+    .metrics b { font-size: 25px; }
+    .archive, .today { border-radius: 22px; padding: 30px 0; }
+    .today-count { margin-left: 0; width: 100%; }
+    .day-pill { width: 56px; height: 56px; }
+    .day-pill b { font-size: 26px; }
+    .river { grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 6px; }
+    .yr { min-height: 92px; padding: 10px; }
+    .yr-btn { font-size: 20px; }
+    .story { grid-template-columns: 62px minmax(0, 1fr) 28px; gap: 12px; padding: 15px 12px; }
+    .story .arrow { grid-column: 3; }
+    .s-img { grid-column: 2; grid-row: 2; width: 100%; height: auto; aspect-ratio: 16 / 9; }
+    .story h3 { font-size: 16px; }
+    .date { font-size: 10px; }
+    .arrow { width: 28px; height: 28px; }
+    .share-card { padding: 24px; }
+    .share-body .two { grid-template-columns: 1fr; }
+    #reader { width: 100%; max-height: 100dvh; height: 100dvh; border-radius: 0; }
+    .r-pager { grid-template-columns: 1fr; }
+    .r-pager a.next { grid-column: auto; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .yr, .card, .story { transition: none; }
+    .hero-img, .hero .rise { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="strip"><span><b>ПРИМОРСЬК</b> · ЗАПОРІЗЬКА ОБЛАСТЬ</span><span>ЦИФРОВИЙ АРХІВ ГРОМАДИ · 2004—2022</span></div>
+  <header class="masthead">
+    <a class="brand" href="./"><span class="mark"><img src="coat.png" width="42" height="42" alt="Герб Приморська"></span><span><small>Приморськ</small>Хроніка громади</span></a>
+    <nav aria-label="Розділи">
+      <a href="#chronicle">Хроніка</a>
+      <a href="#years">За роками</a>
+      <a class="keep" href="#map-h">Мапа громади</a>
+      <a href="#footer">Про архів</a>
+      <button class="pill" type="button" onclick="openShare()">Поширити</button>
+      <a class="pill" href="book.html">Книга року ↗</a>
+      <button class="theme" id="theme" type="button" aria-label="Перемкнути тему"></button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-h">
+      <img class="hero-img" src="hero.jpg" srcset="hero-sm.jpg 1000w, hero.jpg 2000w" sizes="(max-width: 760px) 100vw, 1400px" alt="" fetchpriority="high">
+      <div>
+        <div class="eyebrow rise">Архів громади, що живе в пам'яті</div>
+        <h1 id="hero-h" class="rise" style="--i:1">Приморськ.<em>Громада, яку ми пам'ятаємо</em></h1>
+        <p class="intro rise" style="--i:2">Новини міста, сіл і людей, які жили тут. Зібрано з архівів місцевих сайтів, яких більше немає в мережі, і з обласних ЗМІ.</p>
+        <div class="hero-cta rise" style="--i:3">
+          <a class="btn btn-amber" href="#today-h">Цей день в історії</a>
+          <a class="btn btn-glass" href="book.html">Книга року</a>
+        </div>
+      </div>
+      <ul class="metrics" id="stats" aria-label="Архів у цифрах"></ul>
+    </section>
+
+    <form class="search" id="search" role="search" onsubmit="return false">
+      <label class="sr" for="q">Пошук у хроніці</label>
+      <input id="q" type="search" placeholder="Що ви шукаєте? Напр. школа, фестиваль, вулиця…" autocomplete="off">
+      <button type="submit" id="q-go">Шукати ↗</button>
+      <div class="search-hint">Пошук у заголовках і текстах · будь-які відмінки · українською й російською</div>
+    </form>
+
+  </main>
+</div>
+
+<section class="wrap archive" id="years" aria-labelledby="years-h">
+  <div class="wrap">
+    <div class="section-head">
+      <div><span class="label">Гортайте крізь час</span><h2 class="title" id="years-h">Оберіть свій рік</h2></div>
+      <a class="all" href="#chronicle">Уся хроніка ↗</a>
+    </div>
+    <nav class="river" id="river" aria-label="Роки й місяці"></nav>
+    <p class="river-hint">Натисни рік або стовпчик місяця: висота стовпчика показує, скільки було новин.</p>
+  </div>
+</section>
+
+<section class="wrap today" aria-labelledby="today-h">
+  <div class="wrap">
+    <div class="today-head">
+      <span class="day-pill" id="today-date" aria-hidden="true"></span>
+      <h2 class="title" id="today-h">Цей день в історії</h2>
+      <span class="today-count" id="today-count"></span>
+    </div>
+    <div class="today-list" id="today"></div>
+  </div>
+</section>
+
+<section class="wrap map-sec" aria-labelledby="map-h">
+  <div class="section-head">
+    <div><span class="label">Мапа громади</span><h2 class="title" id="map-h">Місто і села</h2></div>
+  </div>
+  <div class="map-grid">
+    <div id="map" role="region" aria-label="Карта громади"></div>
+    <div class="map-side">
+      <p>Розмір кола показує, скільки новин про населений пункт. Натисни на коло або назву, щоб побачити новини.</p>
+      <ol class="places" id="places"></ol>
+      <p class="map-note" id="map-note"></p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="donate" aria-labelledby="donate-h" hidden>
+  <div class="share-card">
+    <div>
+      <span class="label">Підтримати</span>
+      <h2 class="title" id="donate-h">Допоможіть зберегти пам'ять громади</h2>
+      <p>Хроніку створюють волонтери ГО «Приморськ 24/7»: рятуємо сайти з вебархівів, зберігаємо відео й документи, оплачуємо хостинг.
+        Кожен внесок допомагає зберегти ще одну сторінку історії Приморська.</p>
+    </div>
+    <div class="donate-act">
+      <img class="donate-qr" src="donate-qr.svg" width="132" height="132" alt="QR-код банки monobank «Хроніка громади»">
+      <a class="btn btn-amber" id="donate-link" target="_blank" rel="noopener">Підтримати проєкт</a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap chronicle" id="chronicle">
+  <aside class="panel" id="panel" aria-label="Фільтри">
+    <h3>Знайти історію</h3>
+    <p class="hint">Відфільтруйте хроніку за джерелом, темою, місцем чи датою.</p>
+
+    <h3>Джерела</h3>
+    <details class="ms" id="ms-src"><summary class="select"><span>Усі джерела</span></summary><div class="ms-list" role="group" aria-label="Джерело"></div></details>
+
+    <h3>Теми</h3>
+    <details class="ms" id="ms-topic"><summary class="select"><span>Усі теми</span></summary><div class="ms-list" role="group" aria-label="Тема"></div></details>
+
+    <h3>Населений пункт</h3>
+    <details class="ms" id="ms-vl"><summary class="select"><span>Усі населені пункти</span></summary><div class="ms-list" role="group" aria-label="Населений пункт"></div></details>
+
+    <h3>Медіа</h3>
+    <div class="chips" id="media" role="group" aria-label="Медіа">
+      <button class="chip" data-media="ph" aria-pressed="false">📷 З фото</button>
+      <button class="chip" data-media="v" aria-pressed="false">▶ З відео</button>
+    </div>
+
+    <div id="cal-box" hidden>
+      <h3>Дні місяця</h3>
+      <p class="cal-title" id="cal-title"></p>
+      <div class="cal" id="cal"></div>
+    </div>
+
+    <h3>Період</h3>
+    <div class="range">
+      <label>Від<input type="date" id="from"></label>
+      <label>До<input type="date" id="to"></label>
+    </div>
+    <button class="link-btn" id="dates-clear" type="button" hidden>✕ Скинути дати</button>
+    <button class="link-btn" id="all-clear" type="button">↺ Скинути всі фільтри</button>
+  </aside>
+
+  <section aria-label="Хроніка">
+    <div class="feed-head">
+      <div class="count" id="count" aria-live="polite"></div>
+      <div class="tools">
+        <a class="chip" id="book-link" href="book.html" hidden>📖 Книга року</a>
+        <button class="chip filters-toggle" id="filters-toggle" aria-expanded="false" aria-controls="panel">⚙ Фільтри</button>
+      </div>
+    </div>
+    <div id="feed"></div>
+    <nav class="pager" id="pager" aria-label="Сторінки хроніки"></nav>
+  </section>
+</div>
+
+<section class="wrap" aria-labelledby="share-h">
+  <div class="share-card">
+    <div>
+      <span class="label">Спогади</span>
+      <h2 class="title" id="share-h">Маєш фото чи історію про Приморськ?</h2>
+      <p>Свята на набережній, школа, перший дзвоник, море, сусіди. Wayback зберіг далеко не все.
+        Поділися, і ми додамо це до хроніки після перевірки.</p>
+    </div>
+    <button class="btn btn-amber" id="share-open" type="button">Поділитися спогадом</button>
+  </div>
+</section>
+
+<section class="wrap about" aria-labelledby="history-h">
+  <div class="section-head">
+    <div><span class="label">Історія</span><h2 class="title" id="history-h">Історія міста і краю</h2></div>
+  </div>
+  <div class="tiles" id="history"></div>
+</section>
+
+<footer id="footer">
+  <div class="wrap">
+    <h2>Пам'ять не окупувати</h2>
+    <p>Ці матеріали врятовані з вебархівів <a href="https://web.archive.org/">Wayback Machine</a> і <a href="https://commoncrawl.org/">Common Crawl</a>:
+      більшості цих сайтів уже немає, а з тих, що ще працюють, збережено все до березня 2022. Персональні дані приватних людей приховані.</p>
+    <ul class="sources-list">
+      <li><b>Приморська міська рада</b>mrprim.zp.ua · рішення, оголошення, життя громади</li>
+      <li><b>ГО «Приморськ 24/7»</b>prim24.in.ua · громадський портал</li>
+      <li><b>«ПРО Приморськ»</b>pro.primorsk.biz · місцеві новини й відео</li>
+      <li><b>«Приморск»</b>primorsk.in.ua · міська газета онлайн, 2009–2014</li>
+      <li><b>«Сайт г. Приморска»</b>primorsk.zp.ua · перший міський сайт, 2003–2010</li>
+      <li><b>Школи, ліцей, ЦДТ, відділ освіти</b>сайти закладів освіти міста й сіл громади</li>
+      <li><b>Приморська РДА, «Таврія»</b>primrda.gov.ua · tavriya.co.ua</li>
+      <li><b>Краєзнавство</b>prym.in.ua · travel.mrprim.zp.ua · imsu-zaporizhzhya.com</li>
+    </ul>
+    <div class="foot-bottom">
+    <a class="ngo" href="https://www.facebook.com/YCenterPortal" target="_blank" rel="noopener">
+      <img src="ngo-logo.png" width="58" height="72" alt="Логотип ГО «Приморськ 24/7»">
+      <span>Проєкт<b>ГО «Приморськ 24/7»</b></span>
+    </a>
+    <div class="fine"><span>Збережено з повагою до людей і пам'яті громади. Тексти — як в оригіналі, зі збереженням мови й правопису</span><span>Цифрова спадщина · 2004—2022 · <a href="export/chronicle.csv">Відкриті дані (CSV)</a></span></div>
+    </div>
+  </div>
+</footer>
+
+<dialog id="share" class="share-dlg" aria-labelledby="share-t">
+  <form id="share-form" method="dialog">
+    <div class="reader-bar"><b id="share-t">Поділитися спогадом</b><button type="button" id="share-close">✕ Закрити</button></div>
+    <div class="share-body">
+      <label>Про що спогад <span class="req">*</span>
+        <input name="title" required maxlength="160" placeholder="Напр.: День міста на набережній"></label>
+      <div class="two">
+        <label>Коли (рік або дата)<input name="when" maxlength="40" placeholder="2017 або 12.06.2019"></label>
+        <label>Де<select name="place" id="share-place"><option value="">Приморськ</option></select></label>
+      </div>
+      <label>Твоя історія <span class="req">*</span>
+        <textarea name="story" required rows="6" maxlength="5000" placeholder="Що відбувалося, хто організовував, що запам'яталося…"></textarea></label>
+      <label>Фото (до 10 файлів, JPG/PNG)
+        <input name="photos" type="file" accept="image/jpeg,image/png" multiple></label>
+      <div class="two">
+        <label>Ім'я (необов'язково)<input name="name" maxlength="80" autocomplete="name"></label>
+        <label>Як з тобою зв'язатися (необов'язково)<input name="contact" maxlength="120" placeholder="email або telegram"></label>
+      </div>
+      <label class="check"><input type="checkbox" name="rights" required> Це мої фото або я маю право ними ділитися <span class="req">*</span></label>
+      <label class="check"><input type="checkbox" name="anon" checked> Публікувати без мого імені</label>
+      <p class="safety">⚠ Якщо ви або ваші близькі перебуваєте в окупації, не вказуйте справжнє ім'я і не надсилайте фото,
+        де чітко видно обличчя людей, які там лишаються. Контакт бачить лише модератор.</p>
+      <p class="share-status" id="share-status" role="status"></p>
+      <button class="btn btn-sun" type="submit" id="share-submit">Надіслати</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="reader" aria-labelledby="r-title">
+<div class="r-scroll" id="r-scroll">
+  <div class="reader-bar">
+    <button id="r-close" type="button">← До хроніки</button>
+    <span class="r-bar-right">
+      <nav class="r-nav" aria-label="Сусідні статті"><a id="r-prev" href="#" aria-label="Попередня стаття" title="Попередня (←)"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></a><a id="r-next" href="#" aria-label="Наступна стаття" title="Наступна (→)"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></a></nav>
+      <a id="r-orig" href="#" target="_blank" rel="noopener">Архівна сторінка ↗</a></span>
+  </div>
+  <div class="r-hero" id="r-hero" hidden></div>
+  <article class="reader">
+    <div class="meta" id="r-meta"></div>
+    <h2 id="r-title"></h2>
+    <div class="article" id="r-body"></div>
+    <p class="origin" id="r-origin"></p>
+    <div class="share-row" id="r-sharerow"></div>
+    <p class="fix-line">Текст подано так, як його було опубліковано в оригіналі, зі збереженням мови й правопису. Помітили помилку? Виділіть фрагмент у тексті або <button type="button" class="fix-link" onclick="openFix()">запропонуйте правку</button>.</p>
+    <nav class="r-pager" id="r-pager" aria-label="Гортати хроніку"></nav>
+  </article>
+</div>
+</dialog>
+
+<script src="fix.js" defer></script>
+<script src="share.js" defer></script>
+<script src="meta.js"></script>
+<script>
+const { SOURCES, GEO, TOPIC_COLOR } = META;
+const LOCAL = /^(localhost|127\.0\.0\.1|192\.168\.)/.test(location.hostname);
+const MONTHS = ['січень','лютий','березень','квітень','травень','червень','липень','серпень','вересень','жовтень','листопад','грудень'];
+const MONTHS_GEN = ['січня','лютого','березня','квітня','травня','червня','липня','серпня','вересня','жовтня','листопада','грудня'];
+const PAGE = 10;
+const state = { q: '', year: '', month: '', day: '', from: '', to: '', srcs: new Set(), topics: new Set(), villages: new Set(), media: new Set(), page: 0 };
+let all = [], news = [], list = [], byId = {};
+
+const $ = id => document.getElementById(id);
+const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+// e = how many days an estimated date may be off (dated from WordPress post order)
+const fmt = (d, e) => {
+  const [y, m, day] = d.split('-');
+  if (!e) return `${+day} ${MONTHS_GEN[m - 1]} ${y}`;
+  if (e <= 31) return `≈ ${+day} ${MONTHS_GEN[m - 1]} ${y}`;
+  return e <= 400 ? `≈ ${MONTHS[m - 1]} ${y}` : `≈ ${y}`;
+};
+// search ignores word endings: "набережна" finds "набережної", "школа" finds "школи" (Ukrainian and Russian)
+const ENDING = /(ами|ями|ові|еві|ого|ому|ими|іми|ої|ою|ею|ів|їв|ах|ях|ам|ям|ом|ем|ий|ій|ая|ое|ые|ие|ых|их|ую|ой|ей|а|я|о|е|и|і|ї|у|ю|ь|й|ы)$/;
+const norm = s => s.toLowerCase().replace(/[’ʼ`]/g, "'");
+const stem = w => { const m = w.match(ENDING); return m && w.length - m[0].length >= 4 ? w.slice(0, -m[0].length) : w; };
+let stemsFor = '', stems = [];
+const queryStems = () => {
+  if (stemsFor !== state.q) { stemsFor = state.q; stems = norm(state.q).split(/\s+/).filter(Boolean).map(stem); }
+  return stems;
+};
+const hl = s => {
+  s = esc(s);
+  if (!state.q) return s;
+  const re = new RegExp(`(${queryStems().map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})[\\p{L}'’]*`, 'giu');
+  return s.replace(re, '<mark>$&</mark>');
+};
+function plural(n, one, few, many) {
+  const a = n % 10, b = n % 100;
+  return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many;
+}
+const records = n => `${n.toLocaleString('uk-UA')} ${plural(n, 'запис', 'записи', 'записів')}`;
+
+const pill = a => `<span class="src-pill" style="--c:var(--c-${a.s}, var(--c-school3))">${a.ext ? esc(a.ext) : SOURCES[a.s]}</span>`;
+const badges = a =>
+  (a.ph ? `<span class="badge" title="${a.ph} фото у статті">📷 ${a.ph}</span>` : '') +
+  (a.v ? '<span class="badge" title="У статті є відео">▶ відео</span>' : '');
+const tags = a => (a.c || a.vl) ? `<div class="tags">${[
+  ...(a.vl || []).map(v => `<span class="tag place">📍 ${esc(v)}</span>`),
+  ...(a.c || []).map(c => `<span class="tag" style="--tc:${TOPIC_COLOR[c] || 'var(--sea)'}">${esc(c)}</span>`)].join('')}</div>` : '';
+const approx = a => a.e ? ' title="Дата приблизна: визначена за порядком публікацій"' : '';
+const card = a => `<a class="card" href="p/${a.n}.html" data-n="${a.n}" style="--c:var(--c-${a.s}, var(--c-school3))">
+  ${a.i ? `<div class="img"><img src="${a.i}" alt="" loading="lazy"></div>` : ''}
+  <div class="body">
+    <div class="meta"><time datetime="${a.d}"${approx(a)}>${fmt(a.d, a.e)}</time>${pill(a)}${badges(a)}</div>
+    <h3>${hl(a.t)}</h3>
+    <p>${hl(a.x)}</p>
+    ${tags(a)}
+  </div></a>`;
+
+// feed row: date | headline, excerpt, source | photo | arrow
+const dateStack = a => { const f = fmt(a.d, a.e), i = f.lastIndexOf(' '); return `${f.slice(0, i)}<br>${f.slice(i + 1)}`; };
+const row = a => `<a class="story" href="p/${a.n}.html" data-n="${a.n}" style="--c:var(--c-${a.s}, var(--c-school3))">
+  <time class="date" datetime="${a.d}"${approx(a)}>${dateStack(a)}</time>
+  <div><h3>${hl(a.t)}</h3><p>${hl(a.x)}</p>
+    <div class="s-meta">${pill(a)}${badges(a)}${[...(a.vl || []).map(v => `<span class="tag place">📍 ${esc(v)}</span>`),
+      ...(a.c || []).slice(0, 2).map(c => `<span class="tag" style="--tc:${TOPIC_COLOR[c] || 'var(--green)'}">${esc(c)}</span>`)].join('')}</div></div>
+  ${a.i ? `<img class="s-img" src="${a.i}" alt="" loading="lazy">` : ''}
+  <span class="arrow" aria-hidden="true">↗</span></a>`;
+
+// ── Filtering ─────────────────────────────────────────────
+// skip: filters to ignore, so the year river / calendar can show counts for the other choices
+function matches(a, skip = '') {
+  const q = state.q && queryStems();
+  return (skip.includes('year') || !state.year || a.d.startsWith(state.year)) &&
+    (skip.includes('month') || !state.month || a.d.slice(5, 7) === state.month) &&
+    (skip.includes('day') || !state.day || a.d === state.day) &&
+    (!state.from || a.d >= state.from) && (!state.to || a.d <= state.to) &&
+    (!state.srcs.size || state.srcs.has(a.s)) &&
+    [...state.media].every(k => a[k]) &&
+    (!state.topics.size || (a.c || []).some(v => state.topics.has(v))) &&
+    (!state.villages.size || (a.vl || []).some(v => state.villages.has(v))) &&
+    (!q || (hay => q.every(w => hay.includes(w)))(a._hay ??= norm(`${a.t} ${a.x} ${a.to || ''}`)));
+}
+
+function renderRiver() {
+  const counts = {};
+  news.forEach(a => { if (matches(a, 'year month day')) { const k = a.d.slice(0, 7); counts[k] = (counts[k] || 0) + 1; } });
+  const years = [...new Set(news.map(a => a.d.slice(0, 4)))].sort();
+  const max = Math.max(1, ...Object.values(counts));
+  const total = Object.values(counts).reduce((s, n) => s + n, 0);
+  const sums = Object.fromEntries(years.map(y => [y, MONTHS.reduce((s, _, i) => s + (counts[`${y}-${String(i + 1).padStart(2, '0')}`] || 0), 0)]));
+  const peak = Math.max(...Object.values(sums));
+  $('river').innerHTML = years.map(y => {
+      const sum = sums[y];
+      // each card shows its own year's shape; the count tells how much survived
+      const yMax = Math.max(1, ...MONTHS.map((_, i) => counts[`${y}-${String(i + 1).padStart(2, '0')}`] || 0));
+      const note = sum && sum === peak ? '<em class="yr-note peak">рік-рекорд</em>' : sum && sum < 30 ? '<em class="yr-note">мало збереглося</em>' : '';
+      return `<div class="yr" aria-current="${state.year === y}">
+        <button class="yr-btn" data-year="${y}" aria-pressed="${state.year === y}">${y}
+          <span class="yr-count"><b>${sum.toLocaleString('uk-UA')}</b> ${plural(sum, 'запис', 'записи', 'записів')}</span>${note}</button>
+        <div class="bars">${MONTHS.map((m, i) => {
+          const mm = String(i + 1).padStart(2, '0'), n = counts[`${y}-${mm}`] || 0, max = yMax;
+          return `<button class="bar" data-year="${y}" data-month="${mm}" ${n ? '' : 'disabled'}
+            aria-pressed="${state.year === y && state.month === mm}" aria-label="${m} ${y}: ${n}" title="${m} ${y}: ${records(n)}">
+            <i style="height:${n ? Math.max(6, n / max * 100) : 4}%"></i></button>`;
+        }).join('')}</div></div>`;
+    }).join('') + `<div class="yr yr-all" aria-current="${!state.year}">
+      <button class="yr-btn" data-year="">Усі →<span class="yr-count"><b>${total.toLocaleString('uk-UA')}</b> ${plural(total, 'запис', 'записи', 'записів')}</span></button></div>`;
+}
+
+function renderCalendar() {
+  const box = $('cal-box');
+  box.hidden = !(state.year && state.month);
+  if (box.hidden) return;
+  const byDay = {};
+  news.forEach(a => { if (matches(a, 'day')) byDay[a.d] = (byDay[a.d] || 0) + 1; });
+  const max = Math.max(1, ...Object.values(byDay));
+  const first = new Date(+state.year, +state.month - 1, 1), days = new Date(+state.year, +state.month, 0).getDate();
+  $('cal-title').textContent = `${MONTHS[+state.month - 1]} ${state.year}`;
+  let html = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'нд'].map(d => `<span class="dow">${d}</span>`).join('');
+  html += '<span></span>'.repeat((first.getDay() + 6) % 7);  // Monday-first offset
+  for (let d = 1; d <= days; d++) {
+    const iso = `${state.year}-${state.month}-${String(d).padStart(2, '0')}`, n = byDay[iso] || 0;
+    html += n
+      ? `<button data-day="${iso}" data-n="${n}" style="--lvl: ${Math.ceil(n / max * 8)}0" aria-pressed="${iso === state.day}" title="${fmt(iso)}: ${records(n)}">${d}</button>`
+      : `<button disabled>${d}</button>`;
+  }
+  $('cal').innerHTML = html;
+}
+
+function renderFeed() {
+  renderRiver();
+  renderCalendar();
+  $('dates-clear').hidden = !(state.month || state.day || state.from || state.to);
+  list = news.filter(a => matches(a)).reverse();  // newest first: the story is read back from where it was cut off
+  const perMonth = {};
+  list.forEach(a => { const m = a.d.slice(0, 7); perMonth[m] = (perMonth[m] || 0) + 1; });
+  // above the last record: the pages not written yet
+  const pages = Math.ceil(list.length / PAGE);
+  state.page = Math.min(state.page, Math.max(pages - 1, 0));
+  let html = !state.page && list[0]?.d >= '2022' ? `<aside class="epilogue"><div class="eyebrow">Сторінки, яких ще немає</div>
+    <h2>Наступні сторінки ми напишемо самі</h2>
+    <p>Тут хроніка обривається: з 2022 року громада живе в окупації. Нові сторінки в історії громади чекають на свою публікацію.
+    Нові записи обов'язково з'являться саме тут.</p></aside>` : '', month = '';
+  list.slice(state.page * PAGE, (state.page + 1) * PAGE).forEach(a => {
+    const m = a.d.slice(0, 7);
+    if (m !== month) {
+      month = m;
+      html += `<div class="month-h"><h2>${MONTHS[+m.slice(5) - 1]} ${m.slice(0, 4)}</h2><span>${records(perMonth[m])}</span></div>`;
+    }
+    html += row(a);
+  });
+  $('feed').innerHTML = html || '<p class="empty">Нічого не знайдено. Спробуй прибрати якийсь фільтр.</p>';
+  renderPager(pages);
+  $('count').textContent = records(list.length);
+  $('book-link').hidden = !state.year;
+  $('book-link').href = `book.html?y=${state.year}`;
+  $('book-link').textContent = `📖 Книга ${state.year} року`;
+}
+
+// 1 … 4 5 6 … 957: first, last, and two around the current page
+function renderPager(pages) {
+  const cur = state.page, btn = (p, text, label) =>
+    `<button type="button" data-page="${p}" ${p === cur && text === String(p + 1) ? 'aria-current="page"' : ''}${p < 0 || p >= pages ? ' disabled' : ''} aria-label="${label}">${text}</button>`;
+  if (pages < 2) { $('pager').innerHTML = ''; return; }
+  const nums = [...new Set([0, cur - 2, cur - 1, cur, cur + 1, cur + 2, pages - 1])].filter(p => p >= 0 && p < pages).sort((a, b) => a - b);
+  let html = btn(cur - 1, '‹', 'Попередня сторінка'), prev = -1;
+  for (const p of nums) {
+    if (p - prev > 1) html += '<span class="gap">…</span>';
+    html += btn(p, String(p + 1), `Сторінка ${p + 1}`);
+    prev = p;
+  }
+  $('pager').innerHTML = html + btn(cur + 1, '›', 'Наступна сторінка');
+}
+
+function renderToday() {
+  const now = new Date();
+  const md = `-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  const hits = news.filter(a => a.d.endsWith(md) && !a.e).sort((a, b) => a.d.localeCompare(b.d));
+  // tear-off calendar leaf: day number over the month, next to the heading
+  $('today-date').innerHTML = `<b>${now.getDate()}</b>${MONTHS_GEN[now.getMonth()]}`;
+  $('today-h').setAttribute('aria-label', `${now.getDate()} ${MONTHS_GEN[now.getMonth()]}: цей день в історії`);
+  const years = hits.map(a => a.d.slice(0, 4));
+  $('today-count').textContent = hits.length ? `${records(hits.length)} · ${years[0]}–${years.at(-1)}` : '';
+  // same-size cards: the year, headline, a bit of text, the source
+  $('today').innerHTML = hits.length
+    ? hits.map(a => `<a class="tcard" href="p/${a.n}.html" data-n="${a.n}" style="--c:var(--c-${a.s}, var(--c-school3))">
+        <span class="t-year">${a.d.slice(0, 4)}${a.v ? '<small>▶ відео</small>' : ''}</span>
+        <h3>${esc(a.t)}</h3><p>${esc(a.x)}</p>${pill(a)}</a>`).join('')
+    : '<p class="today-empty">Цього дня в архіві записів немає, але хроніка нижче чекає.</p>';
+}
+
+function setupFilters() {
+  const refresh = () => { state.page = 0; renderFeed(); };
+  $('river').onclick = e => {
+    const b = e.target.closest('button'); if (!b || b.disabled) return;
+    if (b.classList.contains('bar')) {
+      const same = state.year === b.dataset.year && state.month === b.dataset.month;
+      state.year = b.dataset.year; state.month = same ? '' : b.dataset.month;
+    } else {
+      state.year = state.year === b.dataset.year ? '' : b.dataset.year; state.month = '';
+    }
+    state.day = '';
+    refresh();
+  };
+  $('cal').onclick = e => {
+    const b = e.target.closest('button[data-day]'); if (!b) return;
+    state.day = state.day === b.dataset.day ? '' : b.dataset.day;
+    refresh();
+  };
+  const from = $('from'), to = $('to');
+  from.min = to.min = news[0].d; from.max = to.max = news.at(-1).d;
+  from.onchange = () => { state.from = from.value; refresh(); };
+  to.onchange = () => { state.to = to.value; refresh(); };
+  $('dates-clear').onclick = () => { Object.assign(state, { month: '', day: '', from: '', to: '' }); from.value = to.value = ''; refresh(); };
+
+  const count = prop => {
+    const c = {};
+    news.forEach(a => [a[prop] || []].flat().forEach(v => c[v] = (c[v] || 0) + 1));
+    return Object.entries(c).sort((a, b) => b[1] - a[1]);
+  };
+  const perSrc = Object.fromEntries(count('s'));
+  const HIST = ['imsu', 'prym', 'travel'], MEDIA = ['mrprim', 'prim24', 'pro_prim', 'primorsk_in', 'primorsk_zp', 'prim24_blog', 'primorsk_forum', 'regional', 'tavriya', 'primorskstep', 'primrda'];
+  const group = k => MEDIA.includes(k) ? 'Місто, влада і ЗМІ' : HIST.includes(k) ? 'Історія' : k.startsWith('blog_') ? 'Блоги вчителів' : 'Школи й освіта';
+  const GROUPS = ['Місто, влада і ЗМІ', 'Школи й освіта', 'Блоги вчителів', 'Історія'];
+  multiSelect('ms-src', 'Усі джерела', state.srcs, Object.entries(SOURCES).filter(([k]) => perSrc[k])
+    .map(([k, v]) => ({ v: k, label: v, n: perSrc[k], color: `var(--c-${k}, var(--c-school3))`, group: group(k) }))
+    .sort((a, b) => GROUPS.indexOf(a.group) - GROUPS.indexOf(b.group) || b.n - a.n));
+  multiSelect('ms-topic', 'Усі теми', state.topics, count('c').map(([v, n]) => ({ v, label: v, n, color: TOPIC_COLOR[v] || 'var(--sea)' })));
+  multiSelect('ms-vl', 'Усі населені пункти', state.villages, count('vl').map(([v, n]) => ({ v, label: v, n })));
+  document.addEventListener('click', e => document.querySelectorAll('.ms[open]').forEach(d => d.contains(e.target) || d.removeAttribute('open')));
+
+  $('media').onclick = e => {
+    const b = e.target.closest('button'); if (!b) return;
+    const k = b.dataset.media, on = !state.media.has(k);
+    on ? state.media.add(k) : state.media.delete(k);
+    b.setAttribute('aria-pressed', on);
+    refresh();
+  };
+  $('all-clear').onclick = () => {
+    Object.assign(state, { q: '', year: '', month: '', day: '', from: '', to: '' });
+    [state.srcs, state.topics, state.villages, state.media].forEach(x => x.clear());
+    $('q').value = from.value = to.value = '';
+    document.querySelectorAll('.ms').forEach(d => d.sync());
+    document.querySelectorAll('#media .chip').forEach(b => b.setAttribute('aria-pressed', false));
+    refresh();
+  };
+  $('search').addEventListener('submit', () => {
+    clearTimeout(t);
+    state.q = $('q').value.trim(); refresh();
+    $('chronicle').scrollIntoView({ behavior: 'smooth' });
+  });
+  let t;
+  $('q').addEventListener('input', e => {
+    clearTimeout(t);
+    t = setTimeout(() => { state.q = e.target.value.trim(); refresh(); }, 200);
+  });
+  $('pager').onclick = e => {
+    const b = e.target.closest('button[data-page]'); if (!b || b.disabled) return;
+    state.page = +b.dataset.page; renderFeed();
+    $('chronicle').scrollIntoView({ behavior: 'smooth' });
+  };
+  $('filters-toggle').onclick = () => {
+    const open = $('panel').classList.toggle('open');
+    $('filters-toggle').setAttribute('aria-expanded', open);
+  };
+}
+
+// ── Map: coordinates from OpenStreetMap (Nominatim), checked against the community name ──
+// a <details> dropdown of checkboxes over `set` (empty set = no filter)
+function multiSelect(id, all, set, items) {
+  const box = $(id), list = box.querySelector('.ms-list'), label = box.querySelector('summary span');
+  const names = Object.fromEntries(items.map(o => [o.v, o.label]));
+  let g = '';
+  list.innerHTML = items.map(o => (o.group && o.group !== g ? `<div class="ms-g">${g = o.group}</div>` : '') +
+    `<label class="ms-opt"><input type="checkbox" value="${esc(o.v)}">${o.color ? `<span class="dot" style="background:${o.color}"></span>` : ''}${esc(o.label)}<small>${o.n}</small></label>`).join('');
+  box.sync = () => {
+    list.querySelectorAll('input').forEach(i => i.checked = set.has(i.value));
+    label.textContent = !set.size ? all : set.size === 1 ? names[[...set][0]] : `Обрано: ${set.size}`;
+  };
+  list.onchange = e => { e.target.checked ? set.add(e.target.value) : set.delete(e.target.value); box.sync(); state.page = 0; renderFeed(); };
+  box.sync();
+}
+
+let mapReady = false;
+async function setupMap() {
+  const counts = {};
+  news.forEach(a => (a.vl || []).forEach(v => counts[v] = (counts[v] || 0) + 1));
+  const town = news.filter(a => !(a.vl || []).length).length;  // untagged local news are about the town itself
+  const rows = [['Приморськ', town], ...Object.entries(counts).sort((a, b) => b[1] - a[1])];
+  const pick = name => {
+    state.villages.clear();
+    if (name !== 'Приморськ') state.villages.add(name);
+    $('ms-vl').sync();
+    state.page = 0; renderFeed();
+    document.querySelectorAll('#places button').forEach(b => b.setAttribute('aria-pressed', b.dataset.place === name));
+    $('chronicle').scrollIntoView({ behavior: 'smooth' });
+  };
+  $('places').innerHTML = rows.map(([v, n]) =>
+    `<li><button data-place="${esc(v)}" aria-pressed="false">${esc(v)}${GEO[v] ? '' : ' *'}<small>${n}</small></button></li>`).join('');
+  $('places').onclick = e => { const b = e.target.closest('button'); if (b) pick(b.dataset.place); };
+  const missing = rows.map(r => r[0]).filter(v => !GEO[v]);
+  $('map-note').textContent = missing.length ? `* Без точки на карті (координати не підтверджені): ${missing.join(', ')}.` : '';
+  const pages = await fetch('villages.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : {}).catch(() => ({}));
+  document.querySelectorAll('#places li').forEach(li => {
+    const v = li.firstElementChild.dataset.place;
+    if (pages[v]) li.insertAdjacentHTML('beforeend', `<a class="passport" href="${pages[v]}" title="Паспорт села ${esc(v)}" aria-label="Паспорт села ${esc(v)}">→</a>`);
+  });
+  if (!window.L) return;  // Leaflet blocked or offline: the list still works
+  const map = L.map('map', { scrollWheelZoom: false, attributionControl: true }).setView([46.80, 36.22], 10);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 16, attribution: '© OpenStreetMap' }).addTo(map);
+  const max = Math.max(...rows.map(r => r[1]));
+  const pts = [];
+  rows.forEach(([v, n]) => {
+    if (!GEO[v]) return;
+    pts.push(GEO[v]);
+    const c = L.circleMarker(GEO[v], { radius: 7 + 26 * Math.sqrt(n / max), color: v === 'Приморськ' ? '#0f3a2d' : '#b07d1c',
+      weight: 2, fillColor: v === 'Приморськ' ? '#174f3e' : '#efb544', fillOpacity: .6 }).addTo(map);
+    const pop = document.createElement('div');
+    pop.innerHTML = `<b>${esc(v)}</b><br>${records(n)}<br><button type="button">Показати новини</button>` +
+      (pages[v] ? `<br><a href="${pages[v]}">Паспорт села →</a>` : '');
+    pop.querySelector('button').onclick = () => { map.closePopup(); pick(v); };
+    c.bindPopup(pop).bindTooltip(v);
+  });
+  map.fitBounds(pts, { padding: [30, 30] });
+  mapReady = true;
+}
+
+// ── Share a memory ────────────────────────────────────────
+// The author's Google Form (the link from "Send" in the form editor): the button opens it; files and answers stay in his Google Drive.
+// monobank jar of the NGO: the support block above the chronicle shows up once the link is set
+const DONATE_URL = 'https://send.monobank.ua/jar/2R8KWNT4Ys';
+if (DONATE_URL) { $('donate-link').href = DONATE_URL; $('donate').hidden = false; }
+const MEMORIES_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLScURau7u06Lh1ZSyFV0ZTKKXiZKgeHHd4Rvt4jQD_MdEtph7A/viewform';
+// Alternative to the form: a receiver of our own dialog below (e.g. a Cloudflare Worker storing files in R2).
+const MEMORIES_ENDPOINT = '';
+const shareDlg = $('share');
+$('share-open').onclick = () => {
+  if (MEMORIES_FORM) return window.open(MEMORIES_FORM, '_blank', 'noopener');
+  const sel = $('share-place');
+  if (sel.options.length === 1) sel.innerHTML += Object.keys(GEO).filter(v => v !== 'Приморськ')
+    .sort((a, b) => a.localeCompare(b, 'uk')).map(v => `<option>${esc(v)}</option>`).join('');
+  $('share-status').textContent = '';
+  shareDlg.showModal();
+};
+$('share-close').onclick = () => shareDlg.close();
+$('share-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const form = e.target, status = $('share-status');
+  if (form.photos.files.length > 10) { status.textContent = 'Можна додати до 10 фото.'; return; }
+  if (!MEMORIES_ENDPOINT) {
+    status.textContent = 'Дякуємо! Прийом спогадів запрацює, щойно портал буде опубліковано в інтернеті.';
+    return;
+  }
+  $('share-submit').disabled = true;
+  status.textContent = 'Надсилаємо…';
+  try {
+    const r = await fetch(MEMORIES_ENDPOINT, { method: 'POST', body: new FormData(form) });
+    if (!r.ok) throw new Error(r.status);
+    status.textContent = 'Дякуємо! Спогад надіслано, ми додамо його після перевірки.';
+    form.reset();
+  } catch {
+    status.textContent = 'Не вдалося надіслати. Спробуй ще раз трохи пізніше.';
+  } finally {
+    $('share-submit').disabled = false;
+  }
+});
+
+// theme: follows the system until the visitor picks one; the choice is kept for every page of the portal
+const themeBtn = $('theme');
+const theme = () => document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+const showTheme = () => { const dark = theme() === 'dark'; themeBtn.textContent = dark ? '☀' : '☾'; themeBtn.title = dark ? 'Світла тема' : 'Темна тема'; };
+themeBtn.onclick = () => {
+  const next = theme() === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  try { localStorage.setItem('theme', next); } catch {}
+  showTheme();
+};
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', showTheme);
+showTheme();
+
+let videoIndex;
+const localVideos = () => videoIndex ??= fetch('videos.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : {}).catch(() => ({}));
+
+// ── Reader: clean article text, deep-linkable as #<n> ─────────────────────
+const reader = $('reader');
+// where a story comes from: regional media (a live site) or a local site whose consent asked for a credit
+// public copy of the original: Wayback, the still-live site, or none (Common Crawl kept it, it has no public viewer)
+const original = a => !a.u || a.ext || a.ar === 'cc' ? '' : a.ar === 'live' ? a.u : `https://web.archive.org/web/2022/${a.u}`;
+const sourceOf = a => a.ext ? { host: a.ext, href: a.u } : META.CREDIT?.[a.s] && original(a) ? { host: META.CREDIT[a.s], href: original(a) } : null;
+// one standard block under every article: the source, and the archived original
+function originLinks(a) {
+  const src = sourceOf(a), wb = original(a);
+  const link = (href, text) => `<a href="${esc(href)}" target="_blank" rel="noopener">${text} ↗</a>`;
+  return [src && link(src.href, `${a.ext && !a.full ? 'Повний текст' : 'Джерело'}: ${esc(src.host)}`),
+          wb && (!src || src.href !== wb) && link(wb, a.ar === 'live' ? 'Оригінал на сайті' : 'Оригінал у Wayback Machine')].filter(Boolean).join('<span class="sep">·</span>');
+}
+
+// prev / next follow the feed as it is filtered now (or the whole chronicle when the article is not in it)
+function neighbours(n) {
+  const arr = list.some(a => a.n === n) ? list : news, i = arr.findIndex(a => a.n === n);
+  return [arr[i - 1], arr[i + 1]];
+}
+function setPager(n) {
+  const [prev, next] = neighbours(n);
+  [['r-prev', prev], ['r-next', next]].forEach(([id, a]) => {
+    const el = $(id);
+    el.setAttribute('aria-disabled', !a);
+    el.href = a ? `p/${a.n}.html` : '#';
+    a ? el.dataset.n = a.n : delete el.dataset.n;
+  });
+  const link = (a, cls, label) => a ? `<a class="${cls}" href="p/${a.n}.html" data-n="${a.n}"><small>${label} · ${fmt(a.d, a.e)}</small><b>${esc(a.t)}</b></a>` : '';
+  $('r-pager').innerHTML = link(prev, 'prev', '← Попередня') + link(next, 'next', 'Наступна →');
+}
+document.addEventListener('keydown', e => {
+  if (!reader.open || e.target.closest?.('input, textarea, select')) return;
+  const el = e.key === 'ArrowLeft' ? $('r-prev') : e.key === 'ArrowRight' ? $('r-next') : null;
+  if (el && el.dataset.n) { e.preventDefault(); el.click(); }
+});
+async function openArticle(n) {
+  const a = byId[n];
+  if (!a) return;
+  window.countView?.(n);
+  setPager(n);
+  const src = sourceOf(a);
+  // consented editors asked for the credit on top: their name above the headline links to the original
+  $('r-meta').innerHTML = `<time datetime="${a.d}">${fmt(a.d, a.e)}</time>${src
+    ? `<a class="src-pill" style="--c:var(--c-${a.s}, var(--c-school3))" href="${esc(src.href)}" target="_blank" rel="noopener">${esc(src.host)} ↗</a>` : pill(a)}${badges(a)}`;
+  $('r-title').textContent = a.t;
+  $('r-title').insertAdjacentHTML('beforeend', a.to ? `<small class="orig-title" lang="ru">Оригінал: ${esc(a.to)}</small>` : '');
+  // raw archive copies are not published (full names inside): online the button opens the Wayback original
+  $('r-orig').href = a.ext || LOCAL ? a.p : original(a);  // online the raw copies are not there: only public originals
+  $('r-orig').hidden = !$('r-orig').getAttribute('href');  // Common Crawl only: no public page to open
+  $('r-orig').textContent = a.ext ? 'Читати в джерелі ↗' : 'Архівна сторінка ↗';
+  $('r-origin').innerHTML = originLinks(a);
+  // the article's own page: link previews (Facebook, Telegram) show its title and photo
+  fillShare($('r-sharerow'), new URL(`p/${n}${LOCAL ? '.html' : ''}`, location.href).href, a.t);
+  $('r-hero').hidden = true;
+  const body = $('r-body');
+  body.textContent = 'Завантаження…';
+  if (!reader.open) reader.showModal();
+  $('r-scroll').scrollTop = 0;
+  // the text comes from the article's own page (p/<n>.html, the one search engines index): one copy online, not two
+  body.innerHTML = await fetch(`p/${n}.html`, { cache: 'no-cache' }).then(r => r.ok ? r.text() : '').then(t => {
+    const doc = new DOMParser().parseFromString(t, 'text/html'), text = doc.querySelector('.article');
+    const lead = doc.querySelector('img.hero')?.getAttribute('src');  // the page shows the lead photo above the headline
+    return text ? (lead ? `<p><img src="${esc(lead)}" alt="" loading="lazy"></p>` : '') + text.innerHTML : 'Текст не знайдено.';
+  });
+  // our own copy of a video (backed up to the drive) replaces the YouTube embed; the original stays one click away
+  const local = await localVideos();
+  body.querySelectorAll('iframe[src*="youtube"]').forEach(f => {
+    const id = (f.getAttribute('src').match(/embed\/([\w-]{11})/) || [])[1];
+    if (!id) return;
+    const orig = `<a href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">Оригінал на YouTube ↗</a>`;
+    const fig = document.createElement('figure');
+    fig.className = 'video';
+    fig.innerHTML = local[id]
+      ? `<video controls preload="none" playsinline ${local[id].poster ? `poster="${local[id].poster}"` : ''} src="${local[id].src}"></video><figcaption>Копія архіву громади · ${orig}</figcaption>`
+      : `${f.outerHTML}<figcaption>${orig}</figcaption>`;
+    f.replaceWith(fig);
+  });
+  // lead photo becomes the header image instead of sitting above the first paragraph
+  const lead = body.firstElementChild;
+  if (lead && lead.tagName === 'IMG') {
+    $('r-hero').style.backgroundImage = `url("${lead.getAttribute('src')}")`;
+    $('r-hero').hidden = false;
+    lead.remove();
+  }
+}
+function closeArticle() {
+  if (reader.open) reader.close();
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+}
+document.addEventListener('click', e => {
+  const c = e.target.closest('a[data-n]');
+  if (!c || e.metaKey || e.ctrlKey) return;
+  e.preventDefault();
+  history.pushState(null, '', '#' + c.dataset.n);
+  openArticle(c.dataset.n);
+});
+$('r-close').onclick = closeArticle;
+// the article's own page: link previews (Facebook, Telegram) show its title and photo
+reader.addEventListener('close', () => { if (ID.test(location.hash)) history.replaceState(null, '', location.pathname); });
+reader.addEventListener('click', e => { if (e.target === reader) closeArticle(); });
+const ID = /^#[0-9a-f]{10}$/;
+window.addEventListener('popstate', () => ID.test(location.hash) ? openArticle(location.hash.slice(1)) : reader.open && reader.close());
+
+fetch('data.json', { cache: 'no-cache' }).then(r => r.json()).then(data => {
+  all = data;
+  byId = Object.fromEntries(all.map(a => [a.n, a]));
+  news = all.filter(a => !a.k);
+  $('history').innerHTML = all.filter(a => a.k === 'history').map(a => card(a)).join('');
+  const villages = new Set(news.flatMap(a => a.vl || []));
+  function countUp(els, targets) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // ease-out quint: the bulk goes by quickly, then a long slowdown in which the last digits tick over one by one
+    const t0 = performance.now() + 700, dur = 4200, gap = 150;
+    const ease = p => 1 - (1 - p) ** 5;
+    const step = now => {
+      let done = true;
+      els.forEach((el, i) => {
+        const p = Math.min(1, Math.max(0, (now - t0 - i * gap) / dur));
+        el.textContent = Math.round(targets[i] * ease(p)).toLocaleString('uk-UA');
+        el.style.opacity = .35 + .65 * Math.min(1, p * 2.5);
+        done &&= p === 1;
+      });
+      if (!done) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+  const stats = [
+    [news.length, 'новин і подій'],
+    [news.filter(a => a.v).length, 'відеосюжетів'],
+    [news.filter(a => a.ph).length, 'статей з фото'],
+    [villages.size + 1, 'населених пунктів'],
+  ];
+  $('stats').innerHTML = stats.map(([b, s]) => `<li><b>${b.toLocaleString('uk-UA')}</b><span>${s}</span></li>`).join('');
+  countUp([...$('stats').querySelectorAll('b')], stats.map(([b]) => b));
+  if (ID.test(location.hash)) setTimeout(() => openArticle(location.hash.slice(1)));
+  setupFilters(); renderToday(); renderFeed();
+  if (window.L) setupMap(); else window.addEventListener('load', setupMap, { once: true });
+});
+</script>
+</body>
+</html>

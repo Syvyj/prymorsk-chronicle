@@ -1,0 +1,23 @@
+# the archive itself (texts, photos, videos, mirrors) is never part of this repository
+__pycache__/
+.venv/
+mirror/
+media/
+archive_*/
+regional_*/
+cc_index/
+*.json
+!wrangler.jsonc
+timeline/a/
+timeline/p/
+timeline/v/
+timeline/z/
+timeline/export/
+timeline/*.jpg
+timeline/sitemap.xml
+social/*.mp4
+social/day-*.png
+social/day-*.txt
+social/update-still.png
+social/fb-cover*.png
+.wrangler/

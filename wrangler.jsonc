@@ -1,0 +1,15 @@
+// Cloudflare (Workers static assets): the folder publish.py assembles. Deploy: npx wrangler deploy
+// worker.js only answers /api/* (readers' corrections into D1 prym-feedback); every other address is a static file.
+{
+  "name": "prym",
+  "main": "worker.js",
+  "compatibility_date": "2026-10-06",
+  "routes": [{ "pattern": "prym.mydom.website", "custom_domain": true }],
+  "assets": {
+    "directory": "../prymorsk-publish",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
+  },
+  "d1_databases": [{ "binding": "DB", "database_name": "prym-feedback", "database_id": "<your-d1-database-id>" }]
+}

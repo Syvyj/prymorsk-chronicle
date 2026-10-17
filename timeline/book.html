@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Книга року · Приморськ</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="description" content="Рік із життя громади Приморська: головні події місяць за місяцем.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Commissioner:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch {}</script>
+<style>
+  :root {
+    --sand: #f5ecdc; --paper: #fffaf2; --ink: #0f222b; --muted: #5d6a6c; --line: #e4d7bf;
+    --deep: #0a3f55; --sea: #17799a; --foam: #d6ebf0; --wheat: #e1a43b; --reed: #b3843a;
+    --c-mrprim: #17799a; --c-prim24: #5d7a2a; --c-pro_prim: #c0562f; --c-primorsk_in: #7b4fa3; --c-primorsk_zp: #8a6d1f; --c-prim24_blog: #5d7a2a; --c-imsu: #9a5b2e; --c-primorsk_forum: #8a6d1f; --c-prym: #9a5b2e; --c-travel: #0f8f8a; --c-regional: #52606d; --c-rcdt: #d0701c; --c-school3: #3d62b8; --c-licey: #2f8a3f; --c-school2: #3d62b8; --c-primroo: #3d62b8; --c-primrda: #0a3f55; --c-tavriya: #7a4f2a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --sand: #081a22; --paper: #0f2833; --ink: #e8f0ef; --muted: #93a7ab; --line: #1d3d4a;
+      --deep: #04121a; --sea: #5bb7d6; --foam: #123543; --wheat: #f0bb57; --reed: #d6a557;
+      --c-mrprim: #5bb7d6; --c-prim24: #a9bd68; --c-pro_prim: #ee8a5f; --c-primorsk_in: #b99be0; --c-primorsk_zp: #d9b85e; --c-prim24_blog: #a9bd68; --c-imsu: #e0a070; --c-primorsk_forum: #d9b85e; --c-prym: #e0a070; --c-travel: #5fd0c8; --c-regional: #a9b6c2; --c-rcdt: #f0a060; --c-school3: #8fa8f0; --c-licey: #7fcf8a; --c-school2: #8fa8f0; --c-primroo: #8fa8f0; --c-primrda: #7fc3dc; --c-tavriya: #d9a57a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --sand: #081a22; --paper: #0f2833; --ink: #e8f0ef; --muted: #93a7ab; --line: #1d3d4a;
+    --deep: #04121a; --sea: #5bb7d6; --foam: #123543; --wheat: #f0bb57; --reed: #d6a557;
+    --c-mrprim: #5bb7d6; --c-prim24: #a9bd68; --c-pro_prim: #ee8a5f; --c-primorsk_in: #b99be0; --c-primorsk_zp: #d9b85e; --c-prim24_blog: #a9bd68; --c-imsu: #e0a070; --c-primorsk_forum: #d9b85e; --c-prym: #e0a070; --c-travel: #5fd0c8; --c-regional: #a9b6c2; --c-rcdt: #f0a060; --c-school3: #8fa8f0; --c-licey: #7fcf8a; --c-school2: #8fa8f0; --c-primroo: #8fa8f0; --c-primrda: #7fc3dc; --c-tavriya: #d9a57a;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--sand); color: var(--ink); font: 16px/1.6 'Commissioner', system-ui, sans-serif; }
+  a { color: inherit; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+  :focus-visible { outline: 3px solid var(--wheat); outline-offset: 2px; }
+
+  .top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 16px 0; }
+  .top a { font-weight: 600; color: var(--sea); text-decoration: none; }
+  .years { display: flex; gap: 6px; flex-wrap: wrap; }
+  .years a { padding: 5px 12px; border-radius: 999px; border: 1px solid var(--line); font: 600 13px 'Unbounded', sans-serif; color: var(--ink); }
+  .years a[aria-current="page"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .print { border: 1px solid var(--line); background: var(--paper); border-radius: 999px; padding: 6px 14px; font: inherit; font-weight: 600; cursor: pointer; }
+
+  .cover { position: relative; min-height: 520px; border-radius: 28px; overflow: hidden; color: #fff; display: flex; align-items: flex-end;
+    background: var(--deep) center / cover no-repeat; isolation: isolate; }
+  .cover::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(4, 30, 42, .1), rgba(4, 30, 42, .82)); }
+  .cover-in { padding: 36px; width: 100%; }
+  .cover .k { font: 600 12px 'Commissioner', sans-serif; letter-spacing: .18em; text-transform: uppercase; color: var(--wheat); }
+  .cover h1 { font: 800 clamp(80px, 18vw, 200px)/.85 'Unbounded', sans-serif; letter-spacing: -.06em; margin: 10px 0 8px; }
+  .cover p { margin: 0; font: 400 clamp(18px, 2.4vw, 26px)/1.3 'Unbounded', sans-serif; }
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 22px 0 0; }
+  .fact { background: var(--paper); border-radius: 18px; padding: 16px 18px; }
+  .fact b { display: block; font: 600 30px/1 'Unbounded', sans-serif; }
+  .fact span { font-size: 13px; color: var(--muted); }
+  .topics { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .topics span { padding: 5px 12px; border-radius: 999px; background: var(--paper); font-size: 13px; font-weight: 600; }
+  .topics small { color: var(--muted); font-weight: 400; margin-left: 4px; }
+
+  .month { margin-top: 64px; break-inside: avoid-page; }
+  .month-h { display: flex; align-items: baseline; gap: 16px; border-bottom: 2px solid var(--ink); padding-bottom: 10px; margin-bottom: 18px; }
+  .month-h b { font: 800 clamp(34px, 5vw, 56px)/1 'Unbounded', sans-serif; letter-spacing: -.04em; text-transform: lowercase; }
+  .month-h span { color: var(--muted); font-size: 14px; }
+  .stories { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+  .story { grid-column: span 4; background: var(--paper); border-radius: 18px; overflow: hidden; text-decoration: none; display: flex; flex-direction: column; border: 1px solid var(--line); }
+  .story.lead { grid-column: span 8; grid-row: span 2; }
+  .story img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; background: var(--foam); }
+  .story.lead img { aspect-ratio: 16 / 9; }
+  .story .b { padding: 14px 16px 16px; display: grid; gap: 6px; }
+  .story .m { font-size: 12.5px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .story .src { font-weight: 600; color: var(--c); }
+  .story h3 { margin: 0; font: 600 16px/1.35 'Commissioner', sans-serif; }
+  .story.lead h3 { font: 600 clamp(20px, 2.4vw, 26px)/1.25 'Unbounded', sans-serif; letter-spacing: -.02em; }
+  .story p { margin: 0; color: var(--muted); font-size: 14px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+  .story.lead p { -webkit-line-clamp: 6; font-size: 15px; }
+  .more { margin-top: 10px; font-size: 14px; }
+  .more a { color: var(--sea); font-weight: 600; }
+  footer { margin: 80px 0 40px; font-size: 13px; color: var(--muted); text-align: center; }
+
+  @media (max-width: 760px) {
+    .story, .story.lead { grid-column: 1 / -1; grid-row: auto; }
+    .cover { min-height: 420px; }
+    .cover-in { padding: 24px; }
+  }
+  @page { size: A4; margin: 12mm; }
+  @media print {
+    /* always the light palette on paper, whatever the screen theme */
+    :root, :root[data-theme="dark"], :root:not([data-theme="light"]) { --sand: #fff; --paper: #fff; --ink: #0f222b; --muted: #5d6a6c; --line: #e4d7bf; --deep: #0a3f55; --sea: #17799a; --foam: #d6ebf0; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { font-size: 10.5pt; }
+    .wrap { max-width: none; padding: 0; }
+    .top, .more, .print { display: none !important; }
+    .cover { min-height: 255mm; border-radius: 0; break-after: page; }
+    .facts, .topics { break-inside: avoid; }
+    .month { break-before: page; margin-top: 0; }
+    .story { break-inside: avoid; }
+    .story p { -webkit-line-clamp: unset; display: block; }
+    a { text-decoration: none; }
+    footer { break-before: page; margin-top: 40mm; font-size: 11pt; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top" aria-label="Навігація">
+    <a href="./">← До хроніки</a>
+    <div class="years" id="years"></div>
+    <button class="print" type="button" id="print">🖨 Друкувати / PDF</button>
+  </nav>
+
+  <header class="cover" id="cover">
+    <div class="cover-in">
+      <div class="k">Приморськ · Книга року</div>
+      <h1 id="year"></h1>
+      <p id="tagline"></p>
+    </div>
+  </header>
+  <div class="facts" id="facts"></div>
+  <div class="topics" id="topics"></div>
+
+  <main id="months"></main>
+  <footer>Приморськ. Хроніка громади · зібрано з архівів сайтів міської ради, ГО «Приморськ 24/7», «ПРО Приморськ», шкіл, РДА та місцевих і обласних ЗМІ, збережених у Wayback Machine</footer>
+</div>
+
+<script src="meta.js"></script>
+<script>
+const { SOURCES } = META;
+const MONTHS = ['січень','лютий','березень','квітень','травень','червень','липень','серпень','вересень','жовтень','листопад','грудень'];
+const MONTHS_GEN = ['січня','лютого','березня','квітня','травня','червня','липня','серпня','вересня','жовтня','листопада','грудня'];
+const PER_MONTH = 5;
+const $ = id => document.getElementById(id);
+const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+const plural = (n, one, few, many) => { const a = n % 10, b = n % 100; return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many; };
+const day = d => { const [, m, dd] = d.split('-'); return `${+dd} ${MONTHS_GEN[m - 1]}`; };
+
+// what makes a story book-worthy: a real photo (council banners don't count), a video, a proper text, a concrete place; council paperwork ranks lower
+const score = a => (a.i && !a.bn ? 4 : 0) + (a.ph ? 1 : 0) + (a.v ? 2 : 0) + (a.vl ? 1 : 0) + (a.w ? -5 : 0) + (a.e ? -1 : 0)
+  + (/^(Рішення|Розпорядження|Проект рішення|ПОВІДОМЛЕННЯ|Аналіз регуляторного|№\d)/i.test(a.t) ? -3 : 0)
+  + ((a.c || []).some(c => ['Культура', 'Спорт', 'Історія і пам\'ять', 'Молодь і діти', 'Туризм і море'].includes(c)) ? 1 : 0);
+
+// photos load lazily on screen; on paper every one must be there before printing
+const eager = () => document.querySelectorAll('img[loading="lazy"]').forEach(i => { i.loading = 'eager'; });
+addEventListener('beforeprint', eager);  // Ctrl+P: best effort
+$('print').onclick = async () => {
+  eager();
+  await Promise.all([...document.images].map(i => i.decode().catch(() => {})));
+  print();
+};
+
+fetch('data.json', { cache: 'no-cache' }).then(r => r.json()).then(all => {
+  const news = all.filter(a => !a.k);
+  const years = [...new Set(news.map(a => a.d.slice(0, 4)))].sort();
+  const counts = Object.fromEntries(years.map(y => [y, news.filter(a => a.d.startsWith(y)).length]));
+  const asked = new URLSearchParams(location.search).get('y');
+  // default: the richest year
+  const y = years.includes(asked) ? asked : years.reduce((a, b) => counts[b] > counts[a] ? b : a);
+  document.title = `${y} · Книга року · Приморськ`;
+  $('years').innerHTML = years.filter(v => counts[v] >= 20).map(v => `<a href="?y=${v}" ${v === y ? 'aria-current="page"' : ''}>${v}</a>`).join('');
+
+  const items = news.filter(a => a.d.startsWith(y) && !a.e);
+  const ranked = [...items].sort((a, b) => score(b) - score(a));
+  const coverPic = ranked.find(a => a.i && !a.bn && (a.c || []).some(c => c !== 'Влада')) || ranked.find(a => a.i && !a.bn);
+  $('cover').style.backgroundImage = coverPic ? `url("${coverPic.i}")` : 'url(hero.jpg)';
+  $('year').textContent = y;
+  $('tagline').textContent = `Рік громади у ${items.length} ${plural(items.length, 'історії', 'історіях', 'історіях')}`;
+
+  const tc = {}, vc = new Set();
+  items.forEach(a => { (a.c || []).forEach(c => tc[c] = (tc[c] || 0) + 1); (a.vl || []).forEach(v => vc.add(v)); });
+  const bySrc = s => items.filter(a => a.s === s).length;
+  $('facts').innerHTML = [
+    [items.length, 'новин і подій'], [items.filter(a => a.v).length, 'відеосюжетів'],
+    [vc.size + 1, 'населених пунктів у новинах'], [bySrc('pro_prim'), 'від «ПРО Приморськ»'],
+  ].map(([b, s]) => `<div class="fact"><b>${b}</b><span>${s}</span></div>`).join('');
+  $('topics').innerHTML = Object.entries(tc).sort((a, b) => b[1] - a[1]).slice(0, 8)
+    .map(([c, n]) => `<span>${esc(c)}<small>${n}</small></span>`).join('');
+
+  $('months').innerHTML = MONTHS.map((m, i) => {
+    const mm = `${y}-${String(i + 1).padStart(2, '0')}`;
+    const month = items.filter(a => a.d.startsWith(mm));
+    if (!month.length) return '';
+    const best = [...month].sort((a, b) => score(b) - score(a)).slice(0, PER_MONTH).sort((a, b) => a.d.localeCompare(b.d));
+    const lead = best.reduce((a, b) => score(b) > score(a) ? b : a);
+    return `<section class="month" aria-labelledby="m${i}">
+      <div class="month-h"><b id="m${i}">${m}</b><span>${month.length} ${plural(month.length, 'подія', 'події', 'подій')}</span></div>
+      <div class="stories">${[lead, ...best.filter(a => a !== lead)].map(a => `
+        <a class="story ${a === lead ? 'lead' : ''}" href="./#${a.n}" style="--c:var(--c-${a.s})">
+          ${a.i && !a.bn ? `<img src="${a.i}" alt="" loading="lazy">` : ''}
+          <div class="b"><div class="m"><span>${day(a.d)}</span><span class="src">${SOURCES[a.s]}</span>${a.v ? '<span>▶ відео</span>' : ''}</div>
+          <h3>${esc(a.t)}</h3><p>${esc(a.x)}</p></div></a>`).join('')}</div>
+      ${month.length > best.length ? `<p class="more"><a href="./">Усі ${month.length} ${plural(month.length, 'подія', 'події', 'подій')} за ${m} у хроніці →</a></p>` : ''}
+    </section>`;
+  }).join('');
+});
+</script>
+</body>
+</html>
