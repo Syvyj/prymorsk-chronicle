@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Голодомор 1932–1933 · Приморськ. Хроніка громади</title>
+<meta name="description" content="2273 людини з нашого краю забрав голод. Задокументовані втрати Приморського району за Національною книгою пам’яті жертв Голодомору 1932–1933 років.">
+<link rel="canonical" href="https://prym.mydom.website/holodomor">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Приморськ. Хроніка громади">
+<meta property="og:title" content="Голодомор 1932–1933. 2273 людини з нашого краю забрав голод">
+<meta property="og:description" content="Це лише ті, чию смерть було задокументовано. Мапа втрат, діти, імена за селами Приморського району.">
+<meta property="og:image" content="https://prym.mydom.website/holodomor-og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#12100c">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="fonts/g.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha384-c6Rcwz4e4CITMbu/NBmnNS8yN2sC3cUElMEMfP3vqqKFp7GOYaaBBCqmaWBjmkjb" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha384-NElt3Op+9NBMCYaef5HxeJmU4Xeard/Lku8ek6hoPTvYkQPh3zLIrJP7KiRocsxO" crossorigin="anonymous" defer></script>
+<style>
+  @font-face { font-family: 'UAF Memory'; src: url('fonts/UAFMemoryVFVF.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+  /* A memorial: one dark world on purpose (black earth, straw, ash), the document's voice in a typewriter face.
+     Display face: UAF Memory by Dmytro Rastvortsev (CC BY-ND 4.0), the variable web file unchanged; Lora is the fallback. */
+  :root { --earth: #12100c; --soil: #1b1813; --soil-2: #24201a; --ash: #b8b0a3; --ash-dim: #7d766b; --bone: #efe8dc;
+    --straw: #d8b265; --straw-dim: #8a7140; --line: #332d24; --paper: #d6bc84; --paper-2: #cbae72; --ink: #2a2012; --ink-dim: #5f4c2d; --rule: #8c3b2a;
+    --memory: 'UAF Memory', 'Lora', Georgia, serif; --body: 'Commissioner', system-ui, sans-serif; --mono: 'PT Mono', ui-monospace, monospace;
+    color-scheme: dark; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  body { margin: 0; background: var(--earth); color: var(--bone); font: 17px/1.7 var(--body); -webkit-font-smoothing: antialiased; }
+  :focus-visible { outline: 2px solid var(--straw); outline-offset: 3px; }
+  a { color: var(--straw); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px)); }
+  .draft { position: relative; z-index: 5; background: var(--straw); color: #1d1406; font: 13px/1.4 var(--mono); text-align: center; padding: 6px 12px; }
+  .bar { position: absolute; z-index: 4; inset: 0 0 auto; }
+  .bar .wrap { display: flex; justify-content: space-between; padding-block: 14px; }
+  .bar a { font: 14px var(--body); color: var(--ash); text-decoration: none; }
+  .bar a:hover { color: var(--bone); }
+  .eyebrow { margin: 0; font: 13px/1.4 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--straw); }
+  .num { font-variant-numeric: lining-nums tabular-nums; }
+
+  /* 1. Opening: the count over a slow wall of every name */
+  .wall { position: fixed; z-index: 0; top: 0; left: -2vw; right: -2vw; font: 13px/2 var(--mono); color: var(--ash); opacity: .085; text-align: justify;
+    pointer-events: none; user-select: none; will-change: transform; }
+  body > *:not(.wall) { position: relative; z-index: 1; }
+  .open { min-height: 96vh; display: grid; align-items: center; overflow: hidden; background: radial-gradient(ellipse at 40% 55%, rgba(48,38,22,.55) 0%, transparent 70%); }
+  .open .wrap { position: relative; z-index: 2; padding-block: 90px 10px; display: grid; gap: 14px; justify-items: center; text-align: center; }
+  .open .big { margin: 0; font: 600 clamp(120px, min(26vw, 34vh), 340px)/.9 var(--memory); color: var(--straw); letter-spacing: -.02em; text-shadow: 0 0 80px rgba(216,178,101,.22); }
+  .open h1 { margin: 0; font: 600 clamp(36px, min(6.6vw, 8.5vh), 92px)/1.05 var(--memory); letter-spacing: -.01em; max-width: 16ch; text-wrap: balance; }
+  .open .second { margin: 10px 0 0; font: 400 clamp(21px, min(3.2vw, 4vh), 40px)/1.35 var(--memory); color: var(--ash); max-width: 26ch; text-wrap: balance; }
+  .cue { margin-top: 30px; font: 13px var(--mono); color: var(--ash-dim); letter-spacing: .1em; text-decoration: none; }
+  /* the opening's script: the number alone, then the line about the famine, then the rest (stage classes set by the counter) */
+  .open .big .dg { transition: opacity 1.6s ease, filter 1.6s ease; }
+  .js .open .big .dg:not(.on) { opacity: 0; filter: blur(8px); }
+  .open .s1, .open .s2 { transition: opacity 1.8s ease, transform 1.8s ease; }
+  .js .open:not(.stage-1) .s1, .js .open:not(.stage-2) .s2 { opacity: 0; transform: translateY(14px); }
+  .cue::after { content: ' ↓'; }
+
+  .intro .wrap { padding-block: 10px 30px; display: grid; gap: 50px; justify-items: center; }
+  .intro p { margin: 0; max-width: 46ch; text-align: center; font: 400 clamp(20px, 2.2vw, 25px)/1.7 var(--memory); color: var(--bone); }
+
+  /* chapters */
+  .chapter { padding-block: 110px 30px; }
+  .chapter-head { display: grid; justify-items: center; gap: 12px; text-align: center; margin-bottom: 44px; }
+  .chapter-head .no { font: 15px var(--mono); color: var(--straw); letter-spacing: .2em; }
+  .chapter-head h2 { margin: 0; font: 600 clamp(34px, 5vw, 58px)/1.1 var(--memory); text-wrap: balance; }
+  .chapter-head p { margin: 0; max-width: 58ch; color: var(--ash); font-size: 18px; text-wrap: balance; }
+  .ear { width: 34px; height: 68px; color: var(--straw); }
+  .ear path { stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset 1.6s ease; }
+  .ear path + path { transition-delay: .9s; transition-duration: 2.2s; }
+  .js .chapter-head:not(.shown) .ear path, .js #children:not(.c-title) .ear path { stroke-dashoffset: 1; }
+
+  /* 01 the map of losses, its legend laid on the map */
+  .mapframe { position: relative; border: 1px solid var(--line); background: var(--soil); }
+  #map { height: min(78vh, 760px); min-height: 520px; background: var(--soil); }
+  .leaflet-container { font: 14px var(--body); }
+  .leaflet-image-layer { filter: grayscale(1) sepia(.45) brightness(.5) contrast(1.15); }
+  .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--soil-2); color: var(--bone); border-radius: 2px; }
+  .leaflet-popup-content b { font: 600 18px var(--memory); }
+  .leaflet-tooltip { background: var(--soil-2); color: var(--bone); border: 1px solid var(--line); }
+  .leaflet-control-attribution { background: rgba(18,16,12,.75) !important; color: var(--ash-dim) !important; }
+  .leaflet-control-attribution a { color: var(--ash) !important; }
+  .leaflet-bar a { background: var(--soil-2); color: var(--bone); border-color: var(--line); }
+  .legend { position: absolute; z-index: 500; top: 16px; right: 16px; bottom: 34px; width: 300px; display: flex; flex-direction: column;
+    background: rgba(18,16,12,.82); backdrop-filter: blur(6px); border: 1px solid var(--line); }
+  .legend h3 { margin: 0; padding: 16px 18px 12px; font: 13px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--straw); border-bottom: 1px solid var(--line); }
+  .legend ol { list-style: none; margin: 0; padding: 4px 0; overflow-y: auto; flex: 1; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+  .legend li button { all: unset; box-sizing: border-box; cursor: pointer; width: 100%; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; padding: 8px 18px; font-size: 15px; }
+  .legend li button:hover, .legend li button:focus-visible, .legend li button.on { background: rgba(216,178,101,.12); color: var(--straw); }
+  .legend .bar-n { display: block; height: 3px; margin-top: 5px; background: var(--straw-dim); }
+  .legend b { font: 600 19px var(--memory); color: var(--straw); }
+  .caption { margin: 12px 0 0; font: 13px/1.5 var(--mono); color: var(--ash-dim); }
+
+  /* 02 children: lit dots that go out one by one while the count grows */
+  .kids { display: grid; justify-items: center; gap: 28px; }
+  .kids-count { text-align: center; }
+  .kids-count b { display: block; font: 600 clamp(64px, 9vw, 112px)/1 var(--memory); color: var(--straw); }
+  .kids-count .cap { display: grid; margin-top: 10px; }
+  .kids-count .cap > span { grid-area: 1 / 1; transition: opacity 1.6s ease; }
+  .cap-a { font: 14px var(--mono); color: var(--ash); letter-spacing: .08em; }
+  .cap-b { max-width: 40ch; font: 400 clamp(19px, 2.2vw, 24px)/1.5 var(--memory); color: var(--bone); }
+  #children .kids-head { transition: opacity 1.8s ease, transform 1.8s ease; }
+  .js #children:not(.c-title) .kids-head { opacity: 0; transform: translateY(14px); }
+  .js #children:not(.c-end) .cap-b, .js #children.c-end .cap-a { opacity: 0; }
+  .dots { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; max-width: 980px; }
+  .dots i { width: 10px; height: 10px; border-radius: 50%; background: #ffd98a; box-shadow: 0 0 8px 1px rgba(255,205,110,.55); transition: background 1.4s ease, box-shadow 1.4s ease; }
+  .dots i.out { background: #3a352c; box-shadow: none; }
+  .babies { margin: 10px 0 0; max-width: 34ch; text-align: center; font: 400 clamp(22px, 2.8vw, 30px)/1.45 var(--memory); color: var(--bone); transition: opacity 1.5s; }
+  .js .babies.wait { opacity: 0; }
+
+  /* 03 people: a card index of light archive cards */
+  .find { display: grid; gap: 8px; margin: 0 auto 30px; max-width: 760px; }
+  .find label { font: 13px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ash); }
+  .find input { font: 18px var(--body); padding: 15px 18px; border-radius: 2px; border: 1px solid var(--line); background: var(--soil); color: var(--bone); width: 100%; }
+  .find input::placeholder { color: var(--ash-dim); }
+  .find small { color: var(--ash); }
+  .cards { list-style: none; margin: 0 auto; padding: 0; max-width: 980px; display: grid; gap: 0; }
+  .card { position: relative; margin-top: -8px; background: var(--paper); color: var(--ink); border-radius: 0 6px 6px 6px;
+    background-image: linear-gradient(180deg, rgba(255,255,255,.10), transparent 40%), radial-gradient(circle at 80% 120%, rgba(90,60,20,.18), transparent 60%);
+    box-shadow: 0 -6px 14px rgba(0,0,0,.42), 0 1px 0 rgba(255,255,255,.18) inset;
+    transition: transform .35s ease, box-shadow .35s ease, opacity .8s ease, translate .8s ease; }
+  .card:first-child { margin-top: 18px; }
+  .card:nth-child(even) { background: var(--paper-2); }
+  .card::before { content: ''; position: absolute; left: 0; top: -14px; width: 150px; height: 15px; background: inherit; border-radius: 8px 8px 0 0; }
+  .card:nth-child(3n+2)::before { left: 38%; } .card:nth-child(3n)::before { left: auto; right: 0; }
+  .card::after { content: ''; position: absolute; left: 22px; right: 22px; top: 62px; border-top: 1px solid rgba(140,59,42,.4); }  /* the red rule of a catalogue card */
+  .card:hover { transform: translateY(-6px); box-shadow: 0 -10px 22px rgba(0,0,0,.5), 0 1px 0 rgba(255,255,255,.18) inset; }
+  .js .card.hide { opacity: 0; translate: 0 26px; }
+  .card > button { all: unset; box-sizing: border-box; cursor: pointer; width: 100%; display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: baseline; padding: 18px 22px 22px; }
+  .card > button:focus-visible { outline: 2px solid var(--rule); outline-offset: -4px; }
+  .v-name { font: 600 25px/1.2 var(--memory); }
+  .v-rada { display: block; margin-top: 16px; font: 13px var(--mono); color: var(--ink-dim); letter-spacing: .04em; }
+  .count { font: 600 30px var(--memory); color: var(--rule); }
+  .count small { display: block; font: 12px var(--mono); color: var(--ink-dim); text-align: right; }
+  .names { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s ease; }
+  .card[open] .names { grid-template-rows: 1fr; }
+  .names > div { overflow: hidden; }
+  .names .meta { margin: 0; padding: 0 22px 10px; font: 13px var(--mono); color: var(--ink-dim); }
+  .names .meta a { color: var(--rule); }
+  ol.people { list-style: none; margin: 0; padding: 0 22px 22px; columns: 2 300px; column-gap: 34px; }
+  .person { break-inside: avoid; padding: 8px 0; border-top: 1px dashed rgba(42,32,18,.3); line-height: 1.45; }
+  .person b { font: 600 17px var(--memory); }
+  .person span { display: block; font: 13px/1.5 var(--mono); color: var(--ink-dim); }
+  #results { max-width: 980px; margin: 0 auto; background: var(--paper); color: var(--ink); padding: 18px 22px; border-radius: 6px; }
+  .rada-tag { font: 12px var(--mono); color: var(--rule); text-transform: uppercase; letter-spacing: .06em; }
+
+  /* the ending: a candle among ears of wheat */
+  .end { display: grid; align-items: center; text-align: center; background: radial-gradient(circle at 50% 36%, rgba(216,178,101,.16), transparent 36%); }
+  .end .wrap { padding-block: 120px 10px; display: grid; gap: 24px; justify-items: center; }
+  .symbol { width: min(380px, 78vw); height: auto; aspect-ratio: 240 / 260; overflow: visible; }
+  .halo { animation: halo 4s ease-in-out infinite; transform-origin: 120px 92px; }
+  @keyframes halo { 50% { opacity: .55; transform: scale(1.12); } }
+  .flame { transform-origin: 120px 104px; animation: flicker 2.6s ease-in-out infinite; }
+  @keyframes flicker { 0%, 100% { transform: scale(1) rotate(0); } 20% { transform: scale(1.05, .95) rotate(-2.5deg); } 45% { transform: scale(.96, 1.06) rotate(2deg); } 70% { transform: scale(1.03, .98) rotate(-1deg); } }
+  .core { animation: core 1.3s ease-in-out infinite alternate; }
+  @keyframes core { to { opacity: .7; } }
+  .smoke { animation: smoke 6s ease-in infinite; opacity: 0; }
+  @keyframes smoke { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: .25; } 100% { opacity: 0; transform: translateY(-40px) scaleX(1.6); } }
+  .end h2 { margin: 10px 0 0; font: 600 clamp(48px, 8vw, 96px)/1.05 var(--memory); }
+  .end p { margin: 0; max-width: 34ch; color: var(--bone); font: 400 clamp(21px, 2.6vw, 30px)/1.5 var(--memory); }
+
+  .remember .wrap { padding-block: 40px 70px; }
+  .timeline { list-style: none; margin: 0 auto; padding: 0; max-width: 980px; display: grid; gap: 0; border-left: 1px solid var(--line); }
+  .timeline li { position: relative; padding: 0 0 26px 30px; }
+  .timeline li::before { content: ''; position: absolute; left: -5px; top: 9px; width: 9px; height: 9px; border-radius: 50%; background: var(--straw); box-shadow: 0 0 10px rgba(216,178,101,.6); }
+  .timeline a { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: start; text-decoration: none; color: var(--bone); }
+  .timeline a:hover h3, .timeline a:focus-visible h3 { color: var(--straw); }
+  .timeline time { display: block; font: 13px var(--mono); color: var(--straw); letter-spacing: .06em; }
+  .timeline h3 { margin: 4px 0 4px; font: 600 21px/1.3 var(--memory); transition: color .3s; }
+  .timeline p { margin: 0; color: var(--ash); font-size: 15px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .timeline img { width: 150px; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 2px; filter: sepia(.35) brightness(.85); }
+  .js .timeline li.hide { opacity: 0; transform: translateX(-12px); }
+  .timeline li { transition: opacity .8s ease, transform .8s ease; }
+  @media (max-width: 640px) { .timeline img { width: 90px; } }
+  /* one footer: how to read the records, the source, the font, the way back */
+  .foot { margin-top: 30px; background: rgba(10,9,7,.88); border-top: 1px solid var(--line); backdrop-filter: blur(4px); }
+  .foot .wrap { padding-block: 56px 64px; display: grid; gap: 12px; color: var(--ash); font-size: 16px; }
+  .foot h3 { margin: 0 0 6px; font: 600 24px var(--memory); color: var(--bone); }
+  .foot p { margin: 0; }
+  .foot .credits { margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--line); display: grid; gap: 6px; font: 14px/1.6 var(--mono); }
+  .foot .back { margin-top: 18px; font: 14px var(--mono); width: fit-content; }
+
+  .reveal { transition: opacity 1.2s ease, transform 1.2s ease; }
+  /* a picture between two parts is the bridge between them: the previous text ends over its top, the next part
+     begins over its lower part (--up / --down: how much of it each side covers; --k: its height; --a / --b: where it is clear) */
+  body > .scene { z-index: 0; }
+  .scene { --H: calc(var(--k, 1) * clamp(240px, 42vw, 600px)); height: var(--H); overflow: hidden;
+    margin: calc(var(--up, 0) * -1 * var(--H)) 0 calc(var(--down, 0) * -1 * var(--H)); pointer-events: none; }
+  .scene img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 50%); transition: opacity 2.4s ease, transform 3s ease;
+    --m: linear-gradient(transparent, #000 var(--a, 25%), #000 var(--b, 60%), transparent);
+    -webkit-mask-image: var(--m); mask-image: var(--m); }
+  .scene + section { padding-top: 0; }
+  .scene + section .wrap { padding-top: 0; }
+  .scene + section .chapter-head { text-shadow: 0 1px 3px rgba(12,10,6,.9), 0 0 28px rgba(12,10,6,.9); }
+  .js .scene:not(.shown) img { opacity: 0; transform: scale(1.05); }
+  .js .reveal:not(.shown) { opacity: 0; transform: translateY(18px); }
+  @media (prefers-reduced-motion: reduce) {
+    .flame, .halo, .core, .smoke { animation: none; }
+    .js .open .s1, .js .open .s2 { opacity: 1; transform: none; }
+    .ear path { stroke-dashoffset: 0 !important; transition: none; }
+    .reveal, .js .reveal:not(.shown), .js .card.hide, .js .scene:not(.shown) img { opacity: 1; transform: none; translate: none; transition: none; }
+  }
+  @media (max-width: 860px) {
+    .legend { position: static; width: auto; max-height: 340px; }
+    #map { height: 460px; min-height: 0; }
+    .dots { gap: 3px; } .dots i { width: 6px; height: 6px; }
+    .chapter { padding-block: 80px 20px; }
+  }
+  /* spacing placed by hand in ?tune on a wide screen (2026-10-22); phones keep the default layout */
+  @media (min-width: 861px) {
+    .open .eyebrow { margin-top: -124px; }
+    .open #n-total { margin-top: -124px; }
+    #intro { margin-top: 203px; }
+    #intro .reveal { margin-top: -251px; }
+    #map-of-losses .ear { margin-top: 68px; }
+    #map-of-losses h2 { margin-top: -3px; }
+    #children .chapter-head { margin-top: 48px; }
+    #children .ear { margin-top: 37px; }
+    #children h2 { margin-top: -15px; }
+    #children .kids-count { margin-top: -37px; }
+    #children #dots { margin-top: -15px; }
+    #children #babies { margin-top: -12px; }
+    #people .chapter-head { margin-top: -7px; }
+    #people .ear { margin-top: 25px; }
+    .end { margin-top: 16px; }
+    .end .symbol { margin-top: -109px; }
+    .end h2 { margin-top: -28px; }
+    .end p { margin-top: -5px; }
+    #remember .chapter-head { margin-top: 12px; }
+    #remember .ear { margin-top: 39px; }
+    .foot { margin-top: 30px; }
+    .foot .wrap > p:nth-child(3) { margin-top: -5px; }
+    .foot .wrap > p:nth-child(4) { margin-top: -4px; }
+    .foot .credits { margin-top: -3px; }
+  }
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js')</script>
+<nav class="bar" aria-label="Навігація"><div class="wrap">
+  <a href="index.html">← Хроніка громади</a>
+  <a href="#people">Знайти рідних</a>
+</div></nav>
+
+<div class="wall" id="wall" aria-hidden="true"></div>
+<header class="open">
+  <div class="wrap">
+    <p class="eyebrow s2">Голодомор 1932–1933 · Приморський район</p>
+    <p class="big num" id="n-total" aria-hidden="true">2273</p>
+    <h1 class="s1"><span class="sr" id="n-sr">2273</span> людини з нашого краю забрав голод.</h1>
+    <p class="second s2">Це лише ті, чию смерть було задокументовано.</p>
+    <a class="cue s2" href="#intro">Гортайте</a>
+  </div>
+</header>
+
+<section class="intro" id="intro"><div class="wrap">
+  <p class="reveal">У 1932–1933 роках голод прийшов у кожне село нашого району: у Ногайськ і Обіточне, в українські й болгарські села від Борисівки до Нельгівки. Тут усі, чию смерть у ті роки задокументовано в книгах реєстрації.</p>
+</div></section>
+
+<figure class="scene" style="--k:1.03;--up:.266;--down:.239" aria-hidden="true"><img src="holodomor-village.webp" alt="" loading="lazy" decoding="async"></figure>
+
+<section class="chapter" id="map-of-losses"><div class="wrap">
+  <div class="chapter-head reveal">
+    <svg class="ear" viewBox="0 0 30 60" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path pathLength="1" d="M15 59V8"/><path pathLength="1" d="M15 14c-5-2-7-6-7-10 4 1 7 4 7 10zm0 0c5-2 7-6 7-10-4 1-7 4-7 10zM15 25c-5-2-7-6-7-10 4 1 7 4 7 10zm0 0c5-2 7-6 7-10-4 1-7 4-7 10zM15 36c-5-2-7-6-7-10 4 1 7 4 7 10zm0 0c5-2 7-6 7-10-4 1-7 4-7 10z"/></g></svg>
+    <span class="no">01</span>
+    <h2>Мапа жертв</h2>
+    <p>Що більше коло, то більше втрат.</p>
+  </div>
+  <div class="mapframe reveal">
+    <div id="map" role="img" aria-label="Мапа сіл Приморського району з кількістю загиблих у 1932–1933 роках"></div>
+    <aside class="legend" aria-label="Села за кількістю загиблих"><h3>Загиблі за селами</h3><ol id="rank"></ol></aside>
+  </div>
+  <p class="caption">Мапа Стрельбицького, лист 48, 1919 рік. Wikimedia Commons.</p>
+</div></section>
+
+<figure class="scene" style="--k:1.5;--up:-.01;--down:.31;--pos:70% 50%;--a:15%;--b:68%" aria-hidden="true"><img src="holodomor-shoes.webp" alt="" loading="lazy" decoding="async"></figure>
+
+<section class="chapter" id="children"><div class="wrap">
+  <div class="chapter-head kids-head">
+    <svg class="ear" viewBox="0 0 30 60" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path pathLength="1" d="M15 59V8"/><path pathLength="1" d="M15 14c-5-2-7-6-7-10 4 1 7 4 7 10zm0 0c5-2 7-6 7-10-4 1-7 4-7 10zM15 25c-5-2-7-6-7-10 4 1 7 4 7 10zm0 0c5-2 7-6 7-10-4 1-7 4-7 10zM15 36c-5-2-7-6-7-10 4 1 7 4 7 10zm0 0c5-2 7-6 7-10-4 1-7 4-7 10z"/></g></svg>
+    <span class="no">02</span>
+    <h2>Найважчі втрати — діти</h2>
+  </div>
+  <div class="kids">
+    <div class="kids-count"><b class="num" id="kids-n">0</b><span class="cap"><span class="cap-b" id="kids-line">ще не мали й 10 років</span></span></div>
+    <div class="dots" id="dots" role="img"></div>
+    <p class="babies wait" id="babies"></p>
+  </div>
+</div></section>
+
+<figure class="scene" style="--up:-.053;--down:.273;--pos:84% 50%" aria-hidden="true"><img src="holodomor-book.webp" alt="" loading="lazy" decoding="async"></figure>
+
+<section class="chapter" id="people"><div class="wrap">
+  <div class="chapter-head reveal">
+    <svg class="ear" viewBox="0 0 30 60" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path pathLength="1" d="M15 59V8"/><path pathLength="1" d="M15 14c-5-2-7-6-7-10 4 1 7 4 7 10zm0 0c5-2 7-6 7-10-4 1-7 4-7 10zM15 25c-5-2-7-6-7-10 4 1 7 4 7 10zm0 0c5-2 7-6 7-10-4 1-7 4-7 10zM15 36c-5-2-7-6-7-10 4 1 7 4 7 10zm0 0c5-2 7-6 7-10-4 1-7 4-7 10z"/></g></svg>
+    <span class="no">03</span>
+    <h2>Люди</h2>
+    <p>Задокументовані втрати нашого району. Тут ви можете знайти інформацію про своїх рідних.</p>
+  </div>
+  <div class="find">
+    <label for="q">Знайти людину</label>
+    <input id="q" type="search" placeholder="Прізвище або ім’я, напр. Бойко" autocomplete="off">
+    <small id="found"></small>
+  </div>
+  <ol class="cards" id="cards" aria-label="Села району"></ol>
+  <ol class="people" id="results" hidden></ol>
+</div></section>
+
+<section class="end"><div class="wrap">
+  <svg class="symbol" viewBox="0 0 240 260" aria-label="Свічка пам’яті серед колосків">
+    <defs>
+      <radialGradient id="glow"><stop offset="0" stop-color="#ffe2a0" stop-opacity=".95"/><stop offset="1" stop-color="#d8b265" stop-opacity="0"/></radialGradient>
+      <linearGradient id="wax" x1="0" x2="1"><stop offset="0" stop-color="#d9cfbc"/><stop offset=".45" stop-color="#f3ece0"/><stop offset="1" stop-color="#c9bea9"/></linearGradient>
+      <g id="ear" fill="none" stroke="#c9a457" stroke-width="1.6" stroke-linecap="round">
+        <path d="M0 0C-2-40-1-80 8-118"/>
+        <path d="M8-118c-7-3-10-10-10-17 6 2 10 8 10 17zm0 0c6-4 9-11 8-17-6 3-9 9-8 17zM5-102c-7-3-10-10-10-17 6 2 10 8 10 17zm0 0c6-4 9-11 8-17-6 3-9 9-8 17zM2-86c-7-3-10-10-10-17 6 2 10 8 10 17zm0 0c6-4 9-11 8-17-6 3-9 9-8 17zM0-70c-7-3-10-10-10-17 6 2 10 8 10 17zm0 0c6-4 9-11 8-17-6 3-9 9-8 17z"/>
+        <path d="M8-135l3-14M13-119l6-10M3-135l-6-11" stroke-width="1"/>
+      </g>
+    </defs>
+    <circle class="halo" cx="120" cy="92" r="70" fill="url(#glow)" opacity=".45"/>
+    <g transform="translate(92 236) rotate(-22)"><use href="#ear"/></g>
+    <g transform="translate(84 238) rotate(-8)"><use href="#ear"/></g>
+    <g transform="translate(148 236) rotate(22) scale(-1 1)"><use href="#ear"/></g>
+    <g transform="translate(156 238) rotate(8) scale(-1 1)"><use href="#ear"/></g>
+    <path d="M86 214q34 14 68 0" fill="none" stroke="#1f1a14" stroke-width="7" stroke-linecap="round"/>
+    <path d="M86 214q34 14 68 0" fill="none" stroke="#2b241b" stroke-width="2"/>
+    <ellipse class="smoke" cx="120" cy="58" rx="3" ry="8" fill="#bdb3a3"/>
+    <g class="flame"><path d="M120 62c11 16 15 27 15 34a15 15 0 0 1-30 0c0-7 4-18 15-34z" fill="#f2bf5e"/><path class="core" d="M120 80c5 7 7 12 7 16a7 7 0 0 1-14 0c0-4 2-9 7-16z" fill="#fff4d6"/></g>
+    <rect x="119" y="104" width="2" height="10" fill="#3a3329"/>
+    <rect x="103" y="113" width="34" height="112" rx="3" fill="url(#wax)"/>
+    <path d="M110 113v18q2 6 4 0v-18" fill="#f6f0e5"/>
+  </svg>
+  <h2 class="reveal">Пам’ятаймо.</h2>
+  <p class="reveal">Щороку в четверту суботу листопада о 16:00 Україна вшановує жертв голодоморів хвилиною мовчання і свічкою у вікні.</p>
+</div></section>
+
+<figure class="scene" style="--up:.12;--down:.24" aria-hidden="true"><img src="holodomor-candle.webp" alt="" loading="lazy" decoding="async"></figure>
+
+<section class="chapter remember" id="remember"><div class="wrap">
+  <div class="chapter-head reveal">
+    <svg class="ear" viewBox="0 0 30 60" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path pathLength="1" d="M15 59V8"/><path pathLength="1" d="M15 14c-5-2-7-6-7-10 4 1 7 4 7 10zm0 0c5-2 7-6 7-10-4 1-7 4-7 10zM15 25c-5-2-7-6-7-10 4 1 7 4 7 10zm0 0c5-2 7-6 7-10-4 1-7 4-7 10zM15 36c-5-2-7-6-7-10 4 1 7 4 7 10zm0 0c5-2 7-6 7-10-4 1-7 4-7 10z"/></g></svg>
+    <span class="no">04</span>
+    <h2>Записи з хроніки громади, 2009–2021</h2>
+  </div>
+  <ol class="timeline" id="news"></ol>
+</div></section>
+
+<footer class="foot"><div class="wrap">
+  <h3>Як читати записи</h3>
+  <p>Записи подано так, як їх надруковано в книзі пам’яті, а вона повторює книги реєстрації смертей тих років. Причини на кшталт «старість» чи «не вказ.» часто приховували голод.</p>
+  <p>Скорочення: колгоспн. колгоспник, одноосібн. одноосібник, чл.арт. член артілі, робітн. робітник, на утрим. на утриманні. «(?)» означає, що слово в документі нерозбірливе.</p>
+  <p>Села згруповано за сільрадами 1932–1933 років: Ногайська сільрада це сучасний Приморськ, Обіточенська колишнє село Обіточне, нині частина міста, Партизанська це Новопавлівка, Коларівська це Софіївка.</p>
+  <div class="credits">
+    <p>Джерело: <a id="src" href="#" target="_blank" rel="noopener">Національна книга пам’яті жертв Голодомору 1932–1933 років в Україні. Запорізька область</a>. Запоріжжя: Дике Поле, 2008, с. 508–543.</p>
+    <p>Шрифт заголовків: <a href="https://rentafont.com.ua/fonts/uaf-memory" target="_blank" rel="noopener">UAF Memory</a>, Дмитро Растворцев, ліцензія CC BY-ND 4.0.</p>
+  </div>
+  <a class="back" href="index.html">← Повернутися до хроніки громади</a>
+</div></footer>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const num = n => n >= 10000 ? n.toLocaleString('uk-UA') : String(n);  // «2273», as the author writes it
+const norm = s => s.toLowerCase().replace(/[’ʼ`']/g, "'");
+function plural(n, one, few, many) { const a = n % 10, b = n % 100; return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many; }
+const people = n => plural(n, 'людина', 'людини', 'людей');
+const baby = age => /(дн|м|міс|тиж)\./.test(age);
+const kid = age => baby(age) || (/^\d+$/.test(age) && +age < 10);
+const ageText = a => /^\d+$/.test(a) ? `${a} ${plural(+a, 'рік', 'роки', 'років')}` : a === 'не вказ.' ? 'вік не вказ.' : a;
+const person = (r, withRada) => `<li class="person">${withRada ? `<div class="rada-tag">${esc(r[0])} сільрада</div>` : ''}<b>${esc(r[1])}</b>
+  <span>${[ageText(r[2]), r[3], r[4], r[5], r[6]].filter(x => x && x !== 'не вказ.').map(esc).join(' · ') || 'дані не вказано'}</span></li>`;
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const PLACE = { 'Обіточне': [46.7364, 36.3888] };  // read off the 1865 sheet, east of Ногайськ
+
+const onSeen = (el, fn, threshold = .25) => {
+  if (!('IntersectionObserver' in window)) return fn();
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { io.disconnect(); fn(); } }), { threshold });
+  io.observe(el);
+};
+if (/[?&]tune\b/.test(location.search)) document.head.append(Object.assign(document.createElement('script'), { src: 'holodomor-tune.js?' + Date.now() }));  // placing the pictures by hand, local only
+document.querySelectorAll('.reveal, .scene').forEach(el => onSeen(el, () => el.classList.add('shown'), .15));
+
+Promise.all([fetch('holodomor.json').then(r => r.json()), fetch('meta.js').then(r => r.text()), fetch('maps/maps.json').then(r => r.json()).catch(() => [])]).then(([d, meta, sheets]) => {
+  const GEO = JSON.parse(meta.slice(meta.indexOf('{'), meta.lastIndexOf('}') + 1)).GEO;
+  $('src').href = d.source;
+  const rows = d.rows, by = {}, total = rows.length;
+  rows.forEach(r => (by[r[0]] ||= []).push(r));
+  const kids = rows.filter(r => kid(r[2])).length, babies = rows.filter(r => baby(r[2])).length;
+
+  // the opening: the last digits come up slowly, one person at a time
+  $('n-sr').textContent = num(total);
+  document.querySelector('.open h1').childNodes[1].textContent = ` ${people(total)} з нашого краю забрав голод.`;
+  // the script: the number surfaces digit by digit (a count going up read as «still rising»); then the line about
+  // the famine; then everything else
+  const big = $('n-total'), open = document.querySelector('.open');
+  big.innerHTML = [...num(total)].map(c => `<span class="dg">${c}</span>`).join('');
+  const digits = [...big.children];
+  if (still) { digits.forEach(d => d.classList.add('on')); open.classList.add('stage-1', 'stage-2'); }
+  else { digits.forEach((d, i) => setTimeout(() => d.classList.add('on'), 600 + i * 700));
+    setTimeout(() => open.classList.add('stage-1'), 600 + digits.length * 700 + 300);
+    setTimeout(() => open.classList.add('stage-2'), 600 + digits.length * 700 + 2300); }
+  const wall = $('wall'), names = rows.map(r => esc(r[1])).join(' · ');
+  wall.innerHTML = names + ' · ' + names;  // long enough to outlast the page at a third of its speed
+  if (!still) { let ticking = false;
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { wall.style.transform = `translateY(${-scrollY * .3}px)`; ticking = false; }); } }, { passive: true }); }
+
+  // 02 children: every child a light. They go out slowly, faster, then slowly again; the title comes at 150;
+  // at the end «ще не мали й 10 років» stands under the number and the line about the babies appears below
+  $('kids-line').textContent = 'ще не мали й 10 років';
+  const kidRows = rows.filter(r => kid(r[2]));
+  $('dots').innerHTML = kidRows.map(r => `<i title="${esc(r[1])}, ${esc(ageText(r[2]))}"></i>`).join('');
+  $('dots').setAttribute('aria-label', `${num(kids)} вогників, по одному на кожну дитину`);
+  $('babies').textContent = `${num(babies)} з них прожили лише кілька днів, тижнів чи місяців.`;
+  onSeen($('dots'), () => {
+    const dots = [...$('dots').children], order = dots.map((_, i) => i), counter = $('kids-n');
+    for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }  // an even shuffle
+    const sec = $('children'), show = () => { sec.classList.add('c-title'); sec.querySelector('.kids-head').classList.add('shown'); }, end = () => { sec.classList.add('c-end'); $('babies').classList.remove('wait'); };
+    if (still) { dots.forEach(i => i.classList.add('out')); counter.textContent = num(kids); show(); end(); return; }
+    const T = 8000, ease = p => p < .5 ? 4 * p ** 3 : 1 - (-2 * p + 2) ** 3 / 2;  // slow, faster, slow
+    let k = 0, t0 = 0;
+    const frame = now => {
+      t0 ||= now;
+      const target = Math.round(kids * ease(Math.min(1, (now - t0) / T)));
+      while (k < target) dots[order[k++]].classList.add('out');
+      counter.textContent = num(k);
+      if (k >= 150) show();
+      if (k >= kids - 20) end();
+      if (k < kids) requestAnimationFrame(frame); else end();
+    };
+    setTimeout(() => requestAnimationFrame(frame), 600);
+  }, .3);
+
+  // 03 people: the card index, cards rise as they come into view
+  const listFor = x => by[x.rada.replace(' сільрада', '')] || [];
+  $('cards').innerHTML = d.radas.map((x, i) => [x, i]).sort((a, b) => a[0].village.localeCompare(b[0].village, 'uk')).map(([x, i]) => `<li class="card hide" id="rada-${i}" data-i="${i}"><button type="button" aria-expanded="false">
+      <span><span class="v-name">${esc(x.village)}</span><span class="v-rada">${esc(x.rada)}, 1932–1933</span></span>
+      <span class="count num">${num(listFor(x).length)}<small>${people(listFor(x).length)}</small></span></button>
+      <div class="names"><div><p class="meta">Книга пам’яті, с. ${x.page}${x.passport ? ` · <a href="${esc(x.passport)}">сторінка села ${esc(x.village)}</a>` : ''}</p><ol class="people"></ol></div></div></li>`).join('');
+  [...$('cards').children].forEach((c, i) => onSeen(c, () => setTimeout(() => c.classList.remove('hide'), (i % 4) * 90), .1));
+  const openCard = (card, open = !card.hasAttribute('open')) => {
+    const ol = card.querySelector('.people');
+    if (open && !ol.children.length) ol.innerHTML = listFor(d.radas[card.dataset.i]).map(r => person(r)).join('');
+    card.toggleAttribute('open', open); card.querySelector('button').setAttribute('aria-expanded', open);
+  };
+  $('cards').addEventListener('click', e => { const b = e.target.closest('.card > button'); if (b) openCard(b.parentElement); });
+  $('q').addEventListener('input', () => {
+    const q = norm($('q').value.trim());
+    if (q.length < 2) { $('results').hidden = true; $('cards').hidden = false; $('found').textContent = ''; return; }
+    const hits = rows.filter(r => norm(r[1]).includes(q));
+    $('cards').hidden = true; $('results').hidden = !hits.length;
+    $('results').innerHTML = hits.slice(0, 300).map(r => person(r, true)).join('');
+    $('found').textContent = hits.length ? `Знайдено: ${num(hits.length)}${hits.length > 300 ? ', показано перші 300' : ''}` : 'Нікого не знайдено. Спробуйте іншу форму прізвища: у документах його могли записати по-різному.';
+  });
+
+  // 04 how the community remembered: chronicle records, oldest first
+  const dateH = s => { const [y, m, dd] = s.split('-'); return `${+dd} ${'січня лютого березня квітня травня червня липня серпня вересня жовтня листопада грудня'.split(' ')[m - 1]} ${y}`; };
+  $('news').innerHTML = (d.news || []).map(a => `<li class="hide"><a href="p/${a.n}.html"><div><time datetime="${a.d}">${dateH(a.d)}${a.vl && a.vl.length ? ' · ' + esc(a.vl[0]) : ''}</time>
+      <h3>${esc(a.t)}</h3><p>${esc(a.x)}</p></div>${a.i ? `<img src="${esc(a.i)}" alt="" loading="lazy">` : ''}</a></li>`).join('');
+  [...$('news').children].forEach((li, i) => onSeen(li, () => setTimeout(() => li.classList.remove('hide'), (i % 3) * 80), .1));
+
+  // 01 the map of losses with its legend on the map
+  const ranked = d.radas.map((x, i) => ({ ...x, i, n: listFor(x).length })).sort((a, b) => b.n - a.n), max = ranked[0].n;
+  $('rank').innerHTML = ranked.map(x => `<li><button type="button" data-i="${x.i}"><span>${esc(x.village)}<span class="bar-n" style="width:${Math.round(100 * x.n / max)}%"></span></span><b class="num">${num(x.n)}</b></button></li>`).join('');
+  const draw = () => {
+    if (!window.L) return;
+    const sheet = sheets.find(s => s.name === 'strel1919');
+    const map = L.map('map', { scrollWheelZoom: false, zoomSnap: .05, maxBoundsViscosity: 1 });
+    if (sheet) L.imageOverlay(sheet.src, sheet.bounds, { attribution: `<a href="${esc(sheet.page)}" target="_blank" rel="noopener">Мапа Стрельбицького, 1919</a>` }).addTo(map);
+    const marks = {}, pts = [], narrow = map.getSize().x < 700, k = Math.max(.45, Math.min(1, map.getSize().x / 860));  // circles scale with the map
+    ranked.forEach(x => {
+      const ll = GEO[x.village] || PLACE[x.village]; if (!ll) return;
+      pts.push(ll);
+      marks[x.i] = L.circleMarker(ll, { radius: (7 + 34 * Math.sqrt(x.n / max)) * k, color: '#f0cf86', weight: 1.5, fillColor: '#d8b265', fillOpacity: .42 })
+        .bindTooltip(`${esc(x.village)}: ${num(x.n)}`)
+        .bindPopup(`<b>${esc(x.village)}</b><br>${num(x.n)} ${people(x.n)}<br><a href="#rada-${x.i}" data-open="${x.i}">Імена</a>`).addTo(map);
+    });
+    // fill the frame with the old sheet edge to edge (its east part, past the villages, lies under the legend), never past its edges
+    const lats = pts.map(p => p[0]);
+    if (sheet && narrow) { map.setMaxBounds(sheet.bounds); map.fitBounds(pts, { padding: [22, 22] }); }
+    else if (sheet) { map.setMaxBounds(sheet.bounds); map.fitBounds([[Math.min(...lats) - .03, sheet.bounds[0][1] + .05], [Math.max(...lats) + .03, sheet.bounds[1][1] - .02]], { padding: [0, 0] });
+      map.setMinZoom(map.getZoom()); }
+    else map.fitBounds(pts, { padding: [40, 40] });
+    const light = (i, on) => marks[i] && marks[i].setStyle({ fillOpacity: on ? .8 : .42, weight: on ? 3 : 1.5 });
+    $('rank').addEventListener('mouseover', e => { const b = e.target.closest('button'); if (b) light(b.dataset.i, true); });
+    $('rank').addEventListener('mouseout', e => { const b = e.target.closest('button'); if (b) light(b.dataset.i, false); });
+    $('rank').addEventListener('click', e => { const b = e.target.closest('button'); if (!b || !marks[b.dataset.i]) return;
+      $('rank').querySelectorAll('.on').forEach(x => x.classList.remove('on')); b.classList.add('on'); marks[b.dataset.i].openPopup(); });
+    map.on('popupopen', p => p.popup.getElement().querySelector('[data-open]')?.addEventListener('click', ev => { ev.preventDefault();
+      const card = $('rada-' + ev.target.dataset.open); card.classList.remove('hide'); openCard(card, true); card.scrollIntoView({ behavior: 'smooth', block: 'start' }); }));
+  };
+  window.L ? draw() : window.addEventListener('load', draw, { once: true });
+});
+</script>
+</body>
+</html>

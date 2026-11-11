@@ -8,11 +8,12 @@ Public posts -> mirror/cc_<site>/ (extract_articles.py reads them as the origina
 council documents (decisions, sessions, orders) -> the private folder, never the portal.
 """
 import glob, gzip, json, os, re, sys, time, urllib.request
+import paths
 from wayback_mirror import slug, OUT
 from tools.legacy.move_council_docs import is_doc
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-PRIVATE = os.environ.get('PRYM_ARCHIVE', '../prymorsk-archive') + '/private/mrprim_docs_cc'
+PRIVATE = os.path.join(paths.PRIVATE, 'mrprim_docs_cc')
 UA = {'User-Agent': 'prymorsk-memory-archive (personal preservation)'}
 # CC domain -> (our mirror dir, id pattern in the URL, id pattern in the paths we already hold)
 SITES = {
@@ -30,7 +31,7 @@ def have(site, rx):
     for a in json.load(open(os.path.join(ROOT, 'articles.json'))):
         if a['site'] == site and (m := re.search(rx, a.get('url') or a['path'])):
             ids.add(m.group(1))
-    idx = os.environ.get('PRYM_ARCHIVE', '../prymorsk-archive') + '/private/mrprim_docs/index.json'
+    idx = os.path.join(paths.PRIVATE, 'mrprim_docs', 'index.json')
     if site == 'archive_mrprim' and os.path.exists(idx):
         ids |= {m.group(1) for r in json.load(open(idx)) if (m := re.search(rx, r['url']))}
     return ids
@@ -109,7 +110,7 @@ DOCS = {
 
 
 def fetch_docs(name, domain, rx):
-    out = os.path.join(os.environ.get('PRYM_ARCHIVE', '../prymorsk-archive') + '/private', name)
+    out = os.path.join(paths.PRIVATE, name)
     os.makedirs(out, exist_ok=True)
     ipath = os.path.join(out, 'index.json')
     index = json.load(open(ipath)) if os.path.exists(ipath) else []
@@ -142,7 +143,7 @@ def fetch_docs(name, domain, rx):
 
 def wayback_docs(name, domain, rx):
     """The same documents Wayback kept and Common Crawl did not (1 request / 5 s, Wayback's pace)."""
-    out = os.path.join(os.environ.get('PRYM_ARCHIVE', '../prymorsk-archive') + '/private', name)
+    out = os.path.join(paths.PRIVATE, name)
     ipath = os.path.join(out, 'index.json')
     index = json.load(open(ipath)) if os.path.exists(ipath) else []
     have = {re.sub(r'^https?://(www\.)?|:80(?=/)', '', r['url']) for r in index}

@@ -1,6 +1,7 @@
 // Readers' corrections: select a fragment of an article, press "✎ Запропонувати правку", write how it should read.
 // The note goes to /api/fix (worker.js -> D1 prym-feedback); the archive text itself changes only after review.
 (() => {
+  const humanJs = document.currentScript.src.replace(/fix\.js.*/, 'human.js');  // loaded with the first sending
   const style = document.createElement('style');
   style.textContent = `
     .fix-btn { position: fixed; z-index: 2147483000; padding: 8px 12px; border: 0; border-radius: 10px; background: #efb544; color: #174f3e;
@@ -37,6 +38,7 @@
     <label>Як має бути <span>*</span><textarea name="fix" rows="3" maxlength="4000" required></textarea></label>
     <label>Коментар (необов'язково)<input name="comment" maxlength="2000"></label>
     <input class="fix-hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <div class="fix-human"></div>
     <p class="fix-status" role="status"></p>
     <div class="fix-actions"><button type="button" data-close>Скасувати</button><button class="go" type="submit">Надіслати</button></div>
   </form>`;
@@ -81,15 +83,18 @@
     go.disabled = true;
     status.textContent = 'Надсилаємо…';
     try {
+      window.human || await new Promise((ok, no) => document.head.append(Object.assign(document.createElement('script'), { src: humanJs, onload: ok, onerror: () => no(new Error('human')) })));
+      const token = await human('fix', dlg.querySelector('.fix-human'));
       const r = await fetch('/api/fix', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({
         article: articleId(), page: location.href, fragment: form.fragment.value, fix: form.fix.value,
-        comment: form.comment.value, website: form.website.value }) });
+        comment: form.comment.value, website: form.website.value, token }) });
       const d = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(d.error || r.status);
       status.textContent = 'Дякуємо! Правку надіслано, ми її перевіримо.';
       setTimeout(() => dlg.close(), 1600);
     } catch (err) {
       status.textContent = String(err.message) === 'limit' ? 'Сьогодні з вашої адреси вже надіслано багато правок. Спробуйте завтра.'
+        : /human/.test(err.message) ? 'Не вдалося перевірити, що ви людина. Оновіть сторінку й спробуйте ще раз.'
         : 'Не вдалося надіслати. Спробуйте трохи пізніше.';
     } finally {
       go.disabled = false;

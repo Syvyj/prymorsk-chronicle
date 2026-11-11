@@ -9,7 +9,8 @@
     "directory": "../prymorsk-publish",
     "binding": "ASSETS",
     "not_found_handling": "404-page",
-    "run_worker_first": ["/api/*"]
+    "run_worker_first": ["/api/*", "/admin", "/admin/*"]
   },
+  "ratelimits": [{ "name": "VIEWS", "namespace_id": "1001", "simple": { "limit": 30, "period": 60 } }],
   "d1_databases": [{ "binding": "DB", "database_name": "prym-feedback", "database_id": "<your-d1-database-id>" }]
 }

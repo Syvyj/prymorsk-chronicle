@@ -2,7 +2,7 @@
 
     python3 extract_articles.py
 """
-import json, os, re, html, collections, glob
+import json, os, re, html, collections, glob, shutil, subprocess
 from urllib.parse import unquote, quote
 import clean_article
 import names
@@ -75,9 +75,13 @@ MONTHS_RU_UK = {m: i for i, ms in enumerate([('январ', 'січ'), ('фев�
                                                ('ма[яй]', 'трав'), ('июн', 'черв'), ('июл', 'лип'), ('август', 'серп'),
                                                ('сентябр', 'верес'), ('октябр', 'жовт'), ('ноябр', 'листоп'), ('декабр', 'груд')], 1) for m in ms}
 # Prymorsk + villages of the former Prymorsk district/community (collected from the archives themselves)
-LOCAL = re.compile(r'приморськ|приморск|приморськ\w*|борисівк|борисовк|преслав|подспор|підспір|комишуватк|камышеватк'
+LOCAL = re.compile(r'приморськ|приморск|обит[оі]чн\w*\s+кос|(єлисеївськ|елисеевск|софіївськ|софиевск|коларівськ|коларовск)\w*\s+кар\W?[єеь]+р|приморськ\w*|борисівк|борисовк|преслав|подспор|підспір|комишуватк|камышеватк'
                    r'|лозанівк|лозуватк|лозоватк|орлівк|набережн[еому]|новоолексіївк|в[’\']?ячеславк|інзівк|банівк'
                    r'|болгарк|райнівк|маринівк|мариновк|калинівк|калиновк|підгірн|подгорн|радолівк|радоловк|єлисеївк|елисеевк|єлизаветівк|мануйлівк|нельгівк|коларівк|зеленівк|ногайськ|ногайск', re.I)
+# the residents: «Приморці відгуляли Масляну». In a title it means the story is about the town; ALL-CAPS «ПРИМОРЦЫ, БУДЬТЕ
+# БДИТЕЛЬНЫ» headlines are reposts of other towns' news, and a passing «приморцы» in a column about Germany is not local
+RESIDENTS = re.compile(r'приморц', re.I)
+local_title = lambda t: bool(LOCAL.search(t) or RESIDENTS.search(t) and not t.isupper())
 REGION = re.compile(r'запоріз|запорож|бердянськ|бердянск|мелітопол|мелитопол|приазов', re.I)
 
 
@@ -125,6 +129,7 @@ TEXT_FIX = {
     'b95944cf95': {'t': ('01.02.3033', '01.03.2022')},              # zoda.gov.ua: the 1 March 2022 bulletin
     'ec39501b5d': {'x': ('3 0.08.2021', '30.08.2021')},
     '99d5cd55ab': {'t': ('детальніше...', 'Ми обираємо, нас обирають… (13 округ)')},  # the title was the "read more" link
+    '10f581d72a': {'x': ('відділомКовтун', 'відділом Ковтун')},  # glued in the source: the surname hid from names.py
 }
 
 
@@ -181,6 +186,35 @@ COUNCIL_LOCAL = re.compile(r'міськ\w* рад|міськ\w* голов|ви�
                            r'округ\s*№|паспорт\w* бюджетн|УСЗН|ЦНАП|парк\w* Ювілейн|будинк\w* культури|стадіон|староста', re.I)
 
 
+def feed_thumb(src, width=640):
+    """/media/x.jpg -> /media/_t/x.jpg, at most `width` px wide (macOS sips, made once); the original when it is small or not a JPEG."""
+    if not src.startswith('/media/') or not re.search(r'\.jpe?g$', src, re.I):
+        return src
+    f = os.path.join(ROOT, unquote(src[1:]))
+    t = os.path.join(ROOT, 'media', '_t', unquote(src[len('/media/'):]))
+    if not os.path.exists(t):
+        if not os.path.isfile(f) or os.path.getsize(f) < 80_000 or not shutil.which('sips'):
+            return src
+        os.makedirs(os.path.dirname(t), exist_ok=True)
+        size = __import__('pages').img_size(f)
+        args = ['--resampleWidth', str(width)] if size and size[0] > width else []
+        r = subprocess.run(['sips', *args, '-s', 'format', 'jpeg', '-s', 'formatOptions', '72', f, '--out', t], capture_output=True)
+        if r.returncode or not os.path.exists(t) or os.path.getsize(t) >= os.path.getsize(f):
+            if os.path.exists(t):
+                os.remove(t)
+            return src
+    return '/media/_t/' + src[len('/media/'):]
+
+
+def img_dims(body):
+    """width/height on our own photos, so the text does not jump while they load (the pages' CSS keeps height: auto)."""
+    from pages import img_size
+    def fix(m):
+        size = img_size(os.path.join(ROOT, unquote(m.group(1)[1:].split('?')[0])))
+        return m.group(0) if not size else f'<img src="{m.group(1)}" width="{size[0]}" height="{size[1]}"{m.group(2)}>'
+    return re.sub(r'<img src="(/media/[^"]+)"((?:(?!\swidth=)[^>])*)>', fix, body)
+
+
 # personal notices about named officials that must not be republished
 HIDDEN = re.compile(r'про початок проходження перевірки', re.I)  # lustration check notices (2016), one per person
 
@@ -210,12 +244,12 @@ VILLAGES = {
     'Комишуватка': r'комишуватк|камышеватк|комишеватк', 'Лозанівка': r'лозанівк|лозановк', 'Лозуватка': r'лозуватк|лозоватк',
     'Орлівка': r'орлівк|орловк', 'Набережне': r'\bнабережн(е|ого|ому|ое)\b', 'Новоолексіївка': r'новоолексіївк|новоалексеевк',
     'В\'ячеславка': r'в[’\']?ячеславк|вячеславк', 'Інзівка': r'інзівк|инзовк', 'Банівка': r'банівк|бановк',
-    'Софіївка (Болгарка, Коларівка)': r'\bболгарк|\bсофіївк|\bсофиевк|коларівк|коларовк', 'Райнівка': r'райнівк|райновк', 'Єлизаветівка': r'єлизаветівк|елизаветовк',
+    'Софіївка (Болгарка, Коларівка)': r'\bболгарк|\bсофіївк|\bсофиевк|коларівк|коларовк|(софіївськ|софиевск|коларівськ|коларовск)\w*\s+кар\W?[єеь]+р', 'Райнівка': r'райнівк|райновк', 'Єлизаветівка': r'єлизаветівк|елизаветовк',
     'Мануйлівка': r'мануйлівк|мануйловк', 'Нельгівка': r'нельгівк|нельговк',
     'Зеленівка': r'зеленівк|зеленовк', 'Новопавлівка (Партизани)': r'\bпартизан(и|ах|ів|ська|ській|ської)\b|\bпартизаны\b|новопавлівк|новопавловк',
     'Гюнівка': r'гюнівк|гюновк', "Юр'ївка": r"юр['’]?ївк|юрьевк",
     'Радолівка': r'радолівк|радоловк', 'Азов': r'\b(?:с\.|смт\.?|село|селі|села|селом|селе|поселк\w*|посел\w*|селищ\w*)\s*Азов(?:і|у|а|е)?\b',
-    'Калинівка': r'калинівк|калиновк', 'Маринівка': r'маринівк|мариновк', 'Підгірне': r'підгірн|подгорн', 'Петрівка': r'петрівк|петровк', 'Єлисеївка': r'єлисеївк|елисеевк',
+    'Калинівка': r'калинівк|калиновк', 'Маринівка': r'маринівк|мариновк', 'Підгірне': r'підгірн|подгорн', 'Петрівка': r'петрівк|петровк', 'Єлисеївка': r'єлисеївк|елисеевк|(єлисеївськ|елисеевск)\w*\s+кар\W?[єеь]+р',
 }
 VILLAGE_RE = {k: re.compile(v, re.I) for k, v in VILLAGES.items()}
 
@@ -230,7 +264,7 @@ def topics(title, text):
 def villages(title, text):
     """In the title, twice in the text, or as the one village of the lead (the first sentence names what the story is about;
     a lead that lists several villages — football rounds, power cuts — is a list, not a subject)."""
-    lead = re.split(r'(?<=[.!?])\s', text.strip(), 1)[0][:300]
+    lead = re.split(r'(?<=[.!?])\s', text.strip(), maxsplit=1)[0][:300]
     in_lead = [k for k, r in VILLAGE_RE.items() if r.search(lead)]
     return [k for k, r in VILLAGE_RE.items() if r.search(title) or len(r.findall(text)) >= 2 or in_lead == [k]]
 
@@ -238,13 +272,14 @@ def villages(title, text):
 assert villages('У нас – газ. А у вас?', 'На прошлой неделе торжественно пущен газ в поселке Азов. Потом Камышеватка и Камышеватку.') == ['Комишуватка', 'Азов']
 assert villages('Свято', 'Учні привітали ветеранів. Згодом поїхали до Азовського моря.') == []
 assert villages('Результати туру', 'Зіграли Борисівка, Преслав і Нельгівка. Далі буде.') == []
+assert villages("Купання в Коларівському кар'єрі", '') == ['Софіївка (Болгарка, Коларівка)'] and LOCAL.search('Обиточная коса')
 
 
 def scope(title, text, site=''):
     """local: about Prymorsk area; region: Zaporizhzhia oblast / neighbours; general: national or world news."""
     if site == 'archive_mrprim' and not REGION.search(title) and COUNCIL_LOCAL.search(title + ' ' + text[:1500]):
         return 'local'
-    if LOCAL.search(title) or len(LOCAL.findall(text)) >= 2:
+    if local_title(title) or len(LOCAL.findall(text)) >= 2:
         return 'local'
     if REGION.search(title) or LOCAL.search(text) or len(REGION.findall(text)) >= 2:
         return 'region'
@@ -384,7 +419,7 @@ def extract(path, site):
     title = clean(html.unescape(re.sub(r'<[^>]+>', ' ', title.group(1)))) if title else ''
     title = re.sub(r'\s*[|–—»-]\s*(Приморськ|Приморск|ПРО Приморськ|Приморська міська рада|#goPrim24|Portal\b).*$', '', title, flags=re.I)
     title = re.sub(r'\s*[|–—»-]\s*ГО\s*"Приморськ 24/7".*$', '', title)
-    title = re.sub(r'^Приморск\s*::\s*|\s+-\s+(primorsk\.zp\.ua|Інформаційно-познавальний портал).*$|\s+[–-]\s+(Перші сходинки.*|Школярик)$|\s+-\s+primorsk\.zp\.ua$|\s+[–-]\s+(Твоя історія починається тут|Знайомство з Приморськом)$', '', title)
+    title = re.sub(r'^Приморск\s*::\s*|\s+-\s+(primorsk\.zp\.ua|Інформаційно-познавальний портал).*$|\s+[–-]\s+(Тетяна Петрук|Перші сходинки.*|Школярик)$|\s+-\s+primorsk\.zp\.ua$|\s+[–-]\s+(Твоя історія починається тут|Знайомство з Приморськом)$', '', title)
     title = title.strip(' ~')
     date = (re.search(r'datetime="(\d{4}-\d{2}-\d{2})', raw)
             or re.search(r'"datePublished"\s*:\s*"(\d{4}-\d{2}-\d{2})', raw)
@@ -418,6 +453,8 @@ def extract(path, site):
         body = f'<img src="{f}" alt="" loading="lazy">\n' + body
     if site == 'prym':  # tourist route pages open with "duration / extra materials / accessibility" boxes
         body = re.sub(r'(<p>\s*)?<h4>(Тривалість|Допоміжні матеріали|Доступність)</h4>\s*<p>.*?</p>(\s*</p>)*\s*', '', body, flags=re.S)
+    # a story's size is judged before the names are shortened: a list of winners must not drop out because «Ірина П.» is short
+    size = len(clean_article.to_text(clean_article.cut_tail(body)))
     body = clean_article.mask_private(body, site)
     title = clean_article.mask_private(title, site)
     body, title = names.shorten(body), names.shorten(title)  # reversible: NAMES=full python3 extract_articles.py
@@ -427,7 +464,7 @@ def extract(path, site):
     body = clean_article.cut_tail(body)
     text = clean_article.to_text(body)
     return {'html': body, 'pid': int(pid.group(1)) if pid else None, 'dm': dm, 'date_est': False, 'thumb': thumb(body, path), 'site': site, 'path': os.path.relpath(path, ROOT), 'url': orig.group(1) if orig else '',
-            'title': title, 'date': date, 'scope': scope_, 'text': text}
+            'title': title, 'date': date, 'scope': scope_, 'text': text, 'size': size}
 
 
 if __name__ == '__main__':
@@ -444,7 +481,7 @@ if __name__ == '__main__':
     jobs = [(os.path.join(ROOT, path), site) for site, paths in data.items() for path in paths if os.path.exists(os.path.join(ROOT, path))]
     for a in pool.starmap(extract, jobs, chunksize=64):
         # drop stubs that slipped into "articles" and WordPress default/theme demo content
-        if len(a['text']) >= 200 and not PLACEHOLDER.search(a['text']) and not a['title'].startswith('Markup:') \
+        if a['size'] >= 200 and not PLACEHOLDER.search(a['text']) and not a['title'].startswith('Markup:') \
                 and not HIDDEN.search(a['text']):
             out.append(a)
     # pages rescued later from the Wayback Machine (mirror/<dir>/<slug>.html + manifest.json)
@@ -487,7 +524,7 @@ if __name__ == '__main__':
             a['date'], a['date_est'] = f"{meta_['ts'][:4]}-{meta_['ts'][4:6]}-{meta_['ts'][6:8]}", 9999
         if a['date'] > '2022-03-31' and page_kind == 'news':
             continue  # captured under occupation: the free local press ends in March 2022
-        if len(a['text']) >= 200 and 'Сторінка в розробці' not in a['text'] and not PLACEHOLDER.search(a['text']):
+        if a['size'] >= 200 and 'Сторінка в розробці' not in a['text'] and not PLACEHOLDER.search(a['text']):
             out.append(a)
     # council session recordings were hidden by the council on purpose: drop their embeds from the portal
     hidden, gone = set(), set()
@@ -558,15 +595,19 @@ if __name__ == '__main__':
     # they stop where the community's own sites fell silent: the chronicle ends with a local record (author's call)
     last_local = max(t['d'] for t in timeline)
     regional_html = {}
+    import regional_collect
     for f in sorted(glob.glob(os.path.join(ROOT, 'regional_news*.jsonl'))):
         for line in open(f, encoding='utf-8'):
             r = json.loads(line)
             if not r.get('date') or r['date'] >= REGIONAL_UNTIL or r['date'] > last_local or 'tavriya' in r['source']:  # tavriya is mirrored in full
                 continue
             text = f"{r['title']} {r.get('excerpt', '')}"
+            if '06137' in r['source'] and not LOCAL.search(text) and not local_title(r['title']):
+                # Prymorsk's own news site often wrote «курорт Запорізької області» for the town: its article text decides
+                text += ' ' + clean_article.to_text(regional_body(r['url']))
             if len(r['title']) < 20 or re.match(r'(Довідка|Загальна інформація|Географічне|Інформація щодо|Звіт|План)', r['title']):
                 continue  # oblast site reference pages, not news
-            if not LOCAL.search(text) or re.search(r'Приморське|Приморского края|Ленинградск|Ахтарск|Приморськ\w* Посад|Приморськ\w* площ', text):
+            if not (LOCAL.search(text) or local_title(r['title']) or r['url'] in regional_collect.HAND_PLACES or '06137' in r['source'] and RESIDENTS.search(text)) or re.search(r'Приморське|Приморского края|Ленинградск|Ахтарск|Приморськ\w* Посад|Приморськ\w* площ', text):
                 continue  # other places called Primorsk / Prymorske
             k = ('regional', r['title'], r['date'])
             if k in seen:
@@ -580,6 +621,20 @@ if __name__ == '__main__':
                              'u': r['url'], 'i': '', 'ext': r['source'].replace(' (Wayback)', ''),
                              **({'c': c} if (c := topics(r['title'], r.get('excerpt', ''))) else {}),
                              **({'vl': v} if (v := villages(r['title'], r.get('excerpt', ''))) else {})})
+    # the «Приморськ 24/7» Facebook page, 2017–2022: the posts the author let in on review/fb.html (fb_posts.py), as prim24
+    # records with their own text and photos; `ar: fb` = no archived web page behind them
+    import fb_posts
+    fb_html, fb_extra = {}, fb_posts.extra_photos()
+    for post, body in fb_posts.records():
+        e = {'d': post['date'], 's': 'prim24', 't': post['title'], 'x': excerpt(post['text']), 'p': '/fb/' + post['id'], 'u': '',
+             'i': (re.search(r'src="([^"]+)"', body) or [None, ''])[1], 'ar': 'fb',
+             **({'w': 1} if len(post['text']) < 300 else {}),
+             **({'ph': n} if (n := body.count('<img')) else {}),
+             **({'v': 1} if '<video' in body else {}),
+             **({'c': c} if (c := topics(post['title'], post['text'])) else {}),
+             **({'vl': v} if (v := villages(post['title'], post['text'])) else {})}
+        timeline.append(e)
+        fb_html[e['p']] = body
     timeline += [t for t in about.values() if not t.get('k')]
     timeline.sort(key=lambda t: t['d'])
     timeline += [t for t in about.values() if t.get('k')]  # almanac order: as in the book
@@ -624,7 +679,8 @@ if __name__ == '__main__':
         body = by_path.get(unquote(t['p'][1:]), {}).get('text', '') if not t.get('full') else ''
         t['ua'] = not russian(f"{t.get('to') or t['t']} {t['x']} {body[:2000]}")
         t['t'], t['x'] = (names.shorten(clean_article.fix_typos(t[k], t['ua'])) for k in ('t', 'x'))
-        t.update(proofread.apply(t, PROOF.get(t['n'], {})))  # proofread headline / excerpt (proofread.json)
+        # proofread headline / excerpt (proofread.json); the proofreading was done on the source's text, so it is shortened again
+        t.update({k: names.shorten(v) for k, v in proofread.apply(t, PROOF.get(t['n'], {})).items()})
     live = {t['n'] + '.html' for t in timeline}
     for f in os.listdir(art_dir):  # fragments of articles that are gone (moved/filtered) must not stay reachable
         if f.endswith('.html') and f not in live:
@@ -635,27 +691,52 @@ if __name__ == '__main__':
         # (the consented editors' "credit at the top" is the linked source name above the headline)
         if t.get('full'):
             body = regional_html[t['u']]
+        elif t['p'] in fb_html:
+            body = fb_html[t['p']]
         elif t.get('ext') or by_path.get(unquote(t['p'][1:]), {}).get('ext_url'):
             body = f"<p>{html.escape(t['x'])}</p>"  # excerpt; the full text is at the source
         else:
             body = by_path[unquote(t['p'][1:])]['html']
-            if 'x' in TEXT_FIX.get(n, {}):  # the typo is in the text itself too
-                body = body.replace(*TEXT_FIX[n]['x'])
+        if 'x' in TEXT_FIX.get(n, {}):  # the typo is in the text itself too
+            body = body.replace(*TEXT_FIX[n]['x'])
+        if n in fb_extra:  # the same story posted on the Facebook page brought more photos
+            body += '<h3>Фото з цього допису на сторінці «Приморськ 24/7» у Facebook</h3>\n' + fb_extra[n]
         with open(os.path.join(art_dir, f'{n}.html'), 'w', encoding='utf-8') as f:
             # names once more: a surname typed with a Latin look-alike letter is a word only after fix_typos
-            f.write(names.shorten(clean_article.fix_typos(body, t.pop('ua'))))
-    # the chronicle only shows 3 lines of the excerpt: 160 characters keep data.json (loaded on every visit) light
-    short = [{**t, 'x': t['x'][:160]} for t in timeline]
+            f.write(img_dims(names.shorten(clean_article.fix_typos(body, t.pop('ua')))))
+    # a card shows 3 lines of the excerpt, 110-150 characters by screen width: 140 keep chronicle.json (loaded on every visit) light
+    short = [{**t, 'x': t['x'][:140]} for t in timeline]
     json.dump(short, open(os.path.join(ROOT, 'timeline', 'data.json'), 'w'), ensure_ascii=False, separators=(',', ':'))
+    # what the browser loads (chronicle.json, day/, home.json): no addresses of the originals (the reader takes them from the
+    # article's own page) and a small copy of the photo for the feed (media/_t/); data.json stays whole for the scripts
+    light = [{**{k: v for k, v in t.items() if k not in ('p', 'u', 'full')}, **({'i': feed_thumb(t['i'])} if t.get('i') else {})} for t in short]
+    json.dump(light, open(os.path.join(ROOT, 'timeline', 'chronicle.json'), 'w'), ensure_ascii=False, separators=(',', ':'))
+    import search
+    print('search: %d words in %d files' % search.write(light, search.plain))  # timeline/search/, by the same order
+    # the home page: the counters, the history pieces and one file per calendar day (index.html loads these instead of chronicle.json)
+    short = light
+    news = [t for t in short if not t.get('k')]
+    day_dir = os.path.join(ROOT, 'timeline', 'day')
+    os.makedirs(day_dir, exist_ok=True)
+    days = {}
+    for t in news:
+        if not t.get('e'):
+            days.setdefault(t['d'][5:], []).append(t)
+    for f in os.listdir(day_dir):
+        os.remove(os.path.join(day_dir, f))
+    for md, rows in days.items():
+        json.dump(rows, open(os.path.join(day_dir, md + '.json'), 'w'), ensure_ascii=False, separators=(',', ':'))
+    home = {'stats': [[len(news), 'новин і подій'], [sum(1 for t in news if t.get('v')), 'відеосюжетів'],
+                      [sum(1 for t in news if t.get('ph')), 'статей з фото'],
+                      [len({v for t in news for v in t.get('vl', [])}) + 1, 'населених пунктів']],
+            'days': {md: len(rows) for md, rows in days.items()},
+            'history': [t for t in short if t.get('k') == 'history']}
+    json.dump(home, open(os.path.join(ROOT, 'timeline', 'home.json'), 'w'), ensure_ascii=False, separators=(',', ':'))
     import pages
     print('article pages:', pages.build(timeline))
     import export
     print('open data rows:', export.write(timeline))  # timeline/export/chronicle.csv  # timeline/p/<id>.html for search engines and link previews
     print('timeline:', len(timeline), 'with photo:', sum(1 for t in timeline if t['i']))
-    meta = {a['path']: [a['scope'], a['date'], a['title']] for a in out}
-    if os.path.isdir(os.path.join(ROOT, 'preview_app')):  # the old three-archive browser, if still kept
-        with open(os.path.join(ROOT, 'preview_app', 'scopes.js'), 'w', encoding='utf-8') as f:
-            f.write('const articleMeta = ' + json.dumps(meta, ensure_ascii=False) + ';\n')
     for site in data:
         arts = [a for a in out if a['site'] == site]
         by = {s: sum(1 for a in arts if a['scope'] == s) for s in ('local', 'region', 'general')}

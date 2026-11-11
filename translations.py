@@ -40,4 +40,4 @@ def merge(path):
 
 if __name__ == '__main__':
     assert russian('Чтобы больше знать') and not russian('Щоб знати більше')
-    todo() if sys.argv[1:] == ['todo'] else merge(sys.argv[2])
+    todo() if sys.argv[1:] == ['todo'] else merge(sys.argv[2]) if sys.argv[1:2] == ['merge'] else print('ok')

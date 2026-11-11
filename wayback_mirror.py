@@ -7,13 +7,14 @@ Pages land in mirror/<site>/<slug>.html (original HTML via the id_ endpoint, no 
 and mirror/<site>/manifest.json maps slug -> {url, ts}. Photos are fetched later, like fetch_images.py does.
 """
 import hashlib, json, os, re, sys, time
+import paths
 from urllib.parse import quote, unquote
 from fetch_images import get  # same polite retry/backoff that survived Wayback's connection bans
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, 'mirror')
 # kept for the community only, never published and never under the web server's folder
-PRIVATE = {'primrada': os.environ.get('PRYM_ARCHIVE', '../prymorsk-archive') + '/private'}
+PRIVATE = {'primrada': paths.PRIVATE}
 # private archives: the most important documents first, drafts last
 PRIORITY = [r'rishennya-rajonnoji-radi|/rishennya', r'e-deklaruvannia', r'poimenne-golosuvannya', r'byudzhet',
             r'selishchna-ta-silski-radi', r'dovidoma-meshkantsiv', r'novini|povidomlennya', r'kerivnitstvo', r'komunalna']

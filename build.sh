@@ -9,6 +9,7 @@
 # Publishing: SITE_URL=https://<host>/timeline ./build.sh  (absolute og:image/canonical + sitemap.xml)
 set -e
 cd "$(dirname "$0")"
-python3 clean_article.py && python3 names.py && python3 test_extract.py   # self-checks
+python3 clean_article.py && python3 names.py && python3 test_extract.py && python3 translations.py && python3 proofread.py && python3 search.py   # self-checks
+! command -v node >/dev/null || node test_worker.mjs   # worker.js against a fake D1
 python3 extract_articles.py                         # articles.json, timeline/data.json, a/, p/, v/
 python3 video_download.py --index                   # timeline/videos.json (local copies of videos)

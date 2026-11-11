@@ -2,196 +2,499 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Книга року · Приморськ</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon.ico" sizes="48x48">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="description" content="Рік із життя громади Приморська: головні події місяць за місяцем.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Commissioner:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="description" content="Рік із життя громади Приморська як книга: місяць за місяцем, день за днем.">
+<meta property="og:title" content="Книга року · Приморськ. Хроніка громади">
+<meta property="og:description" content="Рік із життя громади Приморська як книга: місяць за місяцем, день за днем.">
+<meta property="og:image" content="https://prym.mydom.website/hero.jpg">
+<link rel="canonical" href="https://prym.mydom.website/book">
+<link href="fonts/g.css" rel="stylesheet">
 <script>try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch {}</script>
+<!--
+  «Літопис громади»: the Book of the Year typeset as a book, not a web page that turns.
+  - Every entry is a dated record: the day in the margin, the story beside it, a hairline between records.
+  - Photos by their real size (book/<y>.json carries w,h): good wide ones span the column, middling ones sit beside
+    the text left and right in turn, weak ones become small mounted prints that are never enlarged; the month's best
+    photo gets a plate page of its own. Portraits are never cropped hard.
+  - Each month opens with its calendar: a dot on every day the chronicle has something, larger for busier days.
+  - Real pagination: records flow into a page until it is full, then continue on the next; the contents list page numbers.
+  - The book has a thickness that moves from right to left as you read; the gutter darkens toward the spine.
+  Motion: one page turn (GSAP) answers the reader; nothing moves on its own. No smooth-scroll engine: the book does not scroll.
+-->
 <style>
   :root {
-    --sand: #f5ecdc; --paper: #fffaf2; --ink: #0f222b; --muted: #5d6a6c; --line: #e4d7bf;
-    --deep: #0a3f55; --sea: #17799a; --foam: #d6ebf0; --wheat: #e1a43b; --reed: #b3843a;
-    --c-mrprim: #17799a; --c-prim24: #5d7a2a; --c-pro_prim: #c0562f; --c-primorsk_in: #7b4fa3; --c-primorsk_zp: #8a6d1f; --c-prim24_blog: #5d7a2a; --c-imsu: #9a5b2e; --c-primorsk_forum: #8a6d1f; --c-prym: #9a5b2e; --c-travel: #0f8f8a; --c-regional: #52606d; --c-rcdt: #d0701c; --c-school3: #3d62b8; --c-licey: #2f8a3f; --c-school2: #3d62b8; --c-primroo: #3d62b8; --c-primrda: #0a3f55; --c-tavriya: #7a4f2a;
+    --table: #e6dcc6; --table-2: #cfc2a6; --ink: #1b2a24; --soft: #3c4943; --muted: #6b726b; --paper: #fbf6ea; --edge: #efe5cf; --rule: #e0d3b8;
+    --green: #174f3e; --cloth: #1d5a47; --cloth-2: #123c30; --gold: #e5c27a; --gold-2: #b48a3c; --amber: #efb544;
+    --sans: 'Manrope', system-ui, sans-serif;
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --sand: #081a22; --paper: #0f2833; --ink: #e8f0ef; --muted: #93a7ab; --line: #1d3d4a;
-      --deep: #04121a; --sea: #5bb7d6; --foam: #123543; --wheat: #f0bb57; --reed: #d6a557;
-      --c-mrprim: #5bb7d6; --c-prim24: #a9bd68; --c-pro_prim: #ee8a5f; --c-primorsk_in: #b99be0; --c-primorsk_zp: #d9b85e; --c-prim24_blog: #a9bd68; --c-imsu: #e0a070; --c-primorsk_forum: #d9b85e; --c-prym: #e0a070; --c-travel: #5fd0c8; --c-regional: #a9b6c2; --c-rcdt: #f0a060; --c-school3: #8fa8f0; --c-licey: #7fcf8a; --c-school2: #8fa8f0; --c-primroo: #8fa8f0; --c-primrda: #7fc3dc; --c-tavriya: #d9a57a;
-    }
-  }
-  :root[data-theme="dark"] {
-    --sand: #081a22; --paper: #0f2833; --ink: #e8f0ef; --muted: #93a7ab; --line: #1d3d4a;
-    --deep: #04121a; --sea: #5bb7d6; --foam: #123543; --wheat: #f0bb57; --reed: #d6a557;
-    --c-mrprim: #5bb7d6; --c-prim24: #a9bd68; --c-pro_prim: #ee8a5f; --c-primorsk_in: #b99be0; --c-primorsk_zp: #d9b85e; --c-prim24_blog: #a9bd68; --c-imsu: #e0a070; --c-primorsk_forum: #d9b85e; --c-prym: #e0a070; --c-travel: #5fd0c8; --c-regional: #a9b6c2; --c-rcdt: #f0a060; --c-school3: #8fa8f0; --c-licey: #7fcf8a; --c-school2: #8fa8f0; --c-primroo: #8fa8f0; --c-primrda: #7fc3dc; --c-tavriya: #d9a57a;
-  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --table: #10211b; --table-2: #070f0c; } }
+  :root[data-theme="dark"] { --table: #10211b; --table-2: #070f0c; }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--sand); color: var(--ink); font: 16px/1.6 'Commissioner', system-ui, sans-serif; }
+  body { margin: 0; min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto; grid-template-columns: minmax(0, 1fr); overflow: hidden;
+    background: radial-gradient(ellipse at 50% 42%, var(--table) 0%, var(--table-2) 100%); color: var(--ink); font: 16px/1.5 var(--sans); }
   a { color: inherit; }
-  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
-  :focus-visible { outline: 3px solid var(--wheat); outline-offset: 2px; }
+  :focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; border-radius: 6px; }
+  .dim { color: var(--ink); }
+  :root[data-theme="dark"] .dim { color: #e8efe9; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dim { color: #e8efe9; } }
 
-  .top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 16px 0; }
-  .top a { font-weight: 600; color: var(--sea); text-decoration: none; }
-  .years { display: flex; gap: 6px; flex-wrap: wrap; }
-  .years a { padding: 5px 12px; border-radius: 999px; border: 1px solid var(--line); font: 600 13px 'Unbounded', sans-serif; color: var(--ink); }
-  .years a[aria-current="page"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-  .print { border: 1px solid var(--line); background: var(--paper); border-radius: 999px; padding: 6px 14px; font: inherit; font-weight: 600; cursor: pointer; }
+  /* ── around the book ─────────────────────────────────── */
+  .bar { display: flex; align-items: center; gap: 12px; padding: 12px 16px; flex-wrap: wrap; justify-content: space-between; }
+  .bar a.back { font-weight: 700; text-decoration: none; }
+  .years { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; max-width: 100%; }
+  .years a { flex: none; padding: 6px 12px; border-radius: 999px; font: 700 13px var(--sans); text-decoration: none; border: 1px solid rgba(127, 127, 127, .35); }
+  .years a[aria-current="page"] { background: var(--green); border-color: var(--green); color: #fff; }
+  .tools { display: flex; gap: 8px; }
+  .tool { border: 1px solid rgba(127, 127, 127, .35); background: transparent; color: inherit; border-radius: 999px; padding: 7px 14px; font: 700 13px var(--sans); cursor: pointer; }
+  .tool.amber { background: var(--amber); border-color: var(--amber); color: #3d2a05; }
+  .tool[hidden] { display: none; }
+  .foot { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 6px 16px 14px; }
+  .nav { width: 46px; height: 46px; border-radius: 50%; border: 0; background: var(--green); color: #fff; font-size: 20px; cursor: pointer; }
+  .nav:disabled { opacity: .3; cursor: default; }
+  .where { font: 600 13px var(--sans); min-width: 150px; text-align: center; font-variant-numeric: tabular-nums; }
 
-  .cover { position: relative; min-height: 520px; border-radius: 28px; overflow: hidden; color: #fff; display: flex; align-items: flex-end;
-    background: var(--deep) center / cover no-repeat; isolation: isolate; }
-  .cover::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(4, 30, 42, .1), rgba(4, 30, 42, .82)); }
-  .cover-in { padding: 36px; width: 100%; }
-  .cover .k { font: 600 12px 'Commissioner', sans-serif; letter-spacing: .18em; text-transform: uppercase; color: var(--wheat); }
-  .cover h1 { font: 800 clamp(80px, 18vw, 200px)/.85 'Unbounded', sans-serif; letter-spacing: -.06em; margin: 10px 0 8px; }
-  .cover p { margin: 0; font: 400 clamp(18px, 2.4vw, 26px)/1.3 'Unbounded', sans-serif; }
-  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 22px 0 0; }
-  .fact { background: var(--paper); border-radius: 18px; padding: 16px 18px; }
-  .fact b { display: block; font: 600 30px/1 'Unbounded', sans-serif; }
-  .fact span { font-size: 13px; color: var(--muted); }
-  .topics { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
-  .topics span { padding: 5px 12px; border-radius: 999px; background: var(--paper); font-size: 13px; font-weight: 600; }
-  .topics small { color: var(--muted); font-weight: 400; margin-left: 4px; }
+  /* ── the book ────────────────────────────────────────── */
+  .stage { display: grid; place-items: center; perspective: 2400px; padding: 8px 20px; min-height: 0; }
+  .book { position: relative; display: flex; width: min(92vw, calc((100svh - 150px) * 1.42), 1200px); aspect-ratio: 1.42; left: 0;
+    transition: left .7s cubic-bezier(.3, .7, .2, 1); --lt: 0px; --rt: 0px; }
+  .book.closed { left: -25%; }          /* only the cover on the table: centre it (left, not a transform: a transformed cover dropped its photo) */
+  .book.closed-back { left: 25%; }
+  .single .book { width: min(94vw, calc((100svh - 170px) * .68)); aspect-ratio: .68; }
+  .single .book.closed, .single .book.closed-back { left: 0; }
+  /* the block of pages under the open book: thicker on the side you have read */
+  .book::before, .book::after { content: ''; position: absolute; top: 1.2%; bottom: .2%; z-index: -1; border-radius: 3px;
+    background: repeating-linear-gradient(90deg, #e7dcc2 0 1px, #f7f0de 1px 3px); box-shadow: 0 20px 40px -18px rgba(0, 0, 0, .45); }
+  .book::before { right: 100%; width: var(--lt); }
+  .book::after { left: 100%; width: var(--rt); }
+  .side { position: relative; flex: 1; min-width: 0; }
+  .single .side.left { display: none; }
 
-  .month { margin-top: 64px; break-inside: avoid-page; }
-  .month-h { display: flex; align-items: baseline; gap: 16px; border-bottom: 2px solid var(--ink); padding-bottom: 10px; margin-bottom: 18px; }
-  .month-h b { font: 800 clamp(34px, 5vw, 56px)/1 'Unbounded', sans-serif; letter-spacing: -.04em; text-transform: lowercase; }
-  .month-h span { color: var(--muted); font-size: 14px; }
-  .stories { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
-  .story { grid-column: span 4; background: var(--paper); border-radius: 18px; overflow: hidden; text-decoration: none; display: flex; flex-direction: column; border: 1px solid var(--line); }
-  .story.lead { grid-column: span 8; grid-row: span 2; }
-  .story img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; background: var(--foam); }
-  .story.lead img { aspect-ratio: 16 / 9; }
-  .story .b { padding: 14px 16px 16px; display: grid; gap: 6px; }
-  .story .m { font-size: 12.5px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-  .story .src { font-weight: 600; color: var(--c); }
-  .story h3 { margin: 0; font: 600 16px/1.35 'Commissioner', sans-serif; }
-  .story.lead h3 { font: 600 clamp(20px, 2.4vw, 26px)/1.25 'Unbounded', sans-serif; letter-spacing: -.02em; }
-  .story p { margin: 0; color: var(--muted); font-size: 14px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-  .story.lead p { -webkit-line-clamp: 6; font-size: 15px; }
-  .more { margin-top: 10px; font-size: 14px; }
-  .more a { color: var(--sea); font-weight: 600; }
-  footer { margin: 80px 0 40px; font-size: 13px; color: var(--muted); text-align: center; }
+  .page { --u: 1cqw; position: absolute; inset: 0; container-type: inline-size; overflow: hidden; background: var(--paper); color: var(--ink);
+    box-shadow: 0 34px 60px -26px rgba(0, 0, 0, .45); }
+  .page.blank { visibility: hidden; }
+  .single .page { --u: 1.18cqw; }
+  .left .page { border-radius: 5px 1px 1px 5px; }
+  .right .page, .single .page { border-radius: 1px 5px 5px 1px; }
+  /* the gutter: paper bends into the spine */
+  .left .page:not(.cover)::after, .right .page:not(.cover)::after { content: ''; position: absolute; top: 0; bottom: 0; width: 12%; pointer-events: none; z-index: 3; }
+  .left .page:not(.cover)::after { right: 0; background: linear-gradient(90deg, rgba(120, 95, 50, 0) 0%, rgba(120, 95, 50, .07) 55%, rgba(60, 45, 20, .22) 100%); }
+  .right .page:not(.cover)::after { left: 0; background: linear-gradient(270deg, rgba(120, 95, 50, 0) 0%, rgba(120, 95, 50, .07) 55%, rgba(60, 45, 20, .22) 100%); }
+  .single .page:not(.cover)::after { width: 5%; }
 
-  @media (max-width: 760px) {
-    .story, .story.lead { grid-column: 1 / -1; grid-row: auto; }
-    .cover { min-height: 420px; }
-    .cover-in { padding: 24px; }
-  }
-  @page { size: A4; margin: 12mm; }
+  /* type area: book margins, wider outside and at the foot */
+  .pin { position: absolute; inset: 0; display: flex; flex-direction: column; overflow: hidden;
+    padding: calc(10 * var(--u)) calc(7 * var(--u)) calc(12 * var(--u)) calc(9 * var(--u)); }
+  .right .pin, .single .pin, .measure .pin { padding: calc(10 * var(--u)) calc(9 * var(--u)) calc(12 * var(--u)) calc(7 * var(--u)); }
+  .head { position: absolute; top: calc(4.6 * var(--u)); font: 600 calc(2.2 * var(--u)) var(--sans); letter-spacing: .04em; color: var(--muted); }
+  .left .head { left: calc(9 * var(--u)); } .right .head, .single .head, .measure .head { right: calc(9 * var(--u)); }
+  .folio { position: absolute; bottom: calc(5 * var(--u)); font: 700 calc(2.4 * var(--u)) var(--sans); color: var(--green); font-variant-numeric: tabular-nums; }
+  .left .folio { left: calc(9 * var(--u)); } .right .folio, .single .folio, .measure .folio { right: calc(9 * var(--u)); }
+
+  /* a month opens: its name and its calendar */
+  .opener { margin-bottom: calc(5 * var(--u)); }
+  .opener h2 { margin: 0; font: 800 calc(13 * var(--u))/.9 var(--sans); letter-spacing: -.06em; color: var(--green); }
+  .opener .sub { margin: calc(1.6 * var(--u)) 0 0; font: 600 calc(2.9 * var(--u)) var(--sans); color: var(--muted); }
+  .cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: calc(.6 * var(--u)) 0; margin-top: calc(4 * var(--u)); }
+  .cal span { position: relative; height: calc(4.6 * var(--u)); display: grid; place-items: center; font: 600 calc(2.1 * var(--u)) var(--sans); color: #b9b2a1; font-variant-numeric: tabular-nums; }
+  .cal .wd { color: var(--muted); font-weight: 700; height: calc(3.4 * var(--u)); }
+  .cal .on { color: var(--ink); }
+  .cal .on::before { content: ''; position: absolute; z-index: -1; width: var(--d); height: var(--d); border-radius: 50%; background: rgba(23, 79, 62, .18); }
+  .cal .in-book::before { background: rgba(23, 79, 62, .9); }
+  .cal .in-book { color: #fff; }
+  .cal span { isolation: isolate; }
+  .cal-key { margin-top: calc(1.6 * var(--u)); font: 500 calc(2.1 * var(--u))/1.4 var(--sans); color: var(--muted); }
+
+  /* a record: the day in the margin, the story beside it */
+  .entry { display: grid; grid-template-columns: calc(10 * var(--u)) 1fr; gap: 0 calc(3.2 * var(--u)); padding-top: calc(3.6 * var(--u)); margin-top: calc(3.6 * var(--u)); border-top: calc(.22 * var(--u)) solid var(--rule); }
+  .entry.first { border-top: 0; margin-top: 0; padding-top: 0; }
+  .when { text-align: right; padding-top: calc(.4 * var(--u)); }
+  .when b { display: block; font: 800 calc(7.4 * var(--u))/.85 var(--sans); letter-spacing: -.05em; color: var(--green); font-variant-numeric: tabular-nums; }
+  .when span { display: block; margin-top: calc(1 * var(--u)); font: 600 calc(2.1 * var(--u))/1.2 var(--sans); color: var(--muted); }
+  .body { min-width: 0; }
+  .body h3 { margin: 0; font: 750 calc(3.9 * var(--u))/1.2 var(--sans); letter-spacing: -.015em; }
+  .body h3 a { text-decoration: none; }
+  .body h3 a:hover { color: var(--green); text-decoration: underline; text-decoration-thickness: calc(.25 * var(--u)); text-underline-offset: calc(.6 * var(--u)); }
+  .body p { margin: calc(1.6 * var(--u)) 0 0; font: 400 calc(2.85 * var(--u))/1.55 var(--sans); color: var(--soft);
+    display: -webkit-box; -webkit-line-clamp: var(--lines, 5); -webkit-box-orient: vertical; overflow: hidden; }
+  .src { margin-top: calc(1.4 * var(--u)); font: 600 calc(2.2 * var(--u)) var(--sans); color: var(--muted); }
+  .src i { font-style: normal; color: var(--green); }
+  .body::after { content: ''; display: block; clear: both; }
+  /* photos by their real size */
+  figure { margin: 0; }
+  .ph-wide { margin: 0 0 calc(2.6 * var(--u)); aspect-ratio: max(var(--ar), 1.55); border-radius: calc(.8 * var(--u)); overflow: hidden; background: var(--edge); }
+  .ph-side { width: 47%; aspect-ratio: var(--ar); border-radius: calc(.8 * var(--u)); overflow: hidden; background: var(--edge); margin-bottom: calc(1.4 * var(--u)); }
+  .ph-side.l { float: left; margin-right: calc(3 * var(--u)); } .ph-side.r { float: right; margin-left: calc(3 * var(--u)); }
+  .ph-wide img, .ph-side img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* a small mounted print: white border, photo corners, a slight tilt; never larger than the file itself */
+  .print { position: relative; float: right; width: 36%; max-width: var(--maxw); margin: calc(.6 * var(--u)) 0 calc(2 * var(--u)) calc(3.4 * var(--u));
+    padding: calc(1.2 * var(--u)); background: #fffdf7; box-shadow: 0 calc(.6 * var(--u)) calc(1.6 * var(--u)) rgba(60, 45, 20, .22); transform: rotate(var(--tilt, 1.4deg)); }
+  .print.portrait { width: 28%; }
+  .print img { display: block; width: 100%; aspect-ratio: var(--ar); object-fit: cover; filter: sepia(.18) saturate(.9) contrast(.98); }
+  .print::before, .print::after { content: ''; position: absolute; width: calc(3.4 * var(--u)); height: calc(3.4 * var(--u)); background: #2b2a26; opacity: .85; }
+  .print::before { top: calc(-.6 * var(--u)); left: calc(-.6 * var(--u)); clip-path: polygon(0 0, 100% 0, 0 100%); }
+  .print::after { bottom: calc(-.6 * var(--u)); right: calc(-.6 * var(--u)); clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+  .more { margin-top: auto; padding-top: calc(3 * var(--u)); font: 700 calc(2.7 * var(--u)) var(--sans); color: var(--green); text-decoration: none; }
+  .more:hover { text-decoration: underline; }
+
+  /* a plate: the month's best photograph on a page of its own */
+  .plate .pin { justify-content: center; }
+  .plate figure { margin: 0 auto; width: 100%; }
+  .plate figure .fr { aspect-ratio: var(--ar); max-height: calc(var(--ph) * 1px); margin: 0 auto; overflow: hidden; border-radius: calc(.6 * var(--u)); box-shadow: 0 calc(1 * var(--u)) calc(3 * var(--u)) rgba(60, 45, 20, .25); }
+  .plate figure img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .plate figcaption { margin-top: calc(3.4 * var(--u)); display: grid; grid-template-columns: calc(10 * var(--u)) 1fr; gap: calc(3.2 * var(--u)); }
+  .plate figcaption .when b { font-size: calc(6 * var(--u)); }
+  .plate figcaption a { font: 700 calc(3.3 * var(--u))/1.3 var(--sans); text-decoration: none; }
+  .plate figcaption a:hover { color: var(--green); text-decoration: underline; }
+
+  /* front matter and the end */
+  .title-pg .k { font: 600 calc(2.6 * var(--u)) var(--sans); color: var(--gold-2); letter-spacing: .02em; }
+  .title-pg .yr { font: 800 calc(30 * var(--u))/.82 var(--sans); letter-spacing: -.075em; color: var(--green); margin: calc(5 * var(--u)) 0 calc(3 * var(--u)) calc(-1.4 * var(--u)); }
+  .title-pg .lede { font: 700 calc(4.6 * var(--u))/1.25 var(--sans); letter-spacing: -.02em; margin: 0; max-width: 18ch; }
+  .facts { display: grid; grid-template-columns: 1fr 1fr; gap: calc(5 * var(--u)) calc(5 * var(--u)); margin-top: auto; }
+  .facts b { display: block; font: 800 calc(8.4 * var(--u))/1 var(--sans); letter-spacing: -.04em; color: var(--green); font-variant-numeric: tabular-nums; }
+  .facts span { font: 600 calc(2.7 * var(--u))/1.3 var(--sans); color: var(--muted); }
+  .toc h2 { margin: 0 0 calc(5 * var(--u)); font: 800 calc(8 * var(--u))/1 var(--sans); letter-spacing: -.045em; color: var(--green); }
+  .toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: calc(1.5 * var(--u)); }
+  .toc button { all: unset; cursor: pointer; display: flex; align-items: baseline; gap: calc(1.4 * var(--u)); width: 100%; font: 700 calc(3.6 * var(--u)) var(--sans); }
+  .toc button .lead { flex: 1; border-bottom: calc(.3 * var(--u)) dotted #c9bb9b; transform: translateY(calc(-.8 * var(--u))); }
+  .toc button .n { font-variant-numeric: tabular-nums; color: var(--green); }
+  .toc button:hover .m, .toc button:focus-visible .m { color: var(--green); text-decoration: underline; }
+  .end-pg h2 { margin: auto 0 calc(3 * var(--u)); font: 800 calc(8.6 * var(--u))/1 var(--sans); letter-spacing: -.05em; color: var(--green); }
+  .end-pg p { margin: 0 0 calc(6 * var(--u)); font: 400 calc(3.2 * var(--u))/1.55 var(--sans); color: var(--soft); max-width: 34ch; }
+  .end-pg .acts { display: grid; gap: calc(2.4 * var(--u)); margin-bottom: auto; }
+  .end-pg .acts a, .end-pg .acts button { all: unset; cursor: pointer; text-align: center; padding: calc(2.8 * var(--u)); border-radius: 99em; font: 700 calc(3.2 * var(--u)) var(--sans); border: calc(.3 * var(--u)) solid var(--green); color: var(--green); }
+  .end-pg .acts .primary { background: var(--green); color: #fff; }
+  .end-pg .acts [hidden] { display: none; }
+
+  /* the cover: cloth, a tipped-in photograph, gold foil */
+  .page.cover { background: linear-gradient(135deg, var(--cloth), var(--cloth-2)); color: var(--gold); border-radius: 3px 9px 9px 3px; }
+  .page.cover::before { content: ''; position: absolute; inset: 0; opacity: .4; mix-blend-mode: overlay; pointer-events: none;
+    background: repeating-linear-gradient(0deg, rgba(255, 255, 255, .07) 0 1px, transparent 1px 3px), repeating-linear-gradient(90deg, rgba(0, 0, 0, .09) 0 1px, transparent 1px 3px); }
+  .page.cover .hinge { position: absolute; top: 0; bottom: 0; left: calc(4 * var(--u)); width: calc(1.3 * var(--u)); background: linear-gradient(90deg, rgba(0, 0, 0, .28), rgba(255, 255, 255, .08), rgba(0, 0, 0, .22)); }
+  .cv { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; text-align: center; padding: calc(9 * var(--u)) calc(10 * var(--u)); }
+  .cv .frame { position: absolute; inset: calc(5 * var(--u)) calc(5 * var(--u)) calc(5 * var(--u)) calc(8 * var(--u)); border: calc(.35 * var(--u)) solid rgba(229, 194, 122, .55); border-radius: calc(1.4 * var(--u)); pointer-events: none; }
+  .cv img.coat { width: calc(13 * var(--u)); filter: sepia(1) saturate(2.2) hue-rotate(-12deg) brightness(1.05) drop-shadow(0 calc(.3 * var(--u)) calc(.2 * var(--u)) rgba(0, 0, 0, .35)); opacity: .92; }
+  .cv .k { margin-top: calc(3 * var(--u)); font: 700 calc(2.8 * var(--u)) var(--sans); letter-spacing: .3em; }
+  .cv .photo { margin: calc(6 * var(--u)) 0 0; width: calc(62 * var(--u)); aspect-ratio: 4 / 3; padding: calc(1.4 * var(--u)); background: #fbf6ea; box-shadow: 0 calc(1.5 * var(--u)) calc(3 * var(--u)) rgba(0, 0, 0, .45); transform: rotate(-1.5deg); }
+  .cv .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cv .year { margin-top: auto; font: 800 calc(21 * var(--u))/.9 var(--sans); letter-spacing: -.06em; background: linear-gradient(180deg, #f6dc9c, var(--gold) 45%, var(--gold-2));
+    -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 calc(.4 * var(--u)) calc(.2 * var(--u)) rgba(0, 0, 0, .4)); }
+  .cv .title { font: 700 calc(3.6 * var(--u)) var(--sans); letter-spacing: .26em; margin-top: calc(1 * var(--u)); }
+  .page.backcover { background: linear-gradient(225deg, var(--cloth), var(--cloth-2)); }
+  .page.backcover .cv { justify-content: center; gap: calc(2 * var(--u)); }
+
+  /* the turning leaf */
+  .leaf { position: absolute; top: 0; bottom: 0; width: 50%; transform-style: preserve-3d; z-index: 5; pointer-events: none; }
+  .single .leaf { width: 100%; }
+  .leaf .face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+  .leaf .face .page { box-shadow: none; }
+  .leaf .back { transform: rotateY(180deg); }
+  .leaf .shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(0, 0, 0, .22), transparent 45%); opacity: 0; }
+  .hit { position: absolute; top: 0; bottom: 0; width: 20%; z-index: 6; background: none; border: 0; }
+  .hit.prev { left: 0; cursor: w-resize; } .hit.next { right: 0; cursor: e-resize; }
+  .measure { position: fixed; left: -9999px; top: 0; visibility: hidden; }
+  .measure .page { position: relative; inset: auto; }
+  .loading { position: absolute; inset: 0; display: grid; place-items: center; font: 600 15px var(--sans); color: var(--muted); }
+
+  #print-all { display: none; }
+  @page { size: A5; margin: 0; }
   @media print {
-    /* always the light palette on paper, whatever the screen theme */
-    :root, :root[data-theme="dark"], :root:not([data-theme="light"]) { --sand: #fff; --paper: #fff; --ink: #0f222b; --muted: #5d6a6c; --line: #e4d7bf; --deep: #0a3f55; --sea: #17799a; --foam: #d6ebf0; }
+    body { display: block; overflow: visible; background: #fff; }
+    .bar, .foot, .stage { display: none !important; }
+    #print-all { display: block; }
+    #print-all .page { position: relative; width: 148mm; height: 210mm; break-after: page; box-shadow: none; border-radius: 0; }
     * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    body { font-size: 10.5pt; }
-    .wrap { max-width: none; padding: 0; }
-    .top, .more, .print { display: none !important; }
-    .cover { min-height: 255mm; border-radius: 0; break-after: page; }
-    .facts, .topics { break-inside: avoid; }
-    .month { break-before: page; margin-top: 0; }
-    .story { break-inside: avoid; }
-    .story p { -webkit-line-clamp: unset; display: block; }
-    a { text-decoration: none; }
-    footer { break-before: page; margin-top: 40mm; font-size: 11pt; }
   }
+  @media (prefers-reduced-motion: reduce) { .book { transition: none; } }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <nav class="top" aria-label="Навігація">
-    <a href="./">← До хроніки</a>
-    <div class="years" id="years"></div>
-    <button class="print" type="button" id="print">🖨 Друкувати / PDF</button>
-  </nav>
+<header class="bar dim">
+  <a class="back" href="./">← До хроніки</a>
+  <nav class="years" id="years" aria-label="Роки"></nav>
+  <div class="tools">
+    <button class="tool amber" id="share-video" type="button" hidden>Поділитися відео книги</button>
+    <button class="tool" id="print" type="button">Друк або PDF</button>
+  </div>
+</header>
 
-  <header class="cover" id="cover">
-    <div class="cover-in">
-      <div class="k">Приморськ · Книга року</div>
-      <h1 id="year"></h1>
-      <p id="tagline"></p>
-    </div>
-  </header>
-  <div class="facts" id="facts"></div>
-  <div class="topics" id="topics"></div>
+<main class="stage" id="stage" aria-roledescription="книга" aria-label="Книга року">
+  <div class="book closed" id="book">
+    <div class="side left" id="left"></div>
+    <div class="side right" id="right"></div>
+    <button class="hit prev" id="hit-prev" type="button" aria-label="Попередня сторінка"></button>
+    <button class="hit next" id="hit-next" type="button" aria-label="Наступна сторінка"></button>
+    <div class="loading" id="loading">Відкриваємо книгу…</div>
+  </div>
+</main>
 
-  <main id="months"></main>
-  <footer>Приморськ. Хроніка громади · зібрано з архівів сайтів міської ради, ГО «Приморськ 24/7», «ПРО Приморськ», шкіл, РДА та місцевих і обласних ЗМІ, збережених у Wayback Machine</footer>
-</div>
+<footer class="foot dim">
+  <button class="nav" id="prev" type="button" aria-label="Попередня сторінка">←</button>
+  <span class="where" id="where" aria-live="polite"></span>
+  <button class="nav" id="next" type="button" aria-label="Наступна сторінка">→</button>
+</footer>
+<div id="print-all" aria-hidden="true"></div>
+<div class="measure" id="measure" aria-hidden="true"></div>
 
 <script src="meta.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous"></script>
 <script>
+(async () => {
 const { SOURCES } = META;
 const MONTHS = ['січень','лютий','березень','квітень','травень','червень','липень','серпень','вересень','жовтень','листопад','грудень'];
 const MONTHS_GEN = ['січня','лютого','березня','квітня','травня','червня','липня','серпня','вересня','жовтня','листопада','грудня'];
-const PER_MONTH = 5;
+const MONTHS_LOC = ['січні','лютому','березні','квітні','травні','червні','липні','серпні','вересні','жовтні','листопаді','грудні'];
 const $ = id => document.getElementById(id);
-const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 const plural = (n, one, few, many) => { const a = n % 10, b = n % 100; return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many; };
-const day = d => { const [, m, dd] = d.split('-'); return `${+dd} ${MONTHS_GEN[m - 1]}`; };
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const single = () => matchMedia('(max-width: 820px), (orientation: portrait)').matches;
 
-// what makes a story book-worthy: a real photo (council banners don't count), a video, a proper text, a concrete place; council paperwork ranks lower
-const score = a => (a.i && !a.bn ? 4 : 0) + (a.ph ? 1 : 0) + (a.v ? 2 : 0) + (a.vl ? 1 : 0) + (a.w ? -5 : 0) + (a.e ? -1 : 0)
-  + (/^(Рішення|Розпорядження|Проект рішення|ПОВІДОМЛЕННЯ|Аналіз регуляторного|№\d)/i.test(a.t) ? -3 : 0)
-  + ((a.c || []).some(c => ['Культура', 'Спорт', 'Історія і пам\'ять', 'Молодь і діти', 'Туризм і море'].includes(c)) ? 1 : 0);
+const index = await (await fetch('book/index.json')).json();
+const asked = new URLSearchParams(location.search).get('y');
+const y = index.some(r => r.y === asked) ? asked : index.reduce((a, b) => b.count > a.count ? b : a).y;
+document.title = `${y} · Книга року · Приморськ`;
+$('years').innerHTML = index.map(r => `<a href="?y=${r.y}" ${r.y === y ? 'aria-current="page"' : ''}>${r.y}</a>`).join('');
+$('years').querySelector('[aria-current]')?.scrollIntoView({ inline: 'center', block: 'nearest' });
+const B = await (await fetch(`book/${y}.json`)).json();
 
-// photos load lazily on screen; on paper every one must be there before printing
-const eager = () => document.querySelectorAll('img[loading="lazy"]').forEach(i => { i.loading = 'eager'; });
-addEventListener('beforeprint', eager);  // Ctrl+P: best effort
+// ── pieces of pages ──
+const img = src => `<img data-src="${esc(src)}" alt="">`;
+const ar = (w, h, lo, hi) => Math.min(hi, Math.max(lo, w / h)).toFixed(3);
+const isPlate = s => s && s.i && ((s.w >= 1000 && s.w / s.h >= 1.15) || (s.h >= 1000 && s.w >= 700));
+function photoHtml(s, k, compact) {      // by the file's real size; compact = one step smaller, to fit the end of a page
+  if (!s.i || s.w < 150) return '';
+  const land = s.w >= s.h;
+  if (!compact && s.w >= 1000 && s.w / s.h >= 1.2) return `<figure class="ph-wide" style="--ar:${ar(s.w, s.h, 1.3, 1.9)}">${img(s.i)}</figure>`;
+  if (s.w >= 480 && land && !(compact && s.w < 1000)) return `<figure class="ph-side ${k % 2 ? 'l' : 'r'}" style="--ar:${ar(s.w, s.h, 1.15, 1.6)}">${img(s.i)}</figure>`;
+  const tilt = (k % 2 ? -1 : 1) * (0.8 + (k * 7 % 5) / 5);
+  return `<figure class="print ${land ? '' : 'portrait'}" style="--ar:${ar(s.w, s.h, .7, 1.5)};--maxw:${s.w}px;--tilt:${tilt.toFixed(2)}deg">${img(s.i)}</figure>`;
+}
+function entryHtml(s, k, first, compact = false) {
+  const d = +s.d.slice(8, 10), m = +s.d.slice(5, 7);
+  const ph = photoHtml(s, k, compact);
+  return `<article class="entry ${first ? 'first' : ''}">
+    <div class="when"><b>${d}</b><span>${MONTHS_GEN[m - 1]}</span></div>
+    <div class="body">${ph}
+      <h3><a href="./#${s.n}">${esc(s.t)}</a></h3>
+      <p style="--lines:${compact ? 3 : ph ? 5 : 7}">${esc(s.x)}</p>
+      <div class="src">${esc(SOURCES[s.s] || '')}${s.v ? ', <i>є відео</i>' : ''}</div>
+    </div></article>`;
+}
+function calendarHtml(m) {
+  const first = (new Date(+y, m.m - 1, 1).getDay() + 6) % 7, len = new Date(+y, m.m, 0).getDate();
+  const inBook = new Set(m.stories.map(s => +s.d.slice(8, 10)));
+  const max = Math.max(1, ...m.days);
+  let cells = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'нд'].map(w => `<span class="wd">${w}</span>`).join('') + '<span></span>'.repeat(first);
+  for (let d = 1; d <= len; d++) {
+    const n = m.days[d - 1] || 0;
+    const size = n ? (2.6 + 2.2 * Math.sqrt(n / max)).toFixed(2) : 0;
+    cells += `<span class="${n ? 'on' : ''} ${inBook.has(d) ? 'in-book' : ''}" style="--d:calc(${size} * var(--u))" ${n ? `title="${d} ${MONTHS_GEN[m.m - 1]}: ${n} ${plural(n, 'запис', 'записи', 'записів')}"` : ''}>${d}</span>`;
+  }
+  return `<div class="cal" aria-hidden="true">${cells}</div>
+    <div class="cal-key">Кружечок означає, що про цей день є записи в хроніці; що більший, то більше записів. Темні кружечки — дні, що потрапили в цю книгу.</div>`;
+}
+
+// ── pagination: records flow into a page until it is full ──
+let pages = [], monthAt = {}, mode, view;
+const P = (kind, inner, head = '', extra = '') => ({ kind, html: `<div class="page ${extra}">${head ? `<div class="head">${head}</div>` : ''}<div class="pin">${inner}</div></div>` });
+function paginate() {
+  const probe = $('measure');
+  const box = $('right').getBoundingClientRect();
+  probe.className = `measure ${mode === 'single' ? 'single' : ''}`;
+  probe.innerHTML = `<div class="page" style="width:${box.width}px;height:${box.height}px"><div class="pin"></div></div>`;
+  const pin = probe.querySelector('.pin');
+  const fits = () => pin.scrollHeight <= pin.clientHeight + 1;
+  pages = []; monthAt = {};
+  pages.push({ kind: 'cover', html: `<div class="page cover"><div class="hinge"></div><div class="cv"><div class="frame"></div>
+    <img class="coat" src="coat-hi.png" alt=""><div class="k">ПРИМОРСЬК</div>
+    <div class="photo">${img(B.cover || 'hero-sm.jpg')}</div><div class="year">${y}</div><div class="title">КНИГА РОКУ</div></div></div>` });
+  pages.push(P('title', `<div class="title-pg" style="display:flex;flex-direction:column;height:100%">
+    <div class="k">Хроніка громади Приморська</div><div class="yr">${y}</div>
+    <p class="lede">Рік громади у ${B.count} ${plural(B.count, 'історії', 'історіях', 'історіях')}, місяць за місяцем.</p>
+    <div class="facts">
+      <div><b>${B.count}</b><span>записів у хроніці</span></div><div><b>${B.videos}</b><span>відеосюжетів</span></div>
+      <div><b>${B.places}</b><span>населених пунктів у новинах</span></div><div><b>${B.months.length}</b><span>${plural(B.months.length, 'місяць', 'місяці', 'місяців')} у цій книзі</span></div>
+    </div></div>`));
+  const tocAt = pages.length;
+  pages.push(null);                                      // the contents, once page numbers are known
+  for (const m of B.months) {
+    const stories = [...m.stories].sort((a, b) => a.d.localeCompare(b.d));
+    const lead = m.stories.find(s => s.lead);
+    const plate = isPlate(lead) ? lead : null;
+    const out = [];
+    let html = `<div class="opener"><h2>${MONTHS[m.m - 1]}</h2><p class="sub">${m.count} ${plural(m.count, 'запис', 'записи', 'записів')} у хроніці, ${m.stories.length} з них у цій книзі</p>${calendarHtml(m)}</div>`;
+    let first = true, k = 0;
+    const head = () => out.length ? MONTHS[m.m - 1] : '';
+    for (const s of stories.filter(s => s !== plate)) {   // the plate's story is told on the plate
+      let e = entryHtml(s, k, first);
+      pin.innerHTML = html + e;
+      if (!fits() && !first) {                           // the end of the page: try the record a size smaller first
+        e = entryHtml(s, k, first, true);
+        pin.innerHTML = html + e;
+      }
+      if (!fits() && !first) {                           // still too long: this page is done, the record starts the next one
+        out.push(P('flow', html, head()));
+        html = entryHtml(s, k, true);
+      } else html += e;
+      first = false; k++;
+    }
+    const more = m.count > m.stories.length ? `<a class="more" href="chronicle.html?y=${y}&m=${String(m.m).padStart(2, '0')}">Усі ${m.count} ${plural(m.count, 'запис', 'записи', 'записів')} у ${MONTHS_LOC[m.m - 1]} читайте в хроніці</a>` : '';
+    pin.innerHTML = html + more;
+    out.push(P('flow', html + (fits() ? more : ''), head()));
+    monthAt[m.m] = pages.length;
+    if (plate) {                                          // the plate faces the month, right after its first page
+      out.splice(1, 0, P('plate', `<figure><div class="fr" style="--ar:${ar(plate.w, plate.h, .66, 1.8)};--ph:${(box.height * .68).toFixed(0)}">${img(plate.i)}</div>
+        <figcaption><div class="when"><b>${+plate.d.slice(8, 10)}</b><span>${MONTHS_GEN[m.m - 1]}</span></div>
+        <div><a href="./#${plate.n}">${esc(plate.t)}</a><div class="src">${esc(SOURCES[plate.s] || '')}</div></div></figcaption></figure>`, MONTHS[m.m - 1], 'plate'));
+    }
+    pages.push(...out);
+  }
+  pages.push(P('end', `<div class="end-pg" style="display:flex;flex-direction:column;height:100%">
+    <h2>Кінець книги ${y}</h2>
+    <p>Тут лише кілька записів із кожного місяця. Решту, ${B.count} ${plural(B.count, 'запис', 'записи', 'записів')} цього року, читайте в хроніці.</p>
+    <div class="acts">
+      <a class="primary" href="chronicle.html?y=${y}">Відкрити хроніку</a>
+      ${(() => { const i = index.findIndex(r => r.y === y), o = index[i - 1] || index[i + 1]; return o ? `<a href="?y=${o.y}">Гортати книгу ${o.y}</a>` : ''; })()}
+      <button type="button" data-share-video hidden>Поділитися відео книги</button>
+    </div></div>`, 'Кінець'));
+  if (mode !== 'single' && pages.length % 2 === 1) pages.push({ kind: 'blank', html: '<div class="page"></div>' });   // the back cover on a leaf of its own
+  pages.push({ kind: 'back', html: `<div class="page cover backcover"><div class="cv"><img class="coat" src="coat-hi.png" alt=""><div class="k">ПРИМОРСЬК. ХРОНІКА ГРОМАДИ</div><div class="k" style="letter-spacing:.08em">prym.mydom.website</div></div></div>` });
+  pages[tocAt] = P('toc', `<div class="toc"><h2>Зміст</h2><ol>${B.months.map(m =>
+    `<li><button type="button" data-go="${monthAt[m.m]}"><span class="m">${MONTHS[m.m - 1]}</span><span class="lead"></span><span class="n">${monthAt[m.m]}</span></button></li>`).join('')}</ol></div>`, 'Зміст');
+  probe.innerHTML = '';
+}
+
+// ── layout ──
+const units = () => {
+  if (mode === 'single') return pages.map((_, i) => [i]);
+  const u = [[null, 0]];
+  for (let i = 1; i < pages.length - 1; i += 2) u.push([i, i + 1 < pages.length - 1 ? i + 1 : null]);
+  u.push([pages.length - 1, null]);
+  return u;
+};
+const numbered = k => !['cover', 'back', 'plate', 'blank'].includes(k);
+const pageEl = i => {
+  if (i == null) return '<div class="page blank"></div>';
+  const p = pages[i];
+  return numbered(p.kind) && i > 1 ? p.html.replace(/<\/div>$/, `<div class="folio">${i}</div></div>`) : p.html;
+};
+const hydrate = root => root.querySelectorAll('img[data-src]').forEach(im => { im.src = im.dataset.src; im.removeAttribute('data-src'); });
+function warm(u) {
+  for (const k of [u + 1, u + 2, u - 1]) for (const i of (units()[k] || [])) if (i != null)
+    for (const m of pages[i].html.matchAll(/data-src="([^"]+)"/g)) { const im = new Image(); im.src = m[1].replace(/&amp;/g, '&'); }
+}
+function thickness() {
+  const U = units(), book = $('book');
+  if (mode === 'single' || view === 0 || view === U.length - 1) { book.style.setProperty('--lt', '0px'); book.style.setProperty('--rt', '0px'); return; }
+  const p = view / (U.length - 1), full = Math.max(6, Math.min(16, pages.length / 4));
+  book.style.setProperty('--lt', `${(2 + full * p).toFixed(1)}px`); book.style.setProperty('--rt', `${(2 + full * (1 - p)).toFixed(1)}px`);
+}
+function paint() {
+  const U = units(), [l, r] = mode === 'single' ? [null, U[view][0]] : U[view];
+  $('left').innerHTML = pageEl(l); $('right').innerHTML = pageEl(r);
+  hydrate($('book'));
+  $('book').classList.toggle('closed', mode !== 'single' && view === 0);
+  $('book').classList.toggle('closed-back', mode !== 'single' && view === U.length - 1);
+  $('prev').disabled = view === 0; $('next').disabled = view === U.length - 1;
+  const shown = (mode === 'single' ? [U[view][0]] : U[view]).filter(v => v != null);
+  const k = pages[shown[0]].kind;
+  $('where').textContent = k === 'cover' ? 'Обкладинка' : k === 'back' ? 'Задня обкладинка' : `${shown.length > 1 ? 'Сторінки' : 'Сторінка'} ${shown.join('–')} з ${pages.length - 2}`;
+  history.replaceState(null, '', `?y=${y}#${shown[0]}`);
+  thickness(); warm(view); wireShare();
+}
+
+// ── turning ──
+let busy = false;
+function turn(dir) {
+  const U = units(), to = view + dir;
+  if (busy || to < 0 || to >= U.length) return;
+  if (reduce || !window.gsap) { view = to; paint(); return; }
+  busy = true;
+  const book = $('book'), leaf = document.createElement('div');
+  leaf.className = 'leaf';
+  const done = () => { leaf.remove(); view = to; paint(); busy = false; };
+  if (mode === 'single') {
+    const old = U[view][0], nu = U[to][0];
+    leaf.innerHTML = `<div class="face front side right">${pageEl(dir > 0 ? old : nu)}</div><div class="shade"></div>`;
+    leaf.style.left = '0';
+    if (dir > 0) { $('right').innerHTML = pageEl(nu); hydrate($('right')); }
+    book.appendChild(leaf); hydrate(leaf);
+    const tl = gsap.timeline({ onComplete: done });
+    if (dir > 0) tl.fromTo(leaf, { rotateY: 0, transformOrigin: '0% 50%' }, { rotateY: -100, duration: .7, ease: 'power2.in' }).to(leaf, { opacity: 0, duration: .18 }, '-=.18');
+    else tl.fromTo(leaf, { rotateY: -100, opacity: 0, transformOrigin: '0% 50%' }, { rotateY: 0, opacity: 1, duration: .7, ease: 'power2.out' });
+    tl.to(leaf.querySelector('.shade'), { opacity: 1, duration: .35, yoyo: true, repeat: 1 }, 0);
+    return;
+  }
+  const [cl, cr] = U[view], [nl, nr] = U[to], fwd = dir > 0;
+  leaf.style.left = fwd ? '50%' : '0';
+  leaf.innerHTML = `<div class="face front side ${fwd ? 'right' : 'left'}">${pageEl(fwd ? cr : cl)}</div>
+                    <div class="face back side ${fwd ? 'left' : 'right'}">${pageEl(fwd ? nl : nr)}</div><div class="shade"></div>`;
+  if (fwd) { $('right').innerHTML = pageEl(nr); hydrate($('right')); } else { $('left').innerHTML = pageEl(nl); hydrate($('left')); }
+  book.appendChild(leaf); hydrate(leaf);
+  if (view === 0 || to === 0) book.classList.toggle('closed', to === 0);
+  if (view === U.length - 1 || to === U.length - 1) book.classList.toggle('closed-back', to === U.length - 1);
+  gsap.timeline({ onComplete: done })
+    .fromTo(leaf, { rotateY: fwd ? 0 : -180, transformOrigin: fwd ? '0% 50%' : '100% 50%' }, { rotateY: fwd ? -180 : 0, duration: .9, ease: 'power2.inOut' })
+    .fromTo(leaf.querySelector('.shade'), { opacity: 0 }, { opacity: 1, duration: .45, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 0);
+}
+const go = i => { const k = units().findIndex(u => u.includes(i)); if (k >= 0) { view = k; paint(); } };
+
+$('next').onclick = () => turn(1); $('prev').onclick = () => turn(-1);
+$('hit-next').onclick = () => turn(1); $('hit-prev').onclick = () => turn(-1);
+addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'PageDown') turn(1); if (e.key === 'ArrowLeft' || e.key === 'PageUp') turn(-1); });
+let sx = null;
+$('stage').addEventListener('pointerdown', e => { sx = e.clientX; });
+$('stage').addEventListener('pointerup', e => { if (sx != null && Math.abs(e.clientX - sx) > 50) turn(e.clientX < sx ? 1 : -1); sx = null; });
+document.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) go(+b.dataset.go); });
+
+// ── the video of the book (social/book_video.py) ──
+const videoUrl = `book/video/${y}.mp4`;
+let hasVideo = false;
+fetch(videoUrl, { method: 'HEAD' }).then(r => { hasVideo = r.ok; $('share-video').hidden = !hasVideo; wireShare(); }).catch(() => {});
+async function shareVideo() {
+  try {
+    const blob = await (await fetch(videoUrl)).blob();
+    const file = new File([blob], `Книга-року-${y}.mp4`, { type: 'video/mp4' });
+    if (navigator.canShare?.({ files: [file] })) { await navigator.share({ files: [file], title: `Книга року ${y}`, text: `Рік громади Приморська: ${location.origin}/book?y=${y}` }); return; }
+  } catch (e) { if (e.name === 'AbortError') return; }
+  const a = Object.assign(document.createElement('a'), { href: videoUrl, download: `Книга-року-${y}.mp4` });
+  document.body.append(a); a.click(); a.remove();
+}
+function wireShare() { document.querySelectorAll('[data-share-video]').forEach(b => { b.hidden = !hasVideo; b.onclick = shareVideo; }); }
+$('share-video').onclick = shareVideo;
+
 $('print').onclick = async () => {
-  eager();
-  await Promise.all([...document.images].map(i => i.decode().catch(() => {})));
+  $('print-all').innerHTML = pages.map((p, i) => `<div class="side ${i % 2 ? 'left' : 'right'}" style="position:relative">${pageEl(i)}</div>`).join('');
+  hydrate($('print-all'));
+  await Promise.all([...$('print-all').querySelectorAll('img')].map(i => i.decode().catch(() => {})));
   print();
 };
 
-fetch('data.json', { cache: 'no-cache' }).then(r => r.json()).then(all => {
-  const news = all.filter(a => !a.k);
-  const years = [...new Set(news.map(a => a.d.slice(0, 4)))].sort();
-  const counts = Object.fromEntries(years.map(y => [y, news.filter(a => a.d.startsWith(y)).length]));
-  const asked = new URLSearchParams(location.search).get('y');
-  // default: the richest year
-  const y = years.includes(asked) ? asked : years.reduce((a, b) => counts[b] > counts[a] ? b : a);
-  document.title = `${y} · Книга року · Приморськ`;
-  $('years').innerHTML = years.filter(v => counts[v] >= 20).map(v => `<a href="?y=${v}" ${v === y ? 'aria-current="page"' : ''}>${v}</a>`).join('');
-
-  const items = news.filter(a => a.d.startsWith(y) && !a.e);
-  const ranked = [...items].sort((a, b) => score(b) - score(a));
-  const coverPic = ranked.find(a => a.i && !a.bn && (a.c || []).some(c => c !== 'Влада')) || ranked.find(a => a.i && !a.bn);
-  $('cover').style.backgroundImage = coverPic ? `url("${coverPic.i}")` : 'url(hero.jpg)';
-  $('year').textContent = y;
-  $('tagline').textContent = `Рік громади у ${items.length} ${plural(items.length, 'історії', 'історіях', 'історіях')}`;
-
-  const tc = {}, vc = new Set();
-  items.forEach(a => { (a.c || []).forEach(c => tc[c] = (tc[c] || 0) + 1); (a.vl || []).forEach(v => vc.add(v)); });
-  const bySrc = s => items.filter(a => a.s === s).length;
-  $('facts').innerHTML = [
-    [items.length, 'новин і подій'], [items.filter(a => a.v).length, 'відеосюжетів'],
-    [vc.size + 1, 'населених пунктів у новинах'], [bySrc('pro_prim'), 'від «ПРО Приморськ»'],
-  ].map(([b, s]) => `<div class="fact"><b>${b}</b><span>${s}</span></div>`).join('');
-  $('topics').innerHTML = Object.entries(tc).sort((a, b) => b[1] - a[1]).slice(0, 8)
-    .map(([c, n]) => `<span>${esc(c)}<small>${n}</small></span>`).join('');
-
-  $('months').innerHTML = MONTHS.map((m, i) => {
-    const mm = `${y}-${String(i + 1).padStart(2, '0')}`;
-    const month = items.filter(a => a.d.startsWith(mm));
-    if (!month.length) return '';
-    const best = [...month].sort((a, b) => score(b) - score(a)).slice(0, PER_MONTH).sort((a, b) => a.d.localeCompare(b.d));
-    const lead = best.reduce((a, b) => score(b) > score(a) ? b : a);
-    return `<section class="month" aria-labelledby="m${i}">
-      <div class="month-h"><b id="m${i}">${m}</b><span>${month.length} ${plural(month.length, 'подія', 'події', 'подій')}</span></div>
-      <div class="stories">${[lead, ...best.filter(a => a !== lead)].map(a => `
-        <a class="story ${a === lead ? 'lead' : ''}" href="./#${a.n}" style="--c:var(--c-${a.s})">
-          ${a.i && !a.bn ? `<img src="${a.i}" alt="" loading="lazy">` : ''}
-          <div class="b"><div class="m"><span>${day(a.d)}</span><span class="src">${SOURCES[a.s]}</span>${a.v ? '<span>▶ відео</span>' : ''}</div>
-          <h3>${esc(a.t)}</h3><p>${esc(a.x)}</p></div></a>`).join('')}</div>
-      ${month.length > best.length ? `<p class="more"><a href="./">Усі ${month.length} ${plural(month.length, 'подія', 'події', 'подій')} за ${m} у хроніці →</a></p>` : ''}
-    </section>`;
-  }).join('');
-});
+// ── start; switching between one page and spreads typesets the book again at the new page size ──
+async function layout() {
+  const anchor = pages.length && view != null ? (units()[view] || []).find(v => v != null) : +(location.hash.slice(1) || 0);
+  const anchorMonth = pages[anchor]?.html.match(/<h2>([^<]+)<\/h2>/)?.[1];
+  mode = single() ? 'single' : 'spread';
+  document.body.classList.toggle('single', mode === 'single');
+  $('left').innerHTML = $('right').innerHTML = '<div class="page"></div>';
+  await document.fonts.ready;
+  paginate();
+  const target = anchorMonth ? monthAt[MONTHS.indexOf(anchorMonth) + 1] : Math.min(anchor || 0, pages.length - 1);
+  view = Math.max(0, units().findIndex(u => u.includes(target)));
+  paint();
+}
+$('loading').remove();
+$('book').style.transition = 'none';
+await layout();
+void $('book').offsetWidth; $('book').style.transition = '';
+let rt;
+addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { if ((single() ? 'single' : 'spread') !== mode) layout(); }, 200); });
+})();
 </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 Drops share buttons, reactions, view counters, print/e-mail links, prev/next, author boxes, related posts, ads,
 and captions of photos that were not recovered.
 """
-import os, re, html, shutil
+import os, re, html, shutil, subprocess
 from html.parser import HTMLParser
 from urllib.parse import unquote, quote
 
@@ -61,6 +61,14 @@ class Cleaner(HTMLParser):
             return None
         if not (os.path.isfile(f) and os.path.getsize(f) > 2000):
             return None
+        if f.lower().endswith(('.tif', '.tiff')):  # browsers show no TIFF: a JPEG beside it (Blogger's .tif are JPEG inside already)
+            jpg = re.sub(r'\.tiff?$', '.jpg', f, flags=re.I)
+            if not os.path.exists(jpg):
+                if open(f, 'rb').read(2) == b'\xff\xd8':
+                    shutil.copyfile(f, jpg)
+                else:
+                    subprocess.run(['sips', '-s', 'format', 'jpeg', f, '--out', jpg], check=True, capture_output=True)  # macOS
+            f = jpg
         return published(f)
 
     def handle_starttag(self, tag, attrs):
@@ -374,15 +382,19 @@ CITIZEN = re.compile(rf"\b(гр\.+,?|громадян(?:ин|ину|ці|ки|а
 # sole proprietors and applicants are private people too
 PRIVATE_ROLE = re.compile(rf"\b(ФОП|СПД|ФОП-|фізичн\w* особ\w*[- –]підприєм\w*|заявник\w*:?|орендар\w*:?)\s*"
                           rf"(?!Примор|Україн|Запоріз|Бердян|Міськ|Громад|ТОВ|ПП\b)({_NAME}\s+[А-ЯІЇЄҐ]\.\s?[А-ЯІЇЄҐ]\.|{_NAME}(?:\s+{_NAME}){{1,2}})")
-_S = r'(?:[\s-]|&nbsp;|<[^>]+>){0,3}'  # separators as people type them, markup in between included ("<b>(067)</b><b> 406-70-94</b>")
-_OP = r'(?:\+?38[\s-]?)?\(?0(?:39|50|63|66|67|68|73|91|92|93|94|95|96|97|98|99)\)?' + _S
+_S = r'(?:[\s./-]|&nbsp;|<[^>]+>){0,3}'  # separators as people type them, markup in between included ("<b>(067)</b><b> 406-70-94</b>")
+_OP = r'(?<!\d)(?:\+?3?8[\s-]?)?\(?0(?:39|50|63|66|67|68|73|91|92|93|94|95|96|97|98|99)\)?' + _S
 MOBILE = re.compile(_OP + rf'(?:\d{{3}}{_S}\d{{2}}{_S}\d{{2}}|\d{{2}}{_S}\d{{2}}{_S}\d{{3}})\b')
 CARD = re.compile(r'\b\d{4}[\s-]\d{4}[\s-]\d{4}[\s-]\d{4}\b')
 EMAIL = re.compile(r'[\w.+-]+@[\w-]+(?:\.[\w-]+)+')
-PUBLIC_MAIL = re.compile(r'(gov\.ua|zp\.ua|\.org|lobbyx|ukrtel)$|^(mr\.?prim|prim(adm|rdk)|.*(rada|adm|prim)\w*@)', re.I)
+# official addresses stay: state domains and the community's own institutions by name (a «prim» in a private gmail is not one)
+PUBLIC_MAIL = re.compile(r'(gov\.ua|zp\.ua|\.org|lobbyx|ukrtel)$|^(mr\.?prim|prim(adm|rdk\d*|roo\d*)|rcdtprim|czprim|trk\.primorsk|vks-primorsk|uszn_prim\w*)@', re.I)
+MAIL_LINK = re.compile(r'<a\b[^>]*\bhref="(?:mailto:|https?://)?[^"]*?([\w.+-]+@[\w-]+(?:\.[\w-]+)+)[^"]*"[^>]*>(.*?)</a>', re.S)
 
 
 def mask_private(h, site):
+    # a link to a private address goes (its text stays and is masked below): "http://[email приховано]" leads nowhere
+    h = MAIL_LINK.sub(lambda m: m.group(0) if PUBLIC_MAIL.search(m.group(1)) else m.group(2), h)
     h = MOBILE.sub('[телефон приховано]', h)
     h = CARD.sub('[номер картки приховано]', h)
     h = EMAIL.sub(lambda m: m.group(0) if PUBLIC_MAIL.search(m.group(0)) else '[email приховано]', h)
@@ -396,7 +408,7 @@ assert mask_private('гр. України Зінчук Олександр Пет
 assert mask_private('громадянці Шевченко О.М. надати', 'archive_mrprim') == 'громадянці [ПІБ приховано] надати'
 assert mask_private('громадяни Приморської громади', 'archive_mrprim') == 'громадяни Приморської громади'
 assert mask_private('(заявник, орендар: ФОП Муравйов А.С.; адреса', 'archive_mrprim') == '(заявник, орендар: ФОП [ПІБ приховано]; адреса'
-assert mask_private('гр. РФ Терзієва Г.І.; гр..Петренко Д.А.; гр. України\nДячук А.В.', 'archive_mrprim') == 'гр. РФ [ПІБ приховано]; гр.. [ПІБ приховано]; гр. України [ПІБ приховано]'
+assert mask_private('гр. РФ Терзієва Г.І.; гр..Панченко Д.А.; гр. України\nДячук А.В.', 'archive_mrprim') == 'гр. РФ [ПІБ приховано]; гр.. [ПІБ приховано]; гр. України [ПІБ приховано]'
 assert mask_private('гр.<br>України Бєлова Н.А.;', 'archive_mrprim') == 'гр.<br>України [ПІБ приховано];'
 assert mask_private('тел. 099-771-82-59, 7-30-95', 'x') == 'тел. [телефон приховано], 7-30-95'
 assert mask_private('тел. 050-592--1751, (067) 406-70-94, 050-066- 66-90, 095 43 54 501, картка 5168 7573 3935 9194', 'x') == \
@@ -411,3 +423,8 @@ assert fix_typos('<a href="http://x.ua/obiednannia">обєднання</a>') == 
 assert mask_private('<strong>(067)</strong><strong> 406-70-94</strong>', 'x') == '<strong>[телефон приховано]</strong>'
 assert mask_private('тел. 061-377-30-95 (приймальня)', 'x') == 'тел. 061-377-30-95 (приймальня)'
 assert mask_private('mrprim@ukr.net someone@example.com vb@zp.dsns.gov.ua', 'x') == 'mrprim@ukr.net [email приховано] vb@zp.dsns.gov.ua'
+# review 2026-11-10: dots and slashes in numbers, a leading 8, «prim» in a private address, a mail link
+assert mask_private('050.123.45.67, 050/123-45-67, 8-050-123-45-67, 2018.05.12', 'x') == '[телефон приховано], [телефон приховано], [телефон приховано], 2018.05.12'
+assert mask_private('olenaprim17@gmail.com rcdtprim@gmail.com primrdk2015@ukr.net', 'x') == '[email приховано] rcdtprim@gmail.com primrdk2015@ukr.net'
+assert mask_private('<a href="http://ivan@gmail.com">пишіть ivan@gmail.com</a> <a href="mailto:mrprim@ukr.net">mrprim@ukr.net</a>', 'x') == \
+    'пишіть [email приховано] <a href="mailto:mrprim@ukr.net">mrprim@ukr.net</a>'

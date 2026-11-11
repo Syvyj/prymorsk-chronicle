@@ -23,11 +23,41 @@ MONTHS = 'січня лютого березня квітня травня че�
 
 # hand-written cards: (record id, place, title, line under it)
 CURATED = {
+    '10-23': [
+        ('a85fbbe90c', 'Зеленівка', 'Зеленівка відсвяткувала День села', 'Покровський хоровод у дворі будинку культури: ігри, конкурси, концерт і вироби місцевих майстрів.'),
+        ('0c2c8d9ff2', 'Інзівка', 'Покрова і козацтво в школі', 'Третьо- і четвертокласники провели свято «Ми роду козацького діти» про Покрову й козацькі звичаї.'),
+        ('6eee34843c', 'Єлизаветівка', 'Наша зірка на «Зорепаді»', 'Катерина К. представляла школу на обласному фестивалі в Бердянську: сучасна пісня і вірш.'),
+        ('b16b76508a', 'Приморськ', 'Квадрокоптер для рятувальників', 'ГО «Приморськ 24/7» разом з мелітопольськими активістами подарувала техніку приморським пожежникам.'),
+    ],
+    '10-22': [
+        ('3167e47689', 'Приморськ', 'Довідка, що я не верблюд', 'Щоб приватизувати 10 соток, треба було вистояти чергу по довідку в управлінні культури. Фейлетон з 2009-го.'),
+        ('5f5f6a5841', 'Приморський район', 'У районі буде шаховий клуб', 'Шахісти й шашкісти міста і сіл зібралися, щоб об’єднатися і проводити турніри не лише в Приморську.'),
+        ('895ea5bd2c', 'Приморськ', 'Ветерани футболу четверті в Україні', 'Команда 55+ зіграла фінал кубка Колоса в Берегові, а її тренер став найкращим воротарем турніру.'),
+        ('7845272c5f', 'Приморськ', 'Школа №1 отримала нові карти й глобуси', 'Кабінет географії став одинадцятим мультимедійним класом школи. Сюрприз чекав дітей після канікул.'),
+    ],
+    '10-21': [
+        ('c42282cb16', 'Приморськ', 'Сільські голови з’їхалися до Приморська', 'Голови сіл чотирьох районів області радилися з керівництвом ОДА, як розвивати свої території.'),
+        ('be2450a5b1', 'Борисівка', 'Соколята привезли бронзу', 'Команда борисівської школи виграла стрільбу й конкурс рятівника на грі Джура і стала третьою.'),
+        ('566814bf33', 'Приморськ', 'Європа починається з тебе', 'Двоє вихованців ЦДЮТ стали переможцями обласного конкурсу есе серед сотні робіт.'),
+        ('bc2a687b2d', 'Єлисеївка', 'Як хлопців у козаки приймали', 'Соколята і Патріоти змагалися у знанні козацької історії й танцювали гопак. Гомін стояв довго.'),
+    ],
     '10-16': [
         ('095a184107', 'Азов', 'У нас — газ. А у вас?', 'У селищі урочисто пустили газ: ще один населений пункт району отримав блага цивілізації.'),
         ('34750adc81', 'Єлисеївка', 'Змагання до Дня захисника', 'Старшокласники показали стройову підготовку й змагалися за програмою спартакіади.'),
         ('0a3135cecb', 'Юр’ївка', 'На Покрову приймали гостей з усього району', 'Покрова, День козацтва і День захисника — свято, що збирало громаду разом.'),
         ('f09cb234b5', 'Приморськ', 'Над морем — «біла» веселка', 'Туманного дня мешканка зняла рідкісне природне явище над морем.'),
+    ],
+    '10-18': [
+        ('b03fc7397d', 'Приморськ', 'Гості з Польщі', 'Польські школярі побачили Обиточну косу й наше море і не могли намилуватися містом.'),
+        ('e26f84c300', 'Борисівка', 'Десять років храму на Покрову', 'Свято готували всім селом, і відновлений храм зустрів людей у новому вбранні.'),
+        ('90173d27a4', 'Єлизаветівка', 'Покровський хоровод', 'На свято Покрови й козацтва до села з’їхалися понад двісті учасників.'),
+        ('6d163adaf2', 'Приморськ', 'Відкрився шаховий гурток', 'У центральній бібліотеці двічі на тиждень учать грати в шахи. Запрошують усіх охочих.'),
+    ],
+    '10-17': [
+        ('ae41a33044', 'Приморськ', 'Хризантеми хрестиком', 'На виставці умільців люди ахали біля вишивок: до двадцяти відтінків ниток в одній квітці.'),
+        ('043b0cc228', 'Приморський район', 'Фурор на Покровському ярмарку', 'Павільйон району на головному ярмарку області підкорив гостей піснями й гостинністю.'),
+        ('6fca13915b', 'Борисівка', 'Першачків посвятили в козачата', 'Напередодні Дня козацтва малечу вітали батьки й юні «Соколята».'),
+        ('0067e90bb6', 'Єлисеївка', 'Акція «Старенький вчитель»', 'Десятикласники прибрали подвір’я вчительки на пенсії, а вона щиро подякувала дітям.'),
     ],
 }
 
@@ -41,7 +71,7 @@ def cards_for(md):
     data = json.load(open(os.path.join(ROOT, 'timeline', 'data.json')))
     by_id = {a['n']: a for a in data}
     if md in CURATED:
-        return [dict(year=by_id[n]['d'][:4], place=p, title=t, line=l, photo=by_id[n].get('i', '')) for n, p, t, l in CURATED[md]]
+        return [dict(n=n, year=by_id[n]['d'][:4], place=p, title=t, line=l, photo=by_id[n].get('i', '')) for n, p, t, l in CURATED[md]]
     day = [a for a in data if a['d'][5:] == md and a.get('k') != 'history']
     best = {}
     for a in day:  # one per year: a photo first, then a village, then a longer text
@@ -49,7 +79,7 @@ def cards_for(md):
         if a['d'][:4] not in best or score > best[a['d'][:4]][0]:
             best[a['d'][:4]] = (score, a)
     picks = [a for _, a in sorted(best.values(), key=lambda r: r[0], reverse=True)[:4]]
-    return [dict(year=a['d'][:4], place=(a.get('vl') or ['Приморськ'])[0].split(' (')[0], title=a['t'],
+    return [dict(n=a['n'], year=a['d'][:4], place=(a.get('vl') or ['Приморськ'])[0].split(' (')[0], title=a['t'],
                  line=first_sentence(a.get('x', '')), photo=a.get('i', '')) for a in sorted(picks, key=lambda a: a['d'])]
 
 
@@ -64,15 +94,19 @@ def sentence(s):
     return s if s.endswith(('?', '!')) else s + '.'
 
 
-def post(cards, date_label):
-    """The FB post and its first comment (the link goes to the comment: FB shows video posts with links less)."""
+def post(cards, date_label, md=''):
+    """The FB post; the links sit in the text itself, one tap away (the author's call, 4.11.2026: no more first-comment links)."""
+    lead = next((c for c in reversed(cards) if c.get('photo')), cards[-1])  # the linked story: the last one with a photo (the preview shows it)
     lines = [f'📅 Цей день в історії, {date_label}', '', 'Що відбувалося в нашій громаді цього дня в різні роки:', '']
     for c in cards:
         lines.append(f"📍 {c['year']}, {c['place']}. {sentence(c['title'])} {sentence(c['line'])}")
     lines += ['', 'Кожен день громади є в хроніці. Відкрий розділ Цей день в історії і знайди свою історію: '
-                  'свого села, своєї школи, свого року.', '', 'Посилання в коментарі 👇', '',
-              "Громада, яку ми пам'ятаємо 💛💙", '', '#Приморськ #ЦейДеньВІсторії #ХронікаГромади #Приморськ247',
-              '', '--- перший коментар ---', 'Хроніка громади: https://prym.mydom.website']
+                  'свого села, своєї школи, свого року.', '',
+              # the link goes to one story's own page (its title and photo in the preview), the day feed is one more link:
+              # a day with a direct article link brought several times more readers than a day with the home page (20.10.2026)
+              f"{sentence(lead['title'])} https://prym.mydom.website/p/{lead['n']}",
+              f"Усі історії цього дня: https://prym.mydom.website/{'?day=' + md if md else ''}", '',
+              "Громада, яку ми пам'ятаємо 💛💙", '', '#Приморськ #ЦейДеньВІсторії #ХронікаГромади #Приморськ247']
     return '\n'.join(lines) + '\n'
 
 
@@ -94,9 +128,9 @@ def photo_panel(path, w, h):
     im = im.resize((int(im.width * s) + 1, int(im.height * s) + 1))
     x, y = (im.width - w) // 2, (im.height - h) // 2
     im = im.crop((x, y, x + w, y + h)).convert('RGBA')
-    mask = Image.new('L', (w, h), 0)
-    ImageDraw.Draw(mask).rounded_rectangle((0, 0, w - 1, h - 1), 28, fill=255)
-    im.putalpha(mask)
+    mask = Image.new('L', (w * 4, h * 4), 0)  # 4x and down: smooth corners (PIL shapes have no antialiasing)
+    ImageDraw.Draw(mask).rounded_rectangle((0, 0, w * 4 - 1, h * 4 - 1), 28 * 4, fill=255)
+    im.putalpha(mask.resize((w, h), Image.LANCZOS))
     return im
 
 
@@ -165,12 +199,12 @@ def make(md, preview=None):
         for i in range(len(cards)):
             if i == cur:
                 fill = max(0, min(1, (t - SLOTS[i]) / CARD))  # linear: a timer, not an animation
-                d.rounded_rectangle((x, H - M - 14, x + 64, H - M), 7, fill=u.CREAM + (int(70 * a),))
+                u.rrect(lay, (x, H - M - 14, x + 64, H - M), 7, u.CREAM + (int(70 * a),))
                 if fill > 0:
-                    d.rounded_rectangle((x, H - M - 14, x + max(14, int(64 * fill)), H - M), 7, fill=u.AMBER + (int(255 * a),))
+                    u.rrect(lay, (x, H - M - 14, x + max(14, int(64 * fill)), H - M), 7, u.AMBER + (int(255 * a),))
                 x += 64 + 12
             else:
-                d.rounded_rectangle((x, H - M - 14, x + 14, H - M), 7, fill=(u.AMBER + (int(255 * a),)) if i < cur else (u.CREAM + (int(90 * a),)))
+                u.rrect(lay, (x, H - M - 14, x + 14, H - M), 7, (u.AMBER + (int(255 * a),)) if i < cur else (u.CREAM + (int(90 * a),)))
                 x += 14 + 12
         # finale: invitation + address
         steps = [FINAL + k * FSTEP for k in range(4)]  # headline, the invitation, the address, the slogan
@@ -186,7 +220,7 @@ def make(md, preview=None):
             a2 = u.prog(t, steps[2], steps[2] + .7)
             bw, bh = 520, 84
             yy = 700 + 20 * (1 - a2)
-            d.rounded_rectangle((W // 2 - bw // 2, yy, W // 2 + bw // 2, yy + bh), 22, fill=u.CREAM + (int(255 * a2),))
+            u.rrect(lay, (W // 2 - bw // 2, yy, W // 2 + bw // 2, yy + bh), 22, u.CREAM + (int(255 * a2),))
             u.text(d, (W // 2, yy + bh // 2), 'prym.mydom.website', u.font(38), u.GREEN, a2, 'mm')
             a3 = u.prog(t, steps[3], steps[3] + .9)
             u.text(d, (W // 2, 840 + 14 * (1 - a3)), "Громада, яку ми пам’ятаємо", u.font(34, 600), u.MINT, a3, 'ma')
@@ -214,7 +248,7 @@ def make(md, preview=None):
     for i in range(int(DUR * FPS)):
         frame(i / FPS).save(os.path.join(tmp, f'{i:04d}.png'))
     frame(SLOTS[-1] + 2).save(os.path.join(u.HERE, f'day-{md}.png'))
-    open(os.path.join(u.HERE, f'day-{md}.txt'), 'w').write(post(cards, date_label))
+    open(os.path.join(u.HERE, f'day-{md}.txt'), 'w').write(post(cards, date_label, md))
     out = os.path.join(u.HERE, f'day-{md}.mp4')
     subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', str(FPS), '-i', os.path.join(tmp, '%04d.png'), '-i', wav,
                     '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '18', '-c:a', 'aac', '-b:a', '192k', '-shortest',

@@ -3,7 +3,7 @@
 from regional sources. Stdlib only. Resumable: URLs already in the output are skipped, and
 per-URL fetch results are memoised in regional_cache/meta.jsonl.
 
-Usage:  python3 regional_collect.py [zoda reporter 06137 zppravda mig]   (default: all, in order)
+Usage:  python3 regional_collect.py [zoda reporter 06137 06137story zppravda mig]   (default: all, in order)
 Sources can be run as separate processes in parallel: rate limits are per host, output is flock'ed.
 Politeness: >=2.5 s per live host (10 s where robots says Crawl-delay: 10, 5 s for 06137),
 >=5 s for web.archive.org; no robots-disallowed search endpoints; a source stops on repeated errors.
@@ -97,11 +97,11 @@ def meta_put(url, m):
 # ---------------------------------------------------------------- text + places
 # unambiguous within the oblast: a mention alone counts
 PLACES = [
-    ("Приморськ", r"Приморськ(?!о-|е\b|их\b|ого\b(?! район)|ому\b(?! район))|Приморск(?!о-|ое\b|их\b|ий Посад|ом Посад|ого\b(?! район)|ому\b(?! район))|Ногайськ|Ногайск"),
+    ("Приморськ", r"Приморськ(?!о-|е\b|их\b|ого\b(?! район)|ому\b(?! район))|Приморск(?!о-|ое\b|их\b|ий Посад|ом Посад|ого\b(?! район)|ому\b(?! район))|Ногайськ|Ногайск|Обит[оі]чн\w*\s+кос"),  # the spit by the town is ours (author, 2026-10-21)
     ("Преслав", r"Преслав"), ("Підспір'я", r"Підспір|Подспор"),
     ("В'ячеславка", r"В['’ʼ]?ячеславк|Вячеславк"), ("Інзівка", r"Інзівк|Инзовк"), ("Банівка", r"Банівк|Бановк"),
     ("Райнівка", r"Райнівк|Райновк"), ("Нельгівка", r"Нельгівк|Нельговк"), ("Лозанівка", r"Лозанівк|Лозановк"),
-    ("Коларівка", r"Коларівк|Коларовк"), ("Гюнівка", r"Гюнівк|Гюновк"),
+    ("Коларівка", r"Коларівк|Коларовк|(Софіївськ|Софиевск|Коларівськ|Коларовск)\w*\s+[Кк]ар\W?[єеь]+р"), ("Єлисеївка", r"(Єлисеївськ|Елисеевск)\w*\s+[Кк]ар\W?[єеь]+р"), ("Гюнівка", r"Гюнівк|Гюновк"),
 ]
 # common village names elsewhere too: count only together with Prymorsk/Berdiansk context
 AMBIG = [
@@ -262,12 +262,12 @@ def src_zoda():
 REPORTER_TAGS = ["primorsk", "primorskiy-rayon", "primorskiy-rayonnyy-sud", "primorskaya-rga", "primorskiy-gorsovet",
                  "preslav", "borisovka", "podspore", "nogai", "kamyshevatka", "naberezhnoe", "orlovka", "vyacheslavka",
                  "inzovka", "banovka", "bolgarka", "lozovatka", "raynovka", "elizavetovka", "novoalekseevka", "nelgovka",
-                 "manuylovka", "lozanovka", "kolarovka", "zelenovka", "gyunovka"]
+                 "manuylovka", "blog2novka", "kolarovka", "zelenovka", "gyunovka"]
 TAG_PLACE = {"preslav": "Преслав", "borisovka": "Борисівка", "podspore": "Підспір'я", "nogai": "Підспір'я",
              "kamyshevatka": "Комишуватка", "naberezhnoe": "Набережне", "orlovka": "Орлівка", "vyacheslavka": "В'ячеславка",
              "inzovka": "Інзівка", "banovka": "Банівка", "bolgarka": "Болгарка", "lozovatka": "Лозуватка",
              "raynovka": "Райнівка", "elizavetovka": "Єлизаветівка", "novoalekseevka": "Новоолексіївка",
-             "nelgovka": "Нельгівка", "manuylovka": "Мануйлівка", "lozanovka": "Лозанівка", "kolarovka": "Коларівка",
+             "nelgovka": "Нельгівка", "manuylovka": "Мануйлівка", "blog2novka": "Лозанівка", "kolarovka": "Коларівка",
              "zelenovka": "Зеленівка", "gyunovka": "Гюнівка"}
 
 def src_reporter():
@@ -298,7 +298,7 @@ def src_reporter():
             page += 1
     return n
 
-VILLAGE_SLUG = (r"prim|prym|preslav|borisiv|borysiv|borisov|inziv|inzov|baniv|banov|nelgiv|nelgov|kolariv|kolarov|lozaniv|lozanov|"
+VILLAGE_SLUG = (r"prim|prym|preslav|borisiv|borysiv|borisov|inziv|inzov|baniv|banov|nelgiv|nelgov|kolariv|kolarov|blog2niv|blog2nov|"
                 r"guniv|gyuniv|gunov|rajniv|rayniv|rajnov|vaceslav|vyaceslav|vjaceslav|podspor|pidspir|komisuvat|kamysev|naberezn|"
                 r"orlivk|orlovk|bolgark|lozuvat|lozovat|elizavet|jelizavet|novooleks|novoaleks|manujl|manuyl|zeleniv|zelenov|nogajsk")
 
@@ -348,6 +348,54 @@ def src_06137():
         n += emit("06137.com.ua", mm["date"], mm["title"], url, mm["desc"], default_place="Приморськ" if slug_town else None)
         if i % 50 == 0:
             log("06137", i, "/", len(urls), "total", n)
+    return n
+
+# the author's word where the text names no place: the fish die-off in the Obytochna by the «Ювілейний» park is Prymorsk (2026-10-21)
+HAND_PLACES = {"https://www.06137.com.ua/news/2815469/v-zaporozskoj-oblasti-net-sredstv-dla-resenia-ekologiceskoj-problemy-reki-obitocnaa": ["Приморськ"]}
+
+def src_06137_story(story=2528):
+    """The editors' own story «Новини ОТГ» (community news up to mid-2021): its pages often hide the town behind
+    «курорт Запорізької області», so the address filter of src_06137 missed them. Taken when the TEXT names the
+    town or a village of the community (the story also carries a few news of other hromadas)."""
+    s = Source("06137")
+    path = os.path.join(CACHE_DIR, f"story_06137_{story}.json")
+    if os.path.exists(path):
+        links = json.load(open(path))
+    else:
+        links, url = {}, f"https://www.06137.com.ua/news/story/{story}"
+        while url:
+            code, t = s.get(url, 5)
+            if code != 200:
+                raise Blocked(f"06137 story page {code}")
+            new = 0
+            for m in re.finditer(r'href="(?:https://www\.06137\.com\.ua)?/news/(\d+)/([^"#?]+)"', t):
+                if m[1] not in links:
+                    links[m[1]] = f"https://www.06137.com.ua/news/{m[1]}/{m[2]}"; new += 1
+            nxt = re.search(r'href="(?:https://www\.06137\.com\.ua)?(/news/story/%d\?date=[^"]+)"' % story, t)
+            url = "https://www.06137.com.ua" + html.unescape(nxt[1]) if nxt and new else None
+        json.dump(links, open(path, "w"))
+    log("06137 story", story, "links", len(links))
+    n = 0
+    for nid, url in sorted(links.items(), key=lambda x: int(x[0])):
+        if url in DONE:
+            continue
+        mm = meta_get(url)
+        if mm is None or "story_places" not in mm:
+            code, t = s.get(url, 5)  # robots: Crawl-delay 5
+            if code == 404:
+                meta_put(url, {"gone": True}); continue
+            if code != 200:
+                continue
+            d = re.search(r'"datePublished":"(\d{4}-\d\d-\d\d)', t)
+            mm = {"title": meta_tag(t, "og:title"), "desc": meta_tag(t, "og:description", "description"),
+                  # the article text only: every page's header says «Новини Приморська», so the whole page always "names" the town
+                  "date": d[1] if d else "", "story_places": places(body_text(t.split('class="article-details__text', 1)[-1]
+                                                                          .split('article-details__report_error', 1)[0]))}
+            meta_put(url, mm)
+        if mm.get("gone") or not ("2019" <= mm["date"][:4] <= "2022"):
+            continue
+        pl = mm["story_places"] or HAND_PLACES.get(url, [])
+        n += emit("06137.com.ua", mm["date"], mm["title"], url, mm["desc"], default_place=pl[0] if pl else None)
     return n
 
 def src_zppravda():
@@ -437,7 +485,7 @@ def refilter():
     os.replace(OUT + ".tmp", OUT)
     log("refilter: kept", len(keep), "of", len(rs))
 
-SOURCES = {"zoda": src_zoda, "reporter": src_reporter, "06137": src_06137, "zppravda": src_zppravda, "mig": src_mig}
+SOURCES = {"zoda": src_zoda, "reporter": src_reporter, "06137": src_06137, "06137story": src_06137_story, "zppravda": src_zppravda, "mig": src_mig}
 
 def selftest():
     assert places("В Приморске пожар") == ["Приморськ"]

@@ -9,9 +9,10 @@ Skipped on purpose:
   * videos that are no longer available.
 """
 import json, os, re, subprocess, sys
+import paths
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-DEST = os.environ.get('PRYM_ARCHIVE', '../prymorsk-archive') + '/video'
+DEST = os.path.join(paths.ARCHIVE, 'video')
 META = os.path.join(ROOT, 'videos_meta.jsonl')
 SESSION = re.compile(r'сесі|засідан|сессия|заседани', re.I)
 COUNCIL = 'Приморська Міська Рада'

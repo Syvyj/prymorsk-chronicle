@@ -1,0 +1,876 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Спогади та мрії · Приморськ. Хроніка громади</title>
+<meta name="description" content="Мапа Приморська і сіл громади, на якій люди залишають свої спогади й мрії про дім.">
+<link rel="canonical" href="https://prym.mydom.website/memories">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://prym.mydom.website/memories">
+<meta property="og:title" content="Спогади та мрії · Приморськ">
+<meta property="og:description" content="Мапа нашої громади: поля, море, села. Залиште свій спогад чи мрію про дім.">
+<meta property="og:image" content="https://prym.mydom.website/memories-og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="fonts/g.css" rel="stylesheet">
+<style>
+  @font-face { font-family: 'Mak'; src: url('fonts/Mak-SemiBoldHigh.otf') format('opentype'); font-weight: 600; font-display: swap; }  /* Валентин Ткаченко, OFL 1.1: fonts/Mak-License.txt */
+  :root {
+    --paper: #f1e7d5; --paper-2: #efe5d2; --ink: #3a3127; --ink-soft: #7a6c5b; --line: #b9a789;
+    --land: #fffbf2; --sea-1: #d7e8e8; --sea-2: #b9d5d9; --glow: #ffb54a; --glow-2: #ffe2a6;
+    --kite-1: #f29e8e; --kite-2: #8fb9dc; --kite-3: #a8d3b4; --kite-4: #f5c86b;
+    --serif: 'Lora', Georgia, serif; --sans: 'Commissioner', system-ui, sans-serif; --hand: 'Caveat', 'Comic Sans MS', cursive;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 17px/1.6 var(--sans);
+    background-image: radial-gradient(ellipse at 50% 0%, #f8f0e1, transparent 70%); min-height: 100svh; display: flex; flex-direction: column; overflow-x: hidden; }
+  a { color: inherit; }
+  .bar { display: flex; justify-content: space-between; gap: 16px; padding: 14px 20px; font-size: 14px; color: var(--ink-soft); }
+  .bar a { text-decoration: none; }
+  .bar a:hover { color: var(--ink); }
+
+  /* the whole screen is the picture: land in the middle, the sea from edge to edge, the words and buttons lie on it */
+  .layout { position: relative; flex: 1; min-height: 560px; display: flex; flex-direction: column; overflow: hidden; }  /* a close-up never spills over the top bar */
+  .stage { position: absolute; inset: 0; }
+  .head { position: absolute; z-index: 2; left: 36px; top: 6px; max-width: 440px; }
+  .act { margin-top: 22px; }
+  .controls { margin-top: 18px; }
+  .eyebrow { margin: 0 0 10px; font: 600 12px/1.3 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); }
+  h1 { margin: 0; font: 600 clamp(40px, 4.4vw, 62px)/1.02 'Mak', var(--serif); white-space: nowrap; }
+  h1 .t-mem { color: #e0962f; }
+  h1 .t-dream { color: #5d8fbd; }
+  h1 .t-and { color: #b49d76; font-size: .62em; }  /* a quiet «та» between the two colours */
+  .lead { margin: 18px 0 26px; max-width: 32ch; font: italic 400 19px/1.55 var(--serif); color: #5b4e3f; }
+  .legend { display: flex; gap: 22px; margin: 14px 0 0 6px; padding: 0; list-style: none; font-size: 15px; color: var(--ink-soft); }
+  .legend li { display: flex; align-items: center; gap: 12px; }
+  .legend li { gap: 8px !important; }
+  .legend svg { width: 28px; height: 28px; flex: none; overflow: visible; }
+  .filters { display: inline-flex; gap: 2px; padding: 3px; margin-bottom: 4px; background: rgba(255,255,255,.55); border-radius: 999px; backdrop-filter: blur(6px); }
+  .filters button { display: inline-flex; align-items: baseline; gap: 6px; font: 500 14px var(--sans); color: var(--ink); background: transparent; border: 0; border-radius: 999px; padding: 6px 13px; cursor: pointer; transition: background .3s ease, color .3s ease; }
+  .filters button .n { font-size: 12px; color: var(--ink-soft); font-variant-numeric: tabular-nums; transition: color .3s ease; }
+  .filters button:hover { background: rgba(255,255,255,.7); }
+  .filters button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+  .filters button[aria-pressed="true"] .n { color: #e9c99a; }
+  .add { display: inline-flex; align-items: center; gap: 10px; font: 600 16px var(--sans); color: #fff; background: #d9822b; border: 0; border-radius: 999px; padding: 13px 22px 13px 18px; cursor: pointer;
+    box-shadow: 0 8px 22px -10px rgba(217,130,43,.8); transition: transform .25s ease, box-shadow .25s ease; }
+  .add:hover { transform: translateY(-2px); box-shadow: 0 12px 26px -10px rgba(217,130,43,.9); }
+  .add svg { width: 22px; height: 22px; }
+  .count-note { margin: 10px 0 0 6px; font-size: 14px; color: var(--ink-soft); }
+  /* a record of the day: one memory or dream at a time, another on request */
+  .daily { margin-top: 6px; width: 320px; padding: 16px 18px 14px; background: rgba(255,253,247,.82); border-radius: 16px; backdrop-filter: blur(6px);
+    box-shadow: 0 14px 34px -24px rgba(58,49,39,.5); }
+  .daily .lbl { margin: 0; font: 600 22px/1 'Mak', var(--serif); color: #d9822b; }
+  .daily.dream .lbl { color: #5d8fbd; }
+  .daily .txt { margin: 8px 0 6px; font: italic 400 16px/1.5 var(--serif); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; }
+  .daily .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 13px; color: var(--ink-soft); }
+  .daily .row b { font: 600 19px var(--hand); color: #5b4e3f; }
+  .daily button { font: 500 13px var(--sans); color: var(--ink); background: none; border: 0; padding: 4px 0; cursor: pointer; white-space: nowrap; }
+  .daily button:hover { color: #d9822b; }
+  .daily .body { transition: opacity .35s ease, translate .35s ease; }
+  .daily .body.out { opacity: 0; translate: 0 6px; }
+
+  .map { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; touch-action: manipulation; }
+  .map .land { fill: var(--land); stroke: var(--land); stroke-width: 2; }  /* the stroke closes slivers between the two communities */
+  .map .cloud { fill: url(#cloudFill); opacity: .9; animation: cloud var(--cd, 60s) ease-in-out infinite alternate; }
+  .map .river { fill: none; stroke: #8dbdc7; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; filter: url(#hand); }
+  .map .river.main { stroke-width: 3.4; }
+  .map .rname { font: italic 700 calc(var(--vfs, 21px) * .85) var(--hand); fill: #4f8794; letter-spacing: .12em; paint-order: stroke; stroke: rgba(255,251,242,.85); stroke-width: calc(var(--vfs, 21px) * .25); stroke-linejoin: round; }
+  .map .wood { fill: #cfe0b4; }
+  .map .tree { fill: #b5d197; }
+  .map .tree.dark { fill: #9fc283; }
+  .map .hill { fill: #eadcbd; stroke: #b49d76; stroke-width: 1.4; }
+  .map .lake { fill: #a9d3dc; stroke: #7fa9b0; stroke-width: 1.4; filter: url(#hand); }
+  .map .lake-glint { fill: #c4e2e8; }
+  .map .reed { stroke: #8eb07a; stroke-width: 1.2; stroke-linecap: round; }
+  .map .fields { opacity: .55; }
+  .map .apple { fill: #e0604a; }
+  .map .road-edge { fill: none; stroke: #c9b791; stroke-width: 4.6; stroke-linecap: round; stroke-linejoin: round; }
+  .map .road { fill: none; stroke: #f6eedc; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .map .wall { fill: #fffaf0; stroke: #a58f6c; stroke-width: .6; }
+  .map .vehicle { stroke: rgba(60,45,30,.55); stroke-width: .7; }
+  .map .glass { stroke: rgba(255,255,255,.75); stroke-width: 1; }
+  .map .glass-fill { fill: rgba(255,255,255,.7); }
+  .map .pipe { stroke: #4a3f35; stroke-width: 1; }
+  .map .tractor { fill: #d9634a; stroke: #8a3b2b; stroke-width: .8; stroke-linejoin: round; }
+  .map .cab { fill: #f4e7c8; stroke: #8a3b2b; stroke-width: .8; }
+  .map .wheel { fill: #4a3f35; stroke: #2e2620; stroke-width: .6; }
+  .map .drive { animation: drive 26s linear infinite; }
+  @keyframes drive { 0% { transform: translateX(-22px); } 49% { transform: translateX(22px); } 50% { transform: translateX(22px) scaleX(-1); } 99% { transform: translateX(-22px) scaleX(-1); } 100% { transform: translateX(-22px); } }
+  .map .hname { font: 700 calc(var(--vfs, 21px) * .92) var(--hand); fill: #7a6446; paint-order: stroke; stroke: rgba(255,251,242,.9); stroke-width: calc(var(--vfs, 21px) * .3); stroke-linejoin: round; }
+  .map .mast { stroke: #a69a88; stroke-width: 1.3; stroke-linecap: round; }
+  .map .blades { fill: none; stroke: #8f8474; stroke-width: 1.4; stroke-linecap: round; animation: spin var(--sd, 6s) linear infinite; transform-box: view-box; transform-origin: 0 0; }
+  @media (pointer: coarse), (max-width: 760px) {
+    .map .river, .map .lake, .map .edge, .map .shore { filter: none; }
+    .map .cloud { animation: none; }
+    .map .wave { animation: none; }
+    .obj .float { animation: none; }
+  }
+  .map.zoomed { cursor: grab; touch-action: none; }  /* up close a finger drags the map, not the page */
+  .map.grabbing { cursor: grabbing; }
+  .zoom-out { position: absolute; z-index: 3; right: 36px; top: 10px; font: 500 14px var(--sans); color: var(--ink); background: rgba(255,253,247,.85); border: 0; border-radius: 999px;
+    padding: 8px 16px; cursor: pointer; box-shadow: 0 8px 20px -14px rgba(58,49,39,.6); backdrop-filter: blur(6px); opacity: 0; pointer-events: none; transition: opacity .4s ease; }
+  .zoom-out.on { opacity: 1; pointer-events: auto; }
+  @keyframes cloud { from { transform: translateX(calc(var(--cx, 60px) * -1)); } to { transform: translateX(var(--cx, 60px)); } }
+  .map .edge { fill: none; stroke: #8f7b5d; stroke-width: 5; stroke-linejoin: round; stroke-linecap: round; filter: url(#hand); }
+  .map .sea { fill: url(#seaFill); }
+  .map .shore { fill: none; stroke: #7fa9b0; stroke-width: 1.6; filter: url(#hand); }
+  .map .wave { fill: none; stroke: #fff; stroke-width: 1.4; stroke-linecap: round; opacity: .55; stroke-dasharray: 10 14; animation: wave 9s linear infinite; }
+  .map .wave:nth-of-type(2n) { animation-duration: 13s; opacity: .35; }
+  @keyframes wave { to { stroke-dashoffset: -240; } }
+  .map .islet { fill: var(--land); stroke: #7fa9b0; stroke-width: 1; }
+  .map .seaname { font: italic 500 34px var(--serif); fill: #6d97a0; letter-spacing: .35em; opacity: .6; text-anchor: middle; }
+  .map .vdot { fill: #8f7b5d; }
+  .map .vdot.town { fill: none; stroke: #8f7b5d; stroke-width: 2; }
+  .map .vname { font: 700 var(--vfs, 21px)/1 var(--hand); fill: #4f4030; paint-order: stroke; stroke: rgba(255,251,242,.94); stroke-width: calc(var(--vfs, 21px) * .32); stroke-linejoin: round; cursor: pointer; }
+  .map .vname.town { font-size: calc(var(--vfs, 21px) * 1.5); fill: var(--ink); }
+
+  .obj { cursor: pointer; outline: none; }
+  .obj .float { animation: drift var(--dur, 7s) ease-in-out var(--delay, 0s) infinite alternate; transform-box: fill-box; transform-origin: center; }
+  @keyframes drift { from { transform: translate(-3px, 2px); } to { transform: translate(3px, -4px); } }
+  .obj .halo { animation: pulse var(--pdur, 3.2s) ease-in-out var(--delay, 0s) infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes pulse { 0%, 100% { opacity: .35; transform: scale(.85); } 50% { opacity: .9; transform: scale(1.15); } }
+  .obj .kite { animation: sway var(--dur, 5s) ease-in-out var(--delay, 0s) infinite alternate; transform-box: view-box; }
+  @keyframes sway { from { transform: rotate(-7deg); } to { transform: rotate(6deg); } }
+  .obj .tail { animation: tail 2.2s ease-in-out infinite alternate; }
+  @keyframes tail { to { d: path(var(--tail2)); } }
+  .obj .hit { fill: transparent; }
+  .obj:hover .grow, .obj:focus-visible .grow, .obj.lift .grow { transform: translateY(-6px) scale(1.35); }
+  /* on load the records come one by one, from the north down to the sea */
+  .obj.enter { animation: enter 1s cubic-bezier(.3,1.5,.5,1) var(--in, 0s) both; transform-box: fill-box; transform-origin: center; }
+  @keyframes enter { from { opacity: 0; transform: translateY(-16px) scale(.6); } }
+  .obj .grow { transition: transform .35s cubic-bezier(.3,1.6,.5,1); transform-box: fill-box; transform-origin: center; }
+  .obj.dim { opacity: .12; pointer-events: none; transition: opacity .5s ease; }
+  .obj { transition: opacity .5s ease; }
+  .obj.pending .grow { opacity: .6; }
+  .obj.pending .ring { fill: none; stroke: #d9822b; stroke-width: 1.5; stroke-dasharray: 3 4; animation: spin 8s linear infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .tip { position: fixed; z-index: 20; pointer-events: none; background: var(--ink); color: var(--paper); font: 500 13px/1.35 var(--sans); padding: 7px 11px; border-radius: 10px; max-width: 250px;
+    transform: translate(-50%, calc(-100% - 14px)); opacity: 0; transition: opacity .2s ease; }
+  .tip i { display: block; margin-top: 3px; font: italic 400 13px/1.4 var(--serif); color: #e9dcc6; }
+  .tip.on { opacity: 1; }
+
+  /* the postcard */
+  .veil { position: fixed; inset: 0; z-index: 30; background: rgba(58,49,39,.28); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity .45s ease; }
+  .veil.on { opacity: 1; pointer-events: auto; }
+  .card { position: fixed; z-index: 31; left: 50%; top: 50%; width: min(520px, calc(100vw - 32px)); max-height: calc(100vh - 40px); overflow: auto; translate: -50% -50%;
+    perspective: 1400px; display: none; }
+  .card.on { display: block; }
+  .card .sheet { position: relative; background: #fffdf7; border-radius: 6px; padding: 34px 34px 26px; box-shadow: 0 30px 70px -30px rgba(58,49,39,.55), 0 2px 0 rgba(255,255,255,.8) inset;
+    background-image: radial-gradient(circle at 85% 0%, rgba(245,200,107,.14), transparent 50%); transform-origin: top center; }
+  .card .stamp { position: absolute; right: 22px; top: 20px; width: 64px; height: 76px; border: 2px dashed #e1cfae; border-radius: 4px; display: grid; place-items: center; background: #fbf3e2; rotate: 4deg; }
+  .card .stamp svg { width: 46px; height: 46px; overflow: visible; }
+  .card .kind { margin: 0 0 6px 20px; font: 600 30px/1 'Mak', var(--serif); color: #d9822b; }
+  .card.dream .kind { color: #5d8fbd; }
+  .card .text { margin: 14px 0 22px; font: italic 400 20px/32px var(--serif); color: var(--ink); white-space: pre-line; padding-right: 64px; }
+  .card .sign { margin: 0; font: 600 26px/1.2 var(--hand); color: #5b4e3f; text-align: right; }
+  .card .where { margin: 2px 0 0; text-align: right; font-size: 14px; color: var(--ink-soft); }
+  .card nav { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 22px; padding-top: 14px; border-top: 1px dashed #e1cfae; font-size: 14px; color: var(--ink-soft); }
+  .card nav button, .card .x { font: 500 14px var(--sans); background: none; border: 0; color: var(--ink); cursor: pointer; padding: 6px 4px; }
+  .card nav button:disabled { opacity: .3; cursor: default; }
+  .card .x { position: absolute; left: 12px; top: 8px; font-size: 22px; line-height: 1; color: var(--ink-soft); }
+
+  /* the form */
+  .drawer { position: fixed; z-index: 31; top: 0; right: 0; bottom: 0; width: min(460px, 100vw); background: #fffdf7; box-shadow: -30px 0 60px -40px rgba(58,49,39,.6);
+    transform: translateX(105%); transition: transform .55s cubic-bezier(.2,.8,.2,1); overflow: auto; padding: 28px 28px 40px; }
+  .drawer.on { transform: none; }
+  .drawer h2 { margin: 6px 0 4px; font: 600 30px/1.15 'Mak', var(--serif); }
+  .drawer .note { margin: 0 0 22px; color: var(--ink-soft); font-size: 15px; }
+  .drawer .x { position: absolute; right: 16px; top: 12px; font-size: 26px; background: none; border: 0; color: var(--ink-soft); cursor: pointer; }
+  .kinds { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; border: 0; padding: 0; }
+  .kinds legend { margin-bottom: 8px; font-weight: 600; font-size: 15px; }
+  .kinds label { display: grid; justify-items: center; gap: 4px; padding: 14px 8px; border: 1.5px solid var(--line); border-radius: 14px; cursor: pointer; font: 700 24px/1 var(--hand); }
+  .kinds label small { font: 400 13px/1.3 var(--sans); color: var(--ink-soft); text-align: center; }
+  .kinds input { position: absolute; opacity: 0; pointer-events: none; }
+  .kinds label:has(input:checked) { border-color: #d9822b; background: #fff4e3; }
+  .kinds label:has(input[value="dream"]:checked) { border-color: #5d8fbd; background: #eef5fb; }
+  .kinds label:has(input:focus-visible) { outline: 2px solid #d9822b; outline-offset: 2px; }
+  .field { display: grid; gap: 6px; margin-bottom: 16px; font-size: 15px; }
+  .field > span { font-weight: 600; }
+  .field small { color: var(--ink-soft); font-size: 13px; }
+  .field input, .field select, .field textarea { font: 400 17px/1.5 var(--sans); color: var(--ink); background: #fff; border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px; width: 100%; }
+  .field textarea { min-height: 150px; resize: vertical; font: italic 400 18px/1.6 var(--serif); }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #d9822b; box-shadow: 0 0 0 3px rgba(217,130,43,.15); }
+  .preview { font: 600 22px var(--hand); color: #5b4e3f; }
+  .send { width: 100%; justify-content: center; margin-top: 8px; }
+  .toast { position: fixed; z-index: 40; left: 50%; bottom: 26px; translate: -50% 20px; max-width: calc(100vw - 32px); background: var(--ink); color: var(--paper); padding: 12px 18px; border-radius: 12px;
+    font-size: 15px; opacity: 0; transition: opacity .4s ease, translate .4s ease; pointer-events: none; }
+  .toast.on { opacity: 1; translate: -50% 0; }
+
+  .foot { position: absolute; z-index: 2; right: 36px; bottom: 6px; margin: 0; font-size: 12px; color: #5f8b93; white-space: nowrap; }
+
+  @media (max-width: 760px) {
+    .layout { min-height: calc(100svh - 70px); }
+    .head { position: static; padding: 0 16px; max-width: none; }
+    .lead { margin: 10px 0 0; font-size: 17px; }
+    .stage { position: relative; flex: 1; min-height: 62svh; overflow: hidden; }
+    .controls { margin-top: 12px; }
+    .daily { width: auto; margin-top: 14px; }
+    .stage { order: 3; }
+    .legend { display: none; }
+    .count-note, .foot { display: none; }
+    .act { position: fixed; z-index: 25; right: 16px; bottom: 16px; }
+    .add { padding: 12px 18px 12px 14px; font-size: 15px; }
+    .card .sheet { padding: 28px 22px 20px; }
+    .card .text { font-size: 18px; padding-right: 0; margin-top: 60px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .obj .float, .obj .halo, .obj .kite, .obj .tail, .map .wave, .obj.pending .ring, .obj.enter, .map .cloud, .map .blades, .map .drive { animation: none; }
+    .drawer, .veil, .toast { transition: none; }
+  }
+</style>
+</head>
+<body>
+<nav class="bar"><a href="index.html">← Хроніка громади</a></nav>
+
+<main class="layout">
+  <p class="foot">Контур громади й узбережжя: © учасники OpenStreetMap (ODbL)</p>
+  <header class="head">
+    <h1><span class="t-mem">Спогади</span> <span class="t-and">та</span> <span class="t-dream">мрії</span></h1>
+    <p class="lead">Місця, які ми пам’ятаємо, і те, що хочемо там зробити, коли повернемося додому. Торкніться вогника або повітряного змія.</p>
+    <aside class="daily" id="daily" aria-live="polite">
+      <div class="body">
+        <p class="lbl"></p>
+        <p class="txt" title="Відкрити листівку"></p>
+        <div class="row"><span><b></b> <span class="where"></span></span><button type="button" id="daily-next">Інший →</button></div>
+      </div>
+    </aside>
+    <div class="act">
+      <button type="button" class="add floating" id="add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Додати спогад чи мрію</button>
+    </div>
+    <div class="controls">
+      <div class="filters" role="group" aria-label="Показати">
+        <button type="button" data-f="all" aria-pressed="true">Усі</button>
+        <button type="button" data-f="memory" aria-pressed="false">Спогади</button>
+        <button type="button" data-f="dream" aria-pressed="false">Мрії</button>
+      </div>
+      <p class="count-note" id="count"></p>
+      <ul class="legend">
+        <li><svg viewBox="-17 -17 34 34" aria-hidden="true"><use href="#ico-memory"/></svg>Спогад</li>
+        <li><svg viewBox="-17 -17 34 34" aria-hidden="true"><use href="#ico-dream"/></svg>Мрія</li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="stage">
+    <button type="button" class="zoom-out" id="zoom-out">← Уся громада</button>
+    <svg class="map" id="map" preserveAspectRatio="xMidYMid meet" role="group" aria-label="Мапа громади зі спогадами й мріями">
+      <defs>
+        <filter id="hand" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter>
+        <pattern id="rows" patternUnits="userSpaceOnUse" width="5" height="5" patternTransform="rotate(-20)"><path d="M0 2.5H5" stroke="rgba(110,85,40,.16)" stroke-width="1"/></pattern>
+        <pattern id="furrows" patternUnits="userSpaceOnUse" width="4" height="4" patternTransform="rotate(-20)"><path d="M0 2H4" stroke="rgba(120,80,45,.24)" stroke-width="1.6"/></pattern>
+        <pattern id="dots" patternUnits="userSpaceOnUse" width="5" height="5" patternTransform="rotate(-20)"><circle cx="2.5" cy="2.5" r="1.1" fill="rgba(140,95,20,.35)"/></pattern>
+        <radialGradient id="cloudFill"><stop offset=".45" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+        <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="9"/></filter>
+        <linearGradient id="seaFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d7e8e8"/><stop offset="1" stop-color="#b3d0d6"/></linearGradient>
+        <radialGradient id="glow"><stop offset="0" stop-color="#fff3cf"/><stop offset=".35" stop-color="#ffd27a" stop-opacity=".85"/><stop offset="1" stop-color="#ffb54a" stop-opacity="0"/></radialGradient>
+        <!-- icons for the legend and the postcard stamp; the map draws the same shapes inline so they can move -->
+        <g id="ico-memory"><circle r="15" fill="url(#glow)"/><circle r="4.6" fill="#ffcf6e" stroke="#e0962f" stroke-width="1"/></g>
+        <g id="ico-dream"><path d="M0 -14 L9 -2 L0 12 L-9 -2 Z" fill="#8fb9dc" stroke="#5d8fbd" stroke-width="1.2" stroke-linejoin="round"/><path d="M0 -14 V12 M-9 -2 H9" stroke="#5d8fbd" stroke-width=".8"/><path d="M0 12 q4 4 0 8 q-4 4 0 8" fill="none" stroke="#5d8fbd" stroke-width="1"/></g>
+      </defs>
+      <g id="ground"></g>
+      <g id="names"></g>
+      <g id="objects"></g>
+    </svg>
+  </div>
+</main>
+
+<div class="tip" id="tip"></div>
+<div class="veil" id="veil"></div>
+<article class="card" id="card" role="dialog" aria-modal="true" aria-labelledby="card-kind">
+  <div class="sheet">
+    <button type="button" class="x" data-close aria-label="Закрити">×</button>
+    <div class="stamp" aria-hidden="true"><svg viewBox="-17 -17 34 34"><use id="stamp-ico" href="#ico-memory"/></svg></div>
+    <p class="kind" id="card-kind">Спогад</p>
+    <p class="text" id="card-text"></p>
+    <p class="sign" id="card-sign"></p>
+    <p class="where" id="card-where"></p>
+    <nav><button type="button" id="prev">← Попередній</button><span id="card-pos"></span><button type="button" id="next">Наступний →</button></nav>
+  </div>
+</article>
+
+<aside class="drawer" id="drawer" aria-labelledby="form-title" aria-hidden="true">
+  <button type="button" class="x" data-close aria-label="Закрити">×</button>
+  <p class="eyebrow">Ваш внесок у мапу</p>
+  <h2 id="form-title">Поділіться спогадом чи мрією</h2>
+  <p class="note">Ми прочитаємо кожен запис і за кілька днів додамо його на мапу. Прізвище скоротимо до першої літери, точну адресу не показуємо: лише село.</p>
+  <form id="form">
+    <fieldset class="kinds">
+      <legend>Що це?</legend>
+      <label><input type="radio" name="kind" value="memory" checked>Спогад<small>те, що було</small></label>
+      <label><input type="radio" name="kind" value="dream">Мрія<small>те, що хочеться</small></label>
+    </fieldset>
+    <label class="field"><span>Село чи місто</span><select name="village" id="f-village" required></select></label>
+    <label class="field"><span id="f-text-label">Ваш спогад</span><textarea name="text" id="f-text" maxlength="800" required placeholder="Пам’ятаю, як…"></textarea><small id="f-left">800 знаків</small></label>
+    <label class="field" id="f-year-wrap"><span>Рік, якщо пам’ятаєте</span><input name="year" inputmode="numeric" pattern="(19|20)[0-9]{2}" maxlength="4" placeholder="наприклад, 1998"></label>
+    <label class="field"><span>Як вас підписати</span><input name="name" id="f-name" maxlength="60" autocomplete="name" placeholder="Ім’я та прізвище"><small>На мапі буде: <span class="preview" id="f-preview">Анонімно</span></small></label>
+    <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+    <div id="f-human"></div>
+    <button type="submit" class="add send">Надіслати</button>
+  </form>
+</aside>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="human.js" defer></script>
+<script>
+const $ = id => document.getElementById(id);
+const NS = 'http://www.w3.org/2000/svg';
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+const el = (tag, attrs = {}, parent) => { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); parent && parent.append(n); return n; };
+
+// the first lights: written to show what the map is for and picked by the author (2026-10-22), signed as written
+// (the author's call); they stay beside the real records from /api/memories to inspire people (author, 2026-10-25;
+// they used to step aside at five real records)
+const EXAMPLES_UNTIL = Infinity;
+const PICKED = ['s0', 's1', 's5', 's8', 's10', 's11', 's13', 's17', 's4', 's6', 's9', 's12', 's14', 's16'];
+const SAMPLE = [
+  { kind: 'memory', village: 'Приморськ', name: 'Ірина Д.', year: 1996, text: 'Серпень, вечір, ми з дідом ідемо з базару через парк до моря. У нього в сітці кавун, у мене морозиво, яке тане швидше, ніж я встигаю.' },
+  { kind: 'memory', village: 'Приморськ', name: 'Олег К.', year: 2008, text: 'Перший дзвоник у новій школі. Мама зранку плела мені косу так туго, що я цілий день ходила з піднятими бровами.' },
+  { kind: 'dream', village: 'Приморськ', name: 'Аня С.', text: 'Хочу ще раз зустріти світанок на пірсі, з термосом чаю й без жодного страху.' },
+  { kind: 'memory', village: 'Приморськ', name: 'Сергій П.', year: 2013, text: 'День міста, салют над морем, і весь натовп одночасно каже «ох».' },
+  { kind: 'dream', village: 'Приморськ', name: 'Марина Л.', text: 'Мрію відкрити маленьку кав’ярню біля набережної, щоб там пахло корицею і всі знали одне одного.' },
+  { kind: 'memory', village: 'Банівка', name: 'Тетяна Г.', year: 1989, text: 'Шовковиця біля бабусиної хати. Руки фіолетові до ліктів, а бабуся каже, що так і треба.' },
+  { kind: 'dream', village: 'Банівка', name: 'Петро М.', text: 'Повернутися і посадити біля хати абрикосу, таку саму, як була.' },
+  { kind: 'memory', village: 'Борисівка', name: 'Людмила В.', year: 1978, text: 'Взимку ставок замерзав, і всі діти села каталися на ковзанах до темряви, доки не кликали вечеряти.' },
+  { kind: 'memory', village: 'Набережне', name: 'Андрій Ш.', year: 2005, text: 'Ловили бичків з човна, а потім смажили їх просто на березі.' },
+  { kind: 'dream', village: 'Набережне', name: 'Олена Р.', text: 'Хочу привезти сюди своїх дітей і показати, де я вчилася плавати.' },
+  { kind: 'memory', village: 'Преслав', name: 'Ганна Ж.', year: 1999, text: 'Болгарські пісні на весіллі сусідів, і я вперше танцюю хоро, плутаю ноги, а всі сміються разом зі мною.' },
+  { kind: 'memory', village: 'Софіївка (Болгарка, Коларівка)', name: 'Микола Т.', year: 1985, text: 'Кар’єр після дощу, вода блакитна, як на листівці.' },
+  { kind: 'dream', village: 'Новопавлівка (Партизани)', name: 'Віра Н.', text: 'Мрію зібрати всіх однокласників на подвір’ї школи. Усіх, хто зможе.' },
+  { kind: 'memory', village: 'Орлівка', name: 'Юрій Б.', year: 2010, text: 'Велосипедом до моря через поля соняшників, і ти найшвидший у світі.' },
+  { kind: 'dream', village: 'Нельгівка', name: 'Світлана Ф.', text: 'Знову почути, як уранці кукурікає сусідський півень.' },
+  { kind: 'memory', village: 'Інзівка', name: 'Олександр Я.', year: 1993, text: 'Перша зарплата, і я купив мамі хустку на ярмарку.' },
+  { kind: 'dream', village: "Підспір'я", name: 'Катерина О.', text: 'Хочу пройти пішки від Підспір’я до Приморська, як ми ходили в дитинстві.' },
+  { kind: 'memory', village: 'Райнівка', name: 'Діана Х.', year: 2016, text: 'Вишні в цукрі, які бабуся сушила на даху літньої кухні.' },
+];
+
+// «Ірина Дмитренко» -> «Ірина Д.» (the portal never shows a private person's surname)
+const short = full => {
+  const w = full.trim().split(/\s+/).filter(Boolean);
+  if (!w.length) return 'Анонімно';
+  return w.length === 1 ? w[0] : `${w[0]} ${w[w.length - 1][0].toUpperCase()}.`;
+};
+console.assert(short('Ірина Дмитренко') === 'Ірина Д.' && short('  ') === 'Анонімно' && short('Олег') === 'Олег');
+
+// a stable pseudo-random number from a string, so an object keeps its place between visits
+// (FNV-1a with a final mix: without it strings that differ only in their last character land next to each other)
+const hash = s => { let h = 2166136261; for (const c of s) h = Math.imul(h ^ c.codePointAt(0), 16777619);
+  h ^= h >>> 16; h = Math.imul(h, 0x85ebca6b); h ^= h >>> 13; h = Math.imul(h, 0xc2b2ae35); h ^= h >>> 16; return (h >>> 0) / 4294967296; };
+
+// a smooth line through points (Catmull–Rom as cubic Béziers): the outline reads as drawn by hand, not as a border
+const smooth = (pts, closed) => {
+  const p = closed ? pts.slice(0, -1) : pts, n = p.length, at = i => closed ? p[(i + n) % n] : p[Math.max(0, Math.min(n - 1, i))];
+  let d = `M${p[0][0]},${p[0][1]}`;
+  for (let i = 0; i < (closed ? n : n - 1); i++) {
+    const [a, b, c, e] = [at(i - 1), at(i), at(i + 1), at(i + 2)];
+    d += `C${(b[0] + (c[0] - a[0]) / 6).toFixed(1)},${(b[1] + (c[1] - a[1]) / 6).toFixed(1)} ${(c[0] - (e[0] - b[0]) / 6).toFixed(1)},${(c[1] - (e[1] - b[1]) / 6).toFixed(1)} ${c[0]},${c[1]}`;
+  }
+  return d + (closed ? 'Z' : '');
+};
+
+let M, records = [], filter = 'all';
+const map = $('map'), ground = $('ground'), names = $('names'), objects = $('objects');
+
+const sky = el('g', { id: 'sky' });
+map.insertBefore(sky, ground);
+fetch('memories-map.json').then(r => r.json()).then(data => {
+  M = data;
+  frame();
+  const L = land();
+  // soft clouds that travel slowly in the sky beside the land
+  [[L.x0 - 330, L.y0 + 160, 1.3, 46], [L.x1 + 160, L.y0 + 90, 1.1, 58], [L.x0 - 200, L.y0 + 620, .9, 52], [L.x1 + 260, L.y0 + 520, 1.2, 64], [(L.x0 + L.x1) / 2, L.y0 - 10, .8, 70]].forEach(([x, y, k, d], i) => {
+    const g = el('g', { class: 'cloud', style: `--cd:${d}s;--cx:${i % 2 ? -180 : 180}px;animation-delay:${-d * i / 4}s` }, sky);
+    [[0, 0, 70, 26], [-55, 10, 46, 20], [58, 8, 50, 19], [12, -18, 44, 22]].forEach(([dx, dy, rx, ry]) => el('ellipse', { cx: x + dx * k, cy: y + dy * k, rx: rx * k, ry: ry * k }, g));
+  });
+  // land: both communities filled, then their outer edge (the shared border is drawn first, under the fills, and so hidden)
+  M.outline.forEach(r => el('path', { d: smooth(r, true), class: 'edge', 'stroke-width': 6 }, ground));
+  M.outline.forEach(r => el('path', { d: smooth(r, true), class: 'land' }, ground));
+  drawFields();
+  // the sea goes over the fields' sea side; the shore runs on past the frame both ways, so the sea fills the screen
+  const c0 = M.coast[0][0] < M.coast.at(-1)[0] ? M.coast : [...M.coast].reverse();
+  // westward the shore bends down to the south-west, eastward it climbs a little towards Berdiansk
+  const c = [[c0[0][0] - 5000, c0[0][1] + 1500], [c0[0][0] - 500, c0[0][1] + 120], ...c0, [c0.at(-1)[0] + 500, c0.at(-1)[1] - 50], [c0.at(-1)[0] + 5000, c0.at(-1)[1] - 500]];
+  el('path', { d: smooth(c, false) + `L${M.w + 5000},${M.h + 5000}L-5000,${M.h + 5000}Z`, class: 'sea' }, ground);
+  for (let k = 1; k <= 6; k++) el('path', { d: smooth(c.map(([x, y]) => [x, y + k * 34]), false), class: 'wave', style: `animation-delay:${-k * 2}s` }, ground);
+  el('path', { d: smooth(c, false), class: 'shore' }, ground);
+  M.islets.forEach(r => el('path', { d: smooth(r, true), class: 'islet' }, ground));
+  el('text', { x: L.x1 - 60, y: L.y1 - 20, class: 'seaname' }, ground).textContent = 'Азовське море';
+  drawMarks();
+  drawNames();
+  fetch('/api/memories').then(r => r.ok ? r.json() : []).catch(() => []).then(list => {
+    const real = list.filter(r => V(r.village)).map(r => ({ ...r, id: 'm' + r.id, name: r.name || 'Анонімно' }));
+    const examples = real.length >= EXAMPLES_UNTIL ? [] : SAMPLE.map((r, i) => ({ ...r, id: 's' + i }))
+      .filter(r => !PICKED || PICKED.includes(r.id));
+    load([...real, ...examples], true);
+    drawNames();
+    const today = new Date().toISOString().slice(0, 10), p = pool();
+    if (p.length) showDaily(p[Math.floor(hash(today) * p.length)]); else $('daily').hidden = true;
+  });
+  addEventListener('resize', () => { frame(); drawNames(); });
+});
+
+const inLand = (x, y) => M.outline.some(r => { let hit = false; for (let i = 0, j = r.length - 1; i < r.length; j = i++) { const [xi, yi] = r[i], [xj, yj] = r[j]; if ((yi > y) !== (yj > y) && x < xi + (y - yi) * (xj - xi) / (yj - yi)) hit = !hit; } return hit; });
+const nearVillage = (x, y, d) => M.villages.some(v => Math.hypot(v.x - x, v.y - y) < d);
+const segDist = (x, y, [ax, ay], [bx, by]) => { const dx = bx - ax, dy = by - ay, t = Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / (dx * dx + dy * dy || 1))); return Math.hypot(ax + t * dx - x, ay + t * dy - y); };
+const nearRiver = (x, y, d) => M.rivers.some(r => r.pts.some((p, i) => i && segDist(x, y, r.pts[i - 1], p) < d));
+
+// the patchwork of fields, sown differently, cut by the forest belts; gardens round the villages, a few orchards, the rivers.
+// Everything here is clipped to the outline and lies under the sea
+const CROPS = [['#f2df9a', 'rows'], ['#f6d35c', 'dots'], ['#d6e6b0', 'rows'], ['#e6cfa8', 'furrows'], ['#eee59a', null], ['#c8dca6', 'rows'], ['#ead9ad', 'furrows']];
+const TILT = -0.35;  // the fields lie a little askew, as they do
+function drawFields() {
+  const clip = el('clipPath', { id: 'landclip' }, map.querySelector('defs'));
+  M.outline.forEach(r => el('path', { d: smooth(r, true) }, clip));
+  const g = el('g', { 'clip-path': 'url(#landclip)' }, ground), L = land();
+  const u = [Math.cos(TILT), Math.sin(TILT)], v = [-Math.sin(TILT), Math.cos(TILT)], W = 84, H = 58;
+  const cx = (L.x0 + L.x1) / 2, cy = (L.y0 + L.y1) / 2, n = Math.ceil(Math.hypot(L.x1 - L.x0, L.y1 - L.y0) / 2 / H) + 2;
+  // the grid's corners wander a little (shared by neighbours, so the fields still meet), and each block is cut into
+  // one to three long strips, each sown with its own crop
+  const at = (i, j) => { const jx = (hash(`x${i},${j}`) - .5) * 16, jy = (hash(`y${i},${j}`) - .5) * 12;
+    return [cx + u[0] * i * W + v[0] * j * H + jx, cy + u[1] * i * W + v[1] * j * H + jy]; };
+  const mix = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+  const fields = el('g', { class: 'fields' }, g);
+  for (let i = -n; i <= n; i++) for (let j = -n; j <= n; j++) {
+    const A = at(i, j), B = at(i + 1, j), C = at(i + 1, j + 1), D = at(i, j + 1), mid = mix(A, C, .5);
+    if (!inLand(...mid) || nearVillage(...mid, 30)) continue;
+    const strips = 1 + Math.floor(hash(`s${i},${j}`) * 3);
+    for (let k = 0; k < strips; k++) {
+      const t0 = k / strips, t1 = (k + 1) / strips, h = hash(`f${i},${j},${k}`);
+      if (h < .3) continue;  // some ground lies fallow
+      const q = [mix(A, D, t0), mix(B, C, t0), mix(B, C, t1), mix(A, D, t1)];
+      const c = mix(q[0], q[2], .5), pts = q.map(p => mix(p, c, 2.2 / Math.hypot(p[0] - c[0], p[1] - c[1])));  // a narrow gap: the field edge
+      const d = 'M' + pts.map(p => p.map(z => z.toFixed(1)).join(',')).join('L') + 'Z';
+      const [fill, pat] = CROPS[Math.floor(hash(`c${i},${j},${k}`) * CROPS.length)];
+      el('path', { d, fill }, fields);
+      if (pat) el('path', { d, fill: `url(#${pat})` }, fields);
+    }
+  }
+  el('path', { d: M.woods.map(r => smooth(r, true)).join(''), class: 'wood' }, g);
+  M.rivers.forEach((r, i) => {
+    const main = r.name === 'Обитічна' || r.name === 'Корсак';
+    el('path', { d: smooth(r.pts, false), class: 'river' + (main ? ' main' : ''), id: 'river' + i }, g);
+  });
+  M.villages.forEach(vl => {  // a few round tree crowns: every village is its gardens
+    for (let i = 0; i < 7; i++) {
+      const a = hash(vl.name + i) * 6.283, d = 8 + hash(vl.name + 'r' + i) * 16;
+      el('circle', { cx: (vl.x - 6 + Math.cos(a) * d * 1.3).toFixed(1), cy: (vl.y + 4 + Math.sin(a) * d * .8).toFixed(1), r: (3 + hash(vl.name + 's' + i) * 3.2).toFixed(1), class: 'tree' + (i % 3 ? '' : ' dark') }, g);
+    }
+  });
+  // the main roads: a pale band with a darker edge
+  M.roads.forEach((r, i) => el('path', { d: smooth(r, false), class: 'road-edge' }, g));
+  M.roads.forEach((r, i) => el('path', { d: smooth(r, false), class: 'road', id: 'road' + i }, g));
+  // little white houses with red and brown roofs round every village, more in the town
+  const ROOFS = ['#c8664b', '#a9553f', '#8f6a4c', '#b97a4e', '#cf7d52'];
+  M.villages.forEach(vl => {
+    const town = vl.name === 'Приморськ', count = town ? 34 : 9 + Math.floor(hash(vl.name + 'n') * 7);
+    for (let i = 0; i < count; i++) {
+      const a = hash(vl.name + 'ha' + i) * 6.283, d = (town ? 9 : 7) + Math.sqrt(hash(vl.name + 'hd' + i)) * (town ? 40 : 24);
+      const x = vl.x - 4 + Math.cos(a) * d * 1.25, y = vl.y + 2 + Math.sin(a) * d * .85;
+      if (x > vl.x + 4 && Math.abs(y - vl.y - 2) < 9) continue;  // keep the name readable
+      if (!inLand(x, y) || nearRiver(x, y, 7)) continue;
+      const h = el('g', { transform: `translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(1.55)` }, g);
+      el('rect', { x: -3, y: -2.6, width: 6, height: 4.6, class: 'wall' }, h);
+      el('path', { d: 'M-3.9 -2.4 L0 -5.8 L3.9 -2.4 Z', fill: ROOFS[Math.floor(hash(vl.name + 'hr' + i) * ROOFS.length)] }, h);
+    }
+  });
+  ['Банівка', 'Інзівка', 'Маринівка', 'Борисівка', 'Преслав'].forEach(name => {  // apple orchards: rows of round trees with red apples
+    const vl = V(name); if (!vl) return;
+    const ox = vl.x - 44, oy = vl.y - 26;
+    for (let r = 0; r < 3; r++) for (let k = 0; k < 4; k++) {
+      const x = ox + k * 9 + r * 3, y = oy + r * 8;
+      if (!inLand(x, y)) continue;
+      el('circle', { cx: x, cy: y, r: 3.6, class: 'tree dark' }, g);
+      el('circle', { cx: x + 1.2, cy: y - .8, r: .95, class: 'apple' }, g);
+      el('circle', { cx: x - 1.3, cy: y + 1, r: .8, class: 'apple' }, g);
+    }
+  });
+}
+
+// on top: the river names, the quarry lakes, the hill, a handful of wind turbines, two tractors at work
+function drawMarks() {
+  const named = {};  // a name on the longest stretch of each river
+  const len = pts => pts.reduce((a, p, i) => i ? a + Math.hypot(p[0] - pts[i - 1][0], p[1] - pts[i - 1][1]) : 0, 0);
+  const calm = pts => len(pts) / Math.hypot(pts.at(-1)[0] - pts[0][0], pts.at(-1)[1] - pts[0][1]) < 2.1;  // path no more than about twice the straight line
+  M.rivers.forEach((r, i) => { if (r.name && len(r.pts) > 120 && calm(r.pts) && (!named[r.name] || len(r.pts) > len(M.rivers[named[r.name]].pts))) named[r.name] = i; });
+  Object.values(named).forEach(i => {
+    const t = el('text', { class: 'rname', dy: -5 }, ground), tp = el('textPath', { href: '#river' + i, startOffset: '35%' }, t);
+    tp.textContent = M.rivers[i].name;
+  });
+  M.quarries.forEach(q => {  // the old quarries have long since become lakes
+    const pts = Array.from({ length: 9 }, (_, i) => { const a = i / 9 * 6.283, r = 13 + hash(q.name + i) * 6; return [q.x + Math.cos(a) * r * 1.35, q.y + Math.sin(a) * r * .8]; });
+    el('path', { d: smooth([...pts, pts[0]], true), class: 'lake' }, ground);
+    el('path', { d: smooth([...pts, pts[0]].map(([x, y]) => [q.x + (x - q.x) * .55, q.y + (y - q.y) * .55 - 1]), true), class: 'lake-glint' }, ground);
+    for (let i = 0; i < 5; i++) { const a = 2.2 + i * .35, x = q.x + Math.cos(a) * 25, y = q.y + Math.sin(a) * 14; el('path', { d: `M${x},${y} l${-1 + i * .5},-7`, class: 'reed' }, ground); }
+    el('text', { x: q.x, y: q.y + 30, class: 'hname', 'text-anchor': 'middle' }, ground).textContent = q.name;
+  });
+  M.hills.forEach(h => {
+    el('path', { d: `M${h.x - 18},${h.y + 4} Q${h.x},${h.y - 16} ${h.x + 18},${h.y + 4} Z`, class: 'hill' }, ground);
+    el('text', { x: h.x + 4, y: h.y + 26, class: 'hname', 'text-anchor': 'middle', 'dominant-baseline': 'hanging' }, ground).textContent = h.name;
+  });
+  // eight of the wind farm's turbines, spread along it
+  const ts = [...M.turbines].sort((a, b) => a[0] - b[0]), pick = ts.length > 8 ? Array.from({ length: 8 }, (_, i) => ts[Math.round(i * (ts.length - 1) / 7)]) : ts;
+  pick.forEach(([x, y], i) => {
+    const t = el('g', { class: 'sized', 'data-xy': `${x} ${y}`, 'data-s': 1.1 }, ground);
+    el('path', { d: 'M0 0 V-22', class: 'mast' }, t);
+    const b = el('g', { transform: 'translate(0 -22)' }, t), blades = el('path', { d: 'M0 0 V-11 M0 0 L9.5 5.5 M0 0 L-9.5 5.5', class: 'blades' }, b);
+    blades.style.setProperty('--sd', 5 + hash('t' + i) * 4 + 's');
+    blades.style.animationDelay = -hash('d' + i) * 6 + 's';
+  });
+  const west = ['Райнівка', 'Орлівка', 'Інзівка'].map(V).filter(Boolean);
+  const nearWest = r => r.some(([x, y]) => west.some(v => Math.hypot(v.x - x, v.y - y) < 45));
+  const ranked = M.roads.map((r, i) => [r, i]).sort((a, b) => b[0].length - a[0].length);
+  const longest = [...ranked.slice(0, 5), ...ranked.slice(5).filter(([r]) => nearWest(r)).slice(0, 3)];
+  const CARS = [['#5d8fbd', 'car'], ['#f2c14e', 'bus'], ['#d9634a', 'car'], ['#7aa36b', 'truck'], ['#ede6d8', 'car'], ['#f2c14e', 'bus'], ['#8fb9dc', 'car'], ['#7aa36b', 'truck']];
+  if (!still) longest.forEach(([, ri], i) => {
+    const [color, kind] = CARS[i % CARS.length], dur = 46 + i * 9;
+    const mover = el('g', { opacity: 0 }, ground), body = el('g', { class: 'vsize' }, mover);
+    if (kind === 'bus') { el('rect', { x: -9, y: -3.6, width: 18, height: 7.2, rx: 2, fill: color, class: 'vehicle' }, body); el('path', { d: 'M-6 -3.6 V3.6 M-1 -3.6 V3.6 M4 -3.6 V3.6', class: 'glass' }, body); }
+    else if (kind === 'truck') { el('rect', { x: -9, y: -3.4, width: 11, height: 6.8, rx: 1, fill: '#e8c66b', class: 'vehicle' }, body); el('rect', { x: 2.6, y: -3.2, width: 6, height: 6.4, rx: 1.6, fill: color, class: 'vehicle' }, body); }
+    else { el('rect', { x: -6, y: -3.2, width: 12, height: 6.4, rx: 2.6, fill: color, class: 'vehicle' }, body); el('rect', { x: -1.5, y: -2.4, width: 4.5, height: 4.8, rx: 1, class: 'glass-fill' }, body); }
+    const begin = -hash('v' + i) * dur + 's';
+    const m = el('animateMotion', { dur: dur + 's', repeatCount: 'indefinite', rotate: 'auto', begin, keyPoints: '0;1;1', keyTimes: '0;.62;1', calcMode: 'linear' }, mover);
+    el('mpath', { href: '#road' + ri }, m);
+    el('animate', { attributeName: 'opacity', values: '0;1;1;0;0', keyTimes: '0;.04;.58;.62;1', dur: dur + 's', begin, repeatCount: 'indefinite' }, mover);
+  });
+  ['Новоолексіївка', 'Зеленівка', 'Райнівка', 'Орлівка', 'Петрівка'].forEach((name, i) => {  // a little red tractor going up and down its field
+    const vl = V(name); if (!vl) return;
+    const x = vl.x + 40, y = vl.y + 34;
+    const t = el('g', { class: 'sized', 'data-xy': `${x} ${y}`, 'data-s': .9 }, ground), r = el('g', { transform: `rotate(${TILT * 57.3})` }, t);
+    const d = el('g', { class: 'drive', style: `animation-delay:${-i * 9}s` }, r);
+    el('path', { d: 'M-9 1 V-11 H-1 V-5 H9 V1 Z', class: 'tractor' }, d);
+    el('rect', { x: -7.3, y: -9.6, width: 4.8, height: 3.8, class: 'cab' }, d);
+    el('path', { d: 'M5.5 -5 V-8.5', class: 'pipe' }, d);
+    el('circle', { cx: -5, cy: 2, r: 4.6, class: 'wheel' }, d);
+    el('circle', { cx: 6, cy: 3.2, r: 2.7, class: 'wheel' }, d);
+  });
+}
+
+// the land's box (with the spit), and the frame around it: on a wide screen the land sits a little right of the middle,
+// leaving the left side to the words
+function land() {
+  const pts = M.outline.flat(), x0 = Math.min(...pts.map(p => p[0])), x1 = Math.max(...pts.map(p => p[0]));
+  const y0 = Math.min(...pts.map(p => p[1])), y1 = Math.max(...M.coast.filter(p => p[0] > x0 && p[0] < x1).map(p => p[1]));
+  return { x0, x1, y0, y1 };
+}
+let base = null, zoomed = null, zooming = 0;
+function frame() {
+  const L = land(), wide = innerWidth > 760, pad = 16, extra = wide ? (L.x1 - L.x0) * .3 : 0;
+  map.setAttribute('viewBox', `${L.x0 - pad - extra} ${L.y0 - pad} ${L.x1 - L.x0 + 2 * pad + extra + 70} ${L.y1 - L.y0 + 2 * pad - 110}`);  // +70: room for the names right of the eastern villages; -110: the spit's tip runs off the bottom
+  base = map.getAttribute('viewBox').split(' ').map(Number);
+  if (zoomed) zoomTo(zoomed, 0); else rescale();
+}
+const pxPerUnit = () => { const r = map.getBoundingClientRect(), v = map.viewBox.baseVal; return Math.min(r.width / v.width, r.height / v.height); };
+const V = name => M.villages.find(v => v.name === name);
+const objScale = () => Math.min(4, Math.max(1, (innerWidth <= 760 ? .9 : 1.3) / pxPerUnit()));
+function rescale() {
+  if (!M) return;
+  const k = pxPerUnit();
+  const z = base ? base[2] / map.viewBox.baseVal.width : 1;  // how close we are: 1 for the whole community
+  map.style.setProperty('--vfs', (innerWidth <= 760 ? 15 : 17) * (1 + (z - 1) * .2) / k + 'px');  // 17 screen pixels (15 on a phone), a little larger up close
+  map.querySelectorAll('.vsize').forEach(t => t.setAttribute('transform', `scale(${(1 / k).toFixed(2)})`));
+  map.querySelectorAll('.sized').forEach(t => t.setAttribute('transform', `translate(${t.dataset.xy}) scale(${(t.dataset.s * (innerWidth <= 760 ? .65 : 1) / k).toFixed(2)})`));  // the same screen size near or far
+  records.forEach(r => { const at = r.node && r.node.firstChild; at && at.setAttribute('transform', `translate(${at.dataset.xy}) scale(${objScale().toFixed(2)})`); });
+}
+
+// closer to a village: a click on it, its name or anything around it glides the frame there; a click on empty land,
+// Esc or «Уся громада» glides back
+const ease = t => t < .5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
+function setBox(b) { map.setAttribute('viewBox', b.map(n => n.toFixed(1)).join(' ')); rescale(); }
+function zoomTo(v, ms = 1100) {
+  const from = map.getAttribute('viewBox').split(' ').map(Number), k = innerWidth <= 760 ? 2 : 2.4;
+  const to = v ? [v.x - base[2] / k * (innerWidth > 760 ? .6 : .5), v.y - base[3] / k / 2, base[2] / k, base[3] / k] : base;  // wide: right of the words
+  zoomed = v; $('zoom-out').classList.toggle('on', !!v); map.classList.toggle('zoomed', !!v); unpreview();
+  if (still || !ms) return setBox(to);
+  const t0 = performance.now(), id = ++zooming;
+  const step = now => { if (id !== zooming) return; const p = Math.min(1, (now - t0) / ms), e = ease(p); setBox(from.map((a, i) => a + (to[i] - a) * e)); if (p < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+$('zoom-out').addEventListener('click', () => zoomTo(null));
+
+// up close the map can be dragged, with a mouse or a finger; a drag never counts as a click on what it started on
+let pan = null;
+map.addEventListener('pointerdown', e => {
+  if (!zoomed || e.button > 0) return;
+  pan = { id: e.pointerId, x: e.clientX, y: e.clientY, box: map.getAttribute('viewBox').split(' ').map(Number), moved: false };
+});
+map.addEventListener('pointermove', e => {
+  if (!pan || e.pointerId !== pan.id) return;
+  const dx = e.clientX - pan.x, dy = e.clientY - pan.y;
+  if (!pan.moved && Math.hypot(dx, dy) < 6) return;
+  if (!pan.moved) { pan.moved = true; map.setPointerCapture(e.pointerId); map.classList.add('grabbing'); unpreview(); ++zooming; }
+  const k = pxPerUnit(), [x, y, w, h] = pan.box;
+  const nx = Math.max(base[0] - w * .3, Math.min(base[0] + base[2] - w * .7, x - dx / k));  // never wander far off the community
+  const ny = Math.max(base[1] - h * .3, Math.min(base[1] + base[3] - h * .7, y - dy / k));
+  setBox([nx, ny, w, h]);
+});
+const endPan = e => {
+  if (!pan || e.pointerId !== pan.id) return;
+  if (pan.moved) {
+    map.classList.remove('grabbing');
+    const eat = ev => { ev.stopPropagation(); ev.preventDefault(); };  // the click that ends a drag, if the browser sends one
+    addEventListener('click', eat, { capture: true, once: true });
+    setTimeout(() => removeEventListener('click', eat, { capture: true }), 60);
+  }
+  pan = null;
+};
+map.addEventListener('pointerup', endPan);
+map.addEventListener('pointercancel', endPan);
+map.addEventListener('click', e => {
+  if (!M || e.target.closest('.obj, .vname')) return;
+  const pt = new DOMPoint(e.clientX, e.clientY).matrixTransform(map.getScreenCTM().inverse()), k = pxPerUnit();
+  let best = null, bd = Infinity;
+  M.villages.forEach(v => { const d = Math.hypot(v.x - pt.x, v.y - pt.y) * k; if (d < bd) { bd = d; best = v; } });
+  if (bd < 80 && best !== zoomed) zoomTo(best);
+  else if (bd >= 80 && zoomed) zoomTo(null);
+});
+
+// depth: the layers follow the mouse a little, the sky most, the land least
+const layers = [[sky, 26], [ground, 6], [names, 9], [objects, 13]];
+let aim = [0, 0], now = [0, 0], loop = 0;
+if (!still && matchMedia('(pointer: fine)').matches) {
+  addEventListener('pointermove', e => {
+    aim = [e.clientX / innerWidth - .5, e.clientY / innerHeight - .5];
+    if (!loop) loop = requestAnimationFrame(function tick() {
+      now = now.map((n, i) => n + (aim[i] - n) * .06);
+      const k = pxPerUnit();
+      layers.forEach(([g, d]) => g.setAttribute('transform', `translate(${(-now[0] * d * 2 / k).toFixed(2)} ${(-now[1] * d * 2 / k).toFixed(2)})`));
+      loop = Math.abs(aim[0] - now[0]) + Math.abs(aim[1] - now[1]) > .001 ? requestAnimationFrame(tick) : 0;
+    });
+  });
+}
+
+function drawNames() {
+  names.replaceChildren();
+  const scale = pxPerUnit(), narrow = innerWidth <= 760;
+  rescale();  // names never smaller than 13 screen pixels
+  const busy = new Set(records.map(r => r.village));
+  M.villages.forEach(v => {
+    const town = v.name === 'Приморськ', label = v.name.replace(/ \(.*\)/, '');
+    if (narrow && !town && !busy.has(v.name)) { el('circle', { cx: v.x, cy: v.y, r: 2.5, class: 'vdot' }, names); return; }
+    el('circle', { cx: v.x, cy: v.y, r: town ? 7 : 3.5, class: 'vdot' + (town ? ' town' : '') }, names);
+    const t = el('text', { x: v.x + (town ? 12 : 8), y: v.y + 6, class: 'vname' + (town ? ' town' : '') + (busy.has(v.name) ? '' : ' quiet') }, names);
+    t.textContent = label;
+    t.addEventListener('click', e => { e.stopPropagation(); if (zoomed !== v) return zoomTo(v); const first = records.find(r => r.village === v.name && show(r)); first && open(first); });
+  });
+}
+
+// every record becomes a light (a memory) or a kite (a dream) near its village
+function place(r) {
+  // a sunflower spiral round the village; spots on the village's name, in the sea or too close to a light already
+  // placed are skipped, so a busy village (the town) spreads its lights round itself instead of piling them up
+  const v = V(r.village), k = records.filter(x => x.village === r.village).indexOf(r), u = objScale() / 1.3, lift = 14 * u;
+  const town = v.name === 'Приморськ';
+  const onName = (x, y) => M.villages.some(w => {  // any village's name, the town's larger
+    const fs = 17 / pxPerUnit() * (w.name === 'Приморськ' ? 1.5 : 1), lw = w.name.replace(/ \(.*\)/, '').length * fs * .55;
+    return x > w.x - 6 * u && x < w.x + 16 + lw && y > w.y - fs && y < w.y + fs * .6;
+  });
+  const spots = [];
+  for (let j = 0; spots.length <= k && j < 500; j++) {
+    const a = hash(r.village) * 6.283 + j * 2.39996, d = (12 + (town ? 19 : 15) * Math.sqrt(j + 1)) * u;
+    const x = v.x - (town ? 4 : 14) * u + Math.cos(a) * d, y = v.y + Math.sin(a) * d * .85;
+    if (onName(x, y) || onName(x, y - lift) || !inLand(x, y) || spots.some(([sx, sy]) => Math.hypot(sx - x, sy - y) < 20 * u)) continue;
+    spots.push([x, y]);
+  }
+  const [x, y] = spots[k] || [v.x, v.y];
+  return [x, y - (r.kind === 'dream' ? lift : 0)];
+}
+function draw(r) {
+  const [x, y] = place(r), g = el('g', { class: 'obj', tabindex: 0, role: 'button', 'aria-label': `${r.kind === 'dream' ? 'Мрія' : 'Спогад'}, ${r.village}` }, objects);
+  g.style.setProperty('--delay', -hash(r.id + 't') * 6 + 's');
+  g.style.setProperty('--dur', 5 + hash(r.id + 'u') * 4 + 's');
+  const at = el('g', { transform: `translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${objScale().toFixed(2)})` }, g);
+  at.dataset.xy = `${x.toFixed(1)} ${y.toFixed(1)}`;
+  const f = el('g', { class: 'float' }, at);
+  const grow = el('g', { class: 'grow' }, f);
+  el('circle', { r: 22, class: 'hit' }, grow);
+  if (r.kind === 'memory') {
+    el('circle', { r: 17, fill: 'url(#glow)', class: 'halo' }, grow).style.setProperty('--pdur', 2.6 + hash(r.id + 'p') * 2 + 's');
+    el('circle', { r: 4.8, fill: '#ffcf6e', stroke: '#e0962f', 'stroke-width': 1 }, grow);
+  } else {
+    const col = ['#f29e8e', '#8fb9dc', '#a8d3b4', '#f5c86b'][Math.floor(hash(r.id + 'c') * 4)];
+    const kite = el('g', { class: 'kite' }, grow);
+    const t1 = 'M0 13 q5 5 0 10 q-5 5 0 10 q5 5 0 10', t2 = 'M0 13 q-5 5 0 10 q5 5 0 10 q-5 5 0 10';
+    el('path', { d: t1, fill: 'none', stroke: '#6b5a45', 'stroke-width': 1, class: 'tail', style: `--tail2:'${t2}'` }, kite);
+    el('path', { d: 'M0 -15 L10 -2 L0 13 L-10 -2 Z', fill: col, stroke: '#6b5a45', 'stroke-width': 1.1, 'stroke-linejoin': 'round' }, kite);
+    el('path', { d: 'M0 -15 V13 M-10 -2 H10', stroke: '#6b5a45', 'stroke-width': .7, opacity: .6 }, kite);
+  }
+  if (r.pending) el('circle', { r: 21, class: 'ring' }, grow);
+  g.classList.toggle('pending', !!r.pending);
+  g.addEventListener('pointerenter', e => e.pointerType !== 'touch' && preview(r));
+  g.addEventListener('pointerleave', e => e.pointerType !== 'touch' && unpreview());
+  g.addEventListener('focus', () => preview(r));
+  g.addEventListener('blur', unpreview);
+  g.addEventListener('click', () => { unpreview(); r.pending ? toast('Цей запис ще на розгляді.') : open(r, g); });
+  g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); g.dispatchEvent(new Event('click')); } });
+  r.node = g;
+}
+function load(list, enter) {
+  list.forEach(r => { records.push(r); draw(r); });
+  if (enter && !still) [...list].sort((a, b) => place(a)[1] - place(b)[1]).forEach((r, i) => {
+    r.node.classList.add('enter'); r.node.style.setProperty('--in', .5 + i * .11 + 's');
+    r.node.addEventListener('animationend', e => e.target === r.node && r.node.classList.remove('enter'));
+  });
+  count();
+}
+const tip = $('tip');
+let lifted = null;
+function preview(r) {
+  unpreview();
+  lifted = r.node; lifted.classList.add('lift');
+  const b = r.node.getBoundingClientRect(), snip = r.text.length > 60 ? r.text.slice(0, 58).replace(/\s+\S*$/, '') + '…' : r.text;
+  tip.innerHTML = `${r.kind === 'dream' ? 'Мрія' : 'Спогад'} · ${esc(r.village.replace(/ \(.*\)/, ''))}${r.pending ? ' · на розгляді' : `<i>${esc(snip)}</i>`}`;
+  Object.assign(tip.style, { left: b.left + b.width / 2 + 'px', top: b.top + 'px' });
+  tip.classList.add('on');
+}
+function unpreview() { tip.classList.remove('on'); lifted && lifted.classList.remove('lift'); lifted = null; }
+document.addEventListener('pointerdown', e => { if (!e.target.closest('.obj')) unpreview(); });
+const show = r => !r.pending && (filter === 'all' || r.kind === filter);
+// 1 спогад, 2 спогади, 5 спогадів
+const plural = (n, one, few, many) => n % 10 === 1 && n % 100 !== 11 ? one : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? few : many;
+console.assert(plural(1, 'a', 'b', 'c') === 'a' && plural(3, 'a', 'b', 'c') === 'b' && plural(11, 'a', 'b', 'c') === 'c' && plural(22, 'a', 'b', 'c') === 'b');
+function count() {
+  const live = records.filter(r => !r.pending), m = live.filter(r => r.kind === 'memory').length, d = live.length - m;
+  $('count').textContent = filter === 'memory' ? `На мапі ${m} ${plural(m, 'спогад', 'спогади', 'спогадів')}.` : filter === 'dream' ? `На мапі ${d} ${plural(d, 'мрія', 'мрії', 'мрій')}.`
+    : `На мапі ${m} ${plural(m, 'спогад', 'спогади', 'спогадів')} і ${d} ${plural(d, 'мрія', 'мрії', 'мрій')}.`;
+}
+// the record of the day: the same for everyone on a given day, then any other on request
+let daily = null;
+function showDaily(r) {
+  daily = r;
+  const box = $('daily'), body = box.querySelector('.body');
+  const put = () => {
+    box.classList.toggle('dream', r.kind === 'dream');
+    box.querySelector('.lbl').textContent = r.kind === 'dream' ? 'Мрія дня' : 'Спогад дня';
+    box.querySelector('.txt').textContent = r.text;
+    box.querySelector('.row b').textContent = r.name;
+    box.querySelector('.where').textContent = '· ' + r.village.replace(/ \(.*\)/, '');
+    body.classList.remove('out');
+  };
+  if (still || !box.dataset.ready) { box.dataset.ready = 1; return put(); }
+  body.classList.add('out'); setTimeout(put, 330);
+}
+const pool = () => records.filter(show);
+$('daily-next').addEventListener('click', () => { const p = pool().filter(r => r !== daily); p.length && showDaily(p[Math.floor(Math.random() * p.length)]); });
+$('daily').querySelector('.txt').addEventListener('click', () => daily && open(daily));
+document.querySelectorAll('.filters button').forEach(b => b.addEventListener('click', () => {
+  filter = b.dataset.f;
+  document.querySelectorAll('.filters button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  records.forEach(r => r.node.classList.toggle('dim', !r.pending && !show(r)));
+  count();
+  if (daily && !show(daily)) { const p = pool(); p.length && showDaily(p[Math.floor(Math.random() * p.length)]); }
+}));
+
+// the postcard flies out of the light or the kite, unfolds, and lets you leaf through the same village
+let cur = null, from = null;
+const veil = $('veil'), card = $('card');
+function fill(r) {
+  cur = r;
+  card.classList.toggle('dream', r.kind === 'dream');
+  $('card-kind').textContent = r.kind === 'dream' ? 'Мрія' : 'Спогад';
+  $('stamp-ico').setAttribute('href', r.kind === 'dream' ? '#ico-dream' : '#ico-memory');
+  $('card-text').textContent = r.text;
+  $('card-sign').textContent = r.name || 'Анонімно';
+  $('card-where').textContent = [r.village.replace(/ \(.*\)/, ''), r.year].filter(Boolean).join(', ');
+  const same = records.filter(x => x.village === r.village && show(x)), i = same.indexOf(r);
+  $('card-pos').textContent = same.length > 1 ? `${i + 1} з ${same.length}` : '';
+  $('prev').disabled = i <= 0; $('next').disabled = i >= same.length - 1;
+  $('prev').onclick = () => turn(same[i - 1], -1); $('next').onclick = () => turn(same[i + 1], 1);
+}
+function open(r, node = r.node) {
+  from = node;
+  fill(r);
+  veil.classList.add('on'); card.classList.add('on');
+  const sheet = card.querySelector('.sheet');
+  if (!still) {
+    const b = node.getBoundingClientRect(), c = card.getBoundingClientRect();
+    const dx = b.left + b.width / 2 - (c.left + c.width / 2), dy = b.top + b.height / 2 - (c.top + c.height / 2);
+    sheet.animate([
+      { transform: `translate(${dx}px, ${dy}px) scale(.04) rotate(-12deg)`, opacity: 0 },
+      { transform: 'translate(0, 0) scale(.6) rotateX(70deg) rotate(4deg)', opacity: 1, offset: .55 },
+      { transform: 'translate(0, 0) scale(1.02) rotateX(-6deg) rotate(-1deg)', offset: .82 },
+      { transform: 'none' }], { duration: 900, easing: 'cubic-bezier(.25,.8,.3,1)' });
+    [...sheet.children].forEach((x, i) => x.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 0, offset: .5 }, { opacity: 1, transform: 'none' }], { duration: 900 + i * 90, easing: 'ease-out' }));
+  }
+  card.querySelector('[data-close]').focus({ preventScroll: true });
+}
+function turn(r, dir) {
+  if (!r) return;
+  const text = $('card-text');
+  if (still) return fill(r);
+  text.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: `translateX(${-dir * 24}px)` }], { duration: 220, easing: 'ease-in' }).onfinish = () => {
+    fill(r);
+    [text, $('card-sign'), $('card-where')].forEach(x => x.animate([{ opacity: 0, transform: `translateX(${dir * 24}px)` }, { opacity: 1, transform: 'none' }], { duration: 320, easing: 'ease-out' }));
+  };
+}
+function closeCard() {
+  if (!card.classList.contains('on')) return;
+  const done = () => { card.classList.remove('on'); veil.classList.remove('on'); from && from.focus({ preventScroll: true }); };
+  if (still || !from) return done();
+  const b = from.getBoundingClientRect(), c = card.getBoundingClientRect();
+  card.querySelector('.sheet').animate([{ transform: 'none', opacity: 1 },
+    { transform: `translate(${b.left + b.width / 2 - (c.left + c.width / 2)}px, ${b.top + b.height / 2 - (c.top + c.height / 2)}px) scale(.04) rotate(10deg)`, opacity: 0 }],
+    { duration: 480, easing: 'cubic-bezier(.5,0,.75,0)' }).onfinish = done;
+  veil.classList.remove('on');
+}
+
+// the form: a drawer; on sending, a new light flies from the button to its village and waits there for approval
+const drawer = $('drawer'), form = $('form');
+fetch('memories-map.json').then(r => r.json()).then(d => {
+  $('f-village').innerHTML = '<option value="">Оберіть…</option>' + d.villages.map(v => v.name).sort((a, b) => a === 'Приморськ' ? -1 : b === 'Приморськ' ? 1 : a.localeCompare(b, 'uk'))
+    .map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join('');
+});
+const openForm = () => { drawer.classList.add('on'); drawer.setAttribute('aria-hidden', 'false'); veil.classList.add('on'); setTimeout(() => form.kind[0].focus(), 350); };
+const closeForm = () => { if (!drawer.classList.contains('on')) return; drawer.classList.remove('on'); drawer.setAttribute('aria-hidden', 'true'); veil.classList.remove('on'); $('add').focus({ preventScroll: true }); };
+$('add').addEventListener('click', openForm);
+form.addEventListener('change', () => {
+  const dream = form.kind.value === 'dream';
+  $('f-text-label').textContent = dream ? 'Ваша мрія' : 'Ваш спогад';
+  $('f-text').placeholder = dream ? 'Коли повернуся, хочу…' : 'Пам’ятаю, як…';
+  $('f-year-wrap').hidden = dream;
+});
+$('f-text').addEventListener('input', e => { $('f-left').textContent = `${800 - e.target.value.length} знаків`; });
+$('f-name').addEventListener('input', e => { $('f-preview').textContent = short(e.target.value); });
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  const fd = new FormData(form), r = { id: 'n' + Date.now(), kind: fd.get('kind'), village: fd.get('village'), text: fd.get('text').trim(), name: short(fd.get('name') || ''), year: +fd.get('year') || null, pending: true };
+  if (!r.village || !r.text) return;
+  const send = form.querySelector('.send');
+  send.disabled = true;
+  let ok = false;
+  try {
+    const token = await human('memory', $('f-human'));
+    const res = await fetch('/api/memory', { method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ kind: r.kind, village: r.village, text: r.text, name: r.name === 'Анонімно' ? '' : r.name, year: r.year, website: fd.get('website'), token }) });
+    ok = res.ok || res.status;
+  } catch (err) { if (/human/.test(err?.message)) ok = 403; }
+  send.disabled = false;
+  if (ok === 403) return toast('Не вдалося перевірити, що ви людина. Оновіть сторінку й спробуйте ще раз: текст лишився у формі.');
+  if (ok === 429) return toast('Сьогодні вже надіслано багато спогадів. Спробуйте завтра: текст лишився у формі.');
+  if (ok !== true) return toast('Не вдалося надіслати. Перевірте зв’язок і спробуйте ще раз: текст лишився у формі.');
+  closeForm();
+  form.reset(); form.dispatchEvent(new Event('change')); $('f-preview').textContent = 'Анонімно'; $('f-left').textContent = '800 знаків';
+  load([r]);
+  if (!still) {
+    const b = $('add').getBoundingClientRect(), t = r.node.getBoundingClientRect();
+    r.node.animate([{ transform: `translate(${(b.left + b.width / 2 - t.left - t.width / 2) / (map.getBoundingClientRect().width / M.w)}px, ${(b.top - t.top) / (map.getBoundingClientRect().width / M.w)}px) scale(2)`, opacity: 0 },
+      { opacity: 1, offset: .2 }, { transform: 'none' }], { duration: 1600, easing: 'cubic-bezier(.3,.7,.3,1)' });
+    r.node.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+  toast(`Дякуємо! Після перевірки ${r.kind === 'dream' ? 'ваша мрія з’явиться' : 'ваш спогад з’явиться'} на мапі.`);
+});
+
+veil.addEventListener('click', () => { closeCard(); closeForm(); });
+document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => { closeCard(); closeForm(); }));
+addEventListener('keydown', e => {
+  if (e.key === 'Escape') { if (!card.classList.contains('on') && !drawer.classList.contains('on')) zoomTo(null); closeCard(); closeForm(); }
+  if (card.classList.contains('on') && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) $(e.key === 'ArrowLeft' ? 'prev' : 'next').click();
+});
+let toastT;
+function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 4200); }
+</script>
+</body>
+</html>

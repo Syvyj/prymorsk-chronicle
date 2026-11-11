@@ -10,14 +10,26 @@
 <meta name="description" content="Хроніка громади Приморська 2004–2022: новини міської ради, ГО «Приморськ 24/7», місцевих ЗМІ, шкіл і сіл, збережені з Wayback Machine.">
 <meta property="og:title" content="Приморськ. Громада, яку ми пам'ятаємо">
 <meta property="og:description" content="Тисячі новин громади Приморська 2004–2022, врятовані з архівів сайтів, яких більше немає.">
-<meta property="og:image" content="hero.jpg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
+<meta property="og:image" content="https://prym.mydom.website/hero.jpg">
+<link rel="canonical" href="https://prym.mydom.website/">
+<link href="fonts/g.css" rel="stylesheet">
+<script>// Leaflet only for the chronicle's map: the home page has none (150 KB less for every first visit)
+if (/\/chronicle(\.html)?$/.test(location.pathname)) for (const [tag, attrs] of [
+  ['link', { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css', integrity: 'sha384-c6Rcwz4e4CITMbu/NBmnNS8yN2sC3cUElMEMfP3vqqKFp7GOYaaBBCqmaWBjmkjb' }],
+  ['script', { src: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js', integrity: 'sha384-NElt3Op+9NBMCYaef5HxeJmU4Xeard/Lku8ek6hoPTvYkQPh3zLIrJP7KiRocsxO' }]])
+  document.head.append(Object.assign(document.createElement(tag), attrs, { crossOrigin: 'anonymous' }));
+</script>
 <link rel="preload" as="image" href="hero-sm.jpg" imagesrcset="hero-sm.jpg 1000w, hero.jpg 2000w" imagesizes="(max-width: 760px) 100vw, 1400px">
-<script>try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch {}</script>
+<script>try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch {}
+// one file, two pages: the home page (/) and the full chronicle (/chronicle, a copy of this file)
+document.documentElement.dataset.page = /\/chronicle(\.html)?$/.test(location.pathname) ? 'chronicle' : 'home';
+{ // old links to the chronicle on the home page (?all, ?q=…, #chronicle) now open its own page
+  const q = new URLSearchParams(location.search);
+  if (document.documentElement.dataset.page === 'home' && (q.has('all') || q.has('q') || location.hash === '#chronicle')) {
+    q.delete('all');
+    location.replace(`chronicle.html${q.size ? '?' + q : ''}${location.hash === '#chronicle' ? '' : location.hash}`);
+  }
+}</script>
 <style>
   :root {
     --bg: #f7f9f3; --card: #ffffff; --soft: #eaf2e6; --ink: #142d26; --muted: #64736a; --line: #dfe6da;
@@ -47,7 +59,10 @@
   button, input, select { font: inherit; color: inherit; }
   :focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
   .wrap { width: min(1320px, calc(100% - 32px)); margin: 0 auto; }
+  [data-page="home"] .only-chronicle, [data-page="chronicle"] .only-home { display: none !important; }
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .skip { position: absolute; left: -9999px; top: 8px; z-index: 30; padding: 10px 14px; border-radius: 10px; background: #fffaf2; color: #174f3e; font-weight: 700; }
+  .skip:focus { left: 12px; }
   .label { font: 11px var(--mono); text-transform: uppercase; letter-spacing: .12em; color: var(--accent-text); }
   h2.title { font: 800 clamp(28px, 4vw, 40px)/1.05 var(--sans); letter-spacing: -.06em; margin: 8px 0 0; }
   .section-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 22px; flex-wrap: wrap; }
@@ -60,34 +75,38 @@
   .btn-glass { background: rgba(255, 255, 255, .14); color: #fff; border: 1px solid rgba(255, 255, 255, .35); backdrop-filter: blur(8px); }
 
   /* ── Top strip + header ───────────────────────────────── */
-  .strip { height: 42px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font: 11px var(--mono); letter-spacing: .04em; color: var(--muted); }
-  .strip b { color: var(--accent-text); font-weight: 500; }
-  .masthead { height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  /* the header stays on top while the page scrolls: one capsule of equal links */
+  html { scroll-padding-top: 96px; }
+  .topbar { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  .masthead { height: 82px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
   .brand { display: flex; gap: 12px; align-items: center; font-weight: 800; letter-spacing: -.04em; font-size: 17px; line-height: 1.1; }
   .mark { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 14px; background: #fffaf2; border: 1px solid var(--line); box-shadow: 0 4px 14px rgba(23, 79, 62, .12); }
   .mark img { width: 42px; height: 42px; object-fit: contain; }
   .brand small { display: block; margin-bottom: 3px; font: 600 10px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--accent-text); }
-  .masthead nav { display: flex; gap: 28px; align-items: center; font-size: 13px; font-weight: 700; }
-  .masthead nav a:hover { color: var(--accent-text); }
-  .theme { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); cursor: pointer; font-size: 16px; line-height: 1; }
-  .theme:hover { border-color: var(--amber); }
-  .masthead nav .pill { border: 1px solid var(--line); border-radius: 99px; padding: 9px 16px; background: var(--card); color: inherit; font: inherit; cursor: pointer; }
+  .masthead nav { display: flex; gap: 2px; align-items: center; padding: 4px; border: 1px solid var(--line); border-radius: 99px; background: var(--card); box-shadow: var(--shadow); }
+  .masthead nav > * { display: inline-flex; align-items: center; height: 38px; padding: 0 15px; border: 0; border-radius: 99px; background: none; color: var(--ink);
+    font: 700 13px var(--sans); white-space: nowrap; cursor: pointer; }
+  .masthead nav > :hover { background: var(--green-soft); color: var(--accent-text); }
+  .masthead nav > .theme, .masthead nav > .burger { justify-content: center; width: 38px; padding: 0; font-size: 16px; line-height: 1; }
+  .masthead nav > .burger { display: none; font-size: 18px; }
 
   /* ── Hero ─────────────────────────────────────────────── */
-  .hero { position: relative; isolation: isolate; overflow: hidden; min-height: min(78vh, 760px); padding: 56px 52px 34px; margin-top: 6px; border-radius: 26px; color: #fff;
+  .hero { position: relative; isolation: isolate; overflow: hidden; min-height: min(58vh, 570px); padding: 56px 52px 34px; margin-top: 6px; border-radius: 26px; color: #fff;
     display: grid; grid-template-columns: 1fr; align-content: end; gap: 0; background: #174f3e; }
   /* the coast fills the whole card; a deep-green tide rises from the bottom and the left so the type stays readable */
   .hero-img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: center 58%; animation: hero-settle 3.2s cubic-bezier(.2, .7, .2, 1) both; }
   .hero::before { content: ''; position: absolute; inset: 0; z-index: -1;
     background: linear-gradient(180deg, rgba(10, 44, 34, .35) 0%, rgba(10, 44, 34, .1) 30%, rgba(10, 44, 34, .72) 72%, rgba(10, 44, 34, .94) 100%),
                 linear-gradient(90deg, rgba(10, 44, 34, .62) 0%, rgba(10, 44, 34, 0) 62%); }
-  .hero::after { content: 'Збережено з Wayback Machine'; position: absolute; right: 24px; top: 18px; color: rgba(255, 255, 255, .64); font: 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+  .hero::after { content: 'Цифровий архів громади, збережено з Wayback Machine'; position: absolute; right: 24px; top: 18px; color: rgba(255, 255, 255, .64); font: 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; }
   .eyebrow { display: flex; gap: 10px; align-items: center; font: 11px var(--mono); text-transform: uppercase; letter-spacing: .12em; color: #efb544; }
   .eyebrow::before { content: ''; width: 8px; height: 8px; background: #efb544; border-radius: 50%; }
   .hero h1 { font: 800 clamp(64px, 12vw, 176px)/.86 var(--sans); letter-spacing: -.07em; margin: 18px 0 0; }
   .hero h1 em { display: block; font-style: normal; color: #efb544; font-size: clamp(30px, 3.6vw, 52px); line-height: 1.1; letter-spacing: -.045em; margin-top: .6em; }
   .intro { color: #e4eee8; font-size: 17px; max-width: 560px; margin: 18px 0 0; }
   .hero-cta { display: flex; flex-wrap: wrap; gap: 10px; margin: 26px 0 34px; }
+  .btn-support { margin-left: auto; background: #fffaf2; color: var(--green); }
+  .btn-support:hover { background: #fff; }
   /* arrival: the photo settles, the words rise once; nothing moves after that */
   @keyframes hero-settle { from { transform: scale(1.1); } }
   @keyframes hero-rise { from { transform: translateY(34px); } }  /* no fade: the words are readable from the first frame */
@@ -132,24 +151,32 @@
   .river-hint { font-size: 12px; color: var(--muted); margin: 14px 2px 0; }
 
   /* ── Today ────────────────────────────────────────────── */
-  .today { margin-top: 48px; background: var(--green); color: #fff; border-radius: 28px; padding: 42px 0 46px; }
+  .today { margin-top: 34px; }
+  .today > .wrap { width: 100%; }
+  .today .month-h { margin-top: 26px; }
+  .day-nav { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .day-btn { border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 9px 14px; font: 700 13px var(--sans); cursor: pointer; }
+  .day-btn:hover { background: var(--green-soft); color: var(--accent-text); }
+  .day-pick input { border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 8px 12px; font: 600 13px var(--sans); }
+  .day-foot { margin-top: 22px; display: flex; justify-content: center; }
+  .day-empty { color: var(--muted); }
+  /* asks inside the day feed: the portal's own banner (the coast under deep green), each with its own part of the photo; same height */
+  .feed-ask { display: flex; justify-content: space-between; align-items: center; gap: 18px 28px; margin: 22px 0; padding: 30px 34px; min-height: 236px; box-sizing: border-box;
+    border-radius: 22px; color: #fff; background: linear-gradient(90deg, rgba(10, 50, 38, .95), rgba(10, 50, 38, .55)), url(hero-sm.jpg) center var(--focus) / cover; }
+  .feed-ask h3 { margin: 0 0 10px; font: 800 clamp(22px, 2.4vw, 30px)/1.15 var(--sans); letter-spacing: -.04em; }
+  .feed-ask p { margin: 0 0 20px; max-width: 58ch; line-height: 1.55; color: #e4eee8; }
+  .feed-ask .donate-qr { width: 140px; height: 140px; flex: none; }
+  .ask-donate { --focus: 12%; }   /* the sky */
+  .ask-share { --focus: 88%; }    /* the sand */
+  @media (max-width: 640px) { .feed-ask { padding: 24px; min-height: 290px; } }
+  .day-empty button { all: unset; cursor: pointer; text-decoration: underline; color: var(--accent-text); font-weight: 700; }
   .today-head { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
-  .today-head h2.title { color: #fff; margin: 0; }
+  .today-head h2.title { margin: 0; }
   .day-pill { display: grid; align-content: center; justify-items: center; gap: 4px; width: 66px; height: 66px; border-radius: 16px; background: #efb544; color: #174f3e; font: 500 10px/1 var(--mono); text-transform: uppercase; letter-spacing: .04em; flex: none; }
   .day-pill b { font: 800 30px/1 var(--sans); letter-spacing: -.05em; }
-  .today-count { margin-left: auto; font: 11px var(--mono); text-transform: uppercase; letter-spacing: .06em; color: #cfe0d6; }
-  .today-list { display: grid; grid-auto-flow: column; grid-auto-columns: 272px; gap: 12px; overflow-x: auto; padding: 2px 2px 14px; scroll-snap-type: x mandatory;
-    scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, .3) transparent; }
-  .tcard { scroll-snap-align: start; height: 214px; display: flex; flex-direction: column; gap: 8px; padding: 16px 18px; border-radius: 16px;
-    background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .14); color: #fff; transition: background .2s, transform .2s; }
-  .tcard:hover { background: rgba(255, 255, 255, .14); transform: translateY(-3px); }
-  .t-year { display: flex; justify-content: space-between; align-items: baseline; font: 800 30px/1 var(--sans); letter-spacing: -.05em; color: #efb544; }
-  .t-year small { font: 10px var(--mono); letter-spacing: .04em; color: #efb544; text-transform: uppercase; }
-  .tcard h3 { margin: 0; font: 800 15px/1.3 var(--sans); letter-spacing: -.02em; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-  .tcard p { margin: 0; font-size: 12.5px; line-height: 1.45; color: #d7e5dc; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .tcard .src-pill { margin-top: auto; color: #e9f1ec; }
+  .today-count { display: block; margin-top: 4px; font: 600 13px var(--sans); color: var(--muted); }
   .tcard .src-pill::before { box-shadow: 0 0 0 2px rgba(255, 255, 255, .6); }
-  .today-empty { color: rgba(255, 255, 255, .75); }
+  .today-empty { color: var(--muted); }
 
   /* ── Map ──────────────────────────────────────────────── */
   .map-sec { margin-top: 56px; }
@@ -167,6 +194,13 @@
   .places .passport:hover { background: var(--amber); color: var(--amber-ink); }
   .map-note { font-size: 12px; margin: 10px 0 8px; }
   .leaflet-popup-content { font: 14px/1.4 var(--sans); }
+  /* old map sheets (maps/maps.json, oldmaps.py): the layer list and how much of the old map shows through */
+  .leaflet-control-layers { font: 13px/1.4 var(--sans); border-radius: 12px !important; }
+  .leaflet-control-layers-overlays label { display: flex; align-items: center; gap: 6px; margin: 2px 0; }
+  .map-fade { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 12px; background: #fff; color: #174f3e;
+    font: 600 13px var(--sans); box-shadow: 0 1px 5px rgba(0,0,0,.25); }
+  .map-fade[hidden] { display: none; }
+  .map-fade input { width: 110px; accent-color: #174f3e; }
   .leaflet-popup-content b { font-weight: 800; }
   .leaflet-popup-content button { margin-top: 8px; border: 0; border-radius: 8px; padding: 6px 12px; background: #efb544; color: #174f3e; font-weight: 700; cursor: pointer; }
 
@@ -221,6 +255,9 @@
   .story { display: grid; grid-template-columns: 94px minmax(0, 1fr) auto 34px; gap: 20px; align-items: start; background: var(--card); border-radius: 16px; margin: 12px 0; padding: 18px 20px; box-shadow: var(--shadow); transition: box-shadow .2s, transform .2s; }
   .story:hover { box-shadow: var(--shadow-hi); transform: translateY(-2px); }
   .date { font: 11px/1.5 var(--mono); color: var(--accent-text); padding-top: 4px; text-transform: uppercase; }
+  .story .date { align-self: center; text-align: center; padding-top: 0; }
+  .date b { display: block; font: 800 38px/.9 var(--sans); letter-spacing: -.05em; }
+  .date span { display: block; margin-top: 6px; letter-spacing: .04em; }
   .story h3 { font: 800 18px/1.3 var(--sans); letter-spacing: -.035em; margin: 0 0 6px; }
   .story p { margin: 0; font-size: 13px; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .s-meta { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin-top: 10px; }
@@ -247,7 +284,27 @@
   .empty { text-align: center; padding: 60px 20px; color: var(--muted); }
 
   /* tiles: history */
+  .memorial { display: flex; gap: 22px; align-items: center; margin: 0 0 16px; padding: 24px 26px; border-radius: 18px; text-decoration: none;
+    background: radial-gradient(circle at 12% 50%, rgba(216,178,101,.18), transparent 55%), #14110c; color: #efe8dc; box-shadow: var(--shadow); }
+  .memorial svg { flex: none; width: 34px; height: 68px; color: #d8b265; }
+  .memorial span { display: grid; gap: 4px; }
+  .memorial small { font: 12px var(--mono, monospace); letter-spacing: .14em; text-transform: uppercase; color: #d8b265; }
+  .memorial b { font: 700 clamp(20px, 2.6vw, 28px)/1.2 var(--sans); }
+  .memorial em { font-style: normal; color: #b8b0a3; font-size: 15px; }
+  .memorial:hover b, .memorial:focus-visible b { color: #d8b265; }
+  /* the map of memories and dreams: the same shape, in daylight */
+  .memorial.dreams { background: radial-gradient(circle at 10% 50%, rgba(255,200,110,.35), transparent 45%), radial-gradient(circle at 95% 20%, rgba(143,185,220,.3), transparent 45%), #fbf3e3; color: #3a3127; }
+  .memorial.dreams svg { width: 52px; height: 52px; }
+  .memorial.dreams small { color: #c77f2a; }
+  .memorial.dreams em { color: #6f6253; }
+  .memorial.dreams:hover b, .memorial.dreams:focus-visible b { color: #c77f2a; }
+  .memorial.sculptor { background: radial-gradient(circle at 92% 30%, rgba(194,81,47,.16), transparent 45%), #f5efe4; color: #2c2620; }
+  .memorial.sculptor img { flex: none; width: 64px; height: 64px; border-radius: 50%; object-fit: cover; object-position: 55% 30%; box-shadow: 0 0 0 3px #f5efe4, 0 0 0 4.5px #c2512f; }
+  .memorial.sculptor small { color: #c2512f; }
+  .memorial.sculptor em { color: #6c6153; }
+  .memorial.sculptor:hover b, .memorial.sculptor:focus-visible b { color: #c2512f; }
   .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+  .tiles.one { grid-template-columns: minmax(0, 560px); }
   .card { display: flex; flex-direction: column; background: var(--card); border: 1px solid transparent; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); transition: transform .2s, box-shadow .2s; }
   .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hi); }
   .card .img { aspect-ratio: 16 / 10; overflow: hidden; background: var(--soft); }
@@ -354,37 +411,53 @@
     .panel { position: static; max-height: none; display: none; background: var(--card); border-radius: 18px; padding: 18px; box-shadow: var(--shadow); }
     .panel.open { display: block; }
     .filters-toggle { display: inline-flex; }
-    .masthead nav a:not(.pill):not(.keep) { display: none; }
+    .masthead nav .wide { display: none; }
+    /* the sections hidden for width open from ☰ as rows under the pill */
+    .masthead { position: relative; }
+    .masthead nav > .burger { display: inline-flex; }
+    .masthead nav.open { position: absolute; z-index: 2; top: 50%; right: 0; transform: translateY(-25px); width: min(300px, 100%);
+      flex-wrap: wrap; justify-content: flex-end; border-radius: 22px; }
+    .masthead nav.open > .wide, .masthead nav.open > .mid { display: flex; order: 1; flex-basis: 100%; height: 44px; border-radius: 14px; }
   }
   @media (max-width: 900px) { .map-grid { grid-template-columns: 1fr; } #map { height: 380px; } }
   @media (max-width: 760px) {
     footer .fine { align-items: flex-start; text-align: left; }
-    .strip span:last-child { display: none; }
-    .masthead { height: 62px; }
-    .masthead nav { gap: 12px; }
-    .masthead nav a.keep { display: none; }
-    .hero { padding: 120px 22px 28px; min-height: min(86vh, 720px); border-radius: 22px; }
+    .masthead { height: 68px; }
+    html { scroll-padding-top: 80px; }
+    .masthead nav .mid { display: none; }   /* on a phone: the chronicle and the theme */
+    .hero { padding: 120px 22px 28px; min-height: min(64vh, 540px); border-radius: 22px; }
     .hero::after { font-size: 8px; right: 12px; top: 12px; }
     .hero h1 { font-size: clamp(44px, 14.5vw, 84px); }
     .intro { font-size: 16px; }
     .hero-cta { margin: 22px 0 26px; }
+    .btn-support { margin-left: 0; }
     .search { grid-template-columns: 1fr; }
     .search button { padding: 13px; }
     .metrics { grid-template-columns: repeat(2, 1fr); gap: 14px 0; padding-top: 18px; }
     .metrics li { padding: 0 6px; }
     .metrics b { font-size: 25px; }
-    .archive, .today { border-radius: 22px; padding: 30px 0; }
+    .archive { border-radius: 22px; padding: 30px 0; }
     .today-count { margin-left: 0; width: 100%; }
     .day-pill { width: 56px; height: 56px; }
     .day-pill b { font-size: 26px; }
     .river { grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 6px; }
     .yr { min-height: 92px; padding: 10px; }
+    /* a finger can't hit a 5px month: the chosen year opens to the full width with months a finger wide */
+    .yr[aria-current="true"]:not(.yr-all) { grid-column: 1 / -1; }
+    .yr[aria-current="true"] .bars { height: 64px; gap: 4px; padding-bottom: 16px; }
+    .yr[aria-current="true"] .bar { position: relative; }
+    .yr[aria-current="true"] .bar::after { content: attr(data-month); position: absolute; left: 0; right: 0; bottom: -16px; text-align: center; font: 11px var(--mono); color: #c6d7cf; }
+    /* captions in the mono face: 12px on a phone, not 10-11 */
+    .label, .eyebrow, .brand small, .search-hint, .places small, .panel h3, .chip small, .ms-g, .ms-opt small, .cal .dow, .range label,
+    .month-h span, .src-pill, .badge, .tag, .meta, footer .fine, .r-pager small, .article .video figcaption { font-size: 12px; }
+    .yr-note { font-size: 11px; }
     .yr-btn { font-size: 20px; }
     .story { grid-template-columns: 62px minmax(0, 1fr) 28px; gap: 12px; padding: 15px 12px; }
     .story .arrow { grid-column: 3; }
     .s-img { grid-column: 2; grid-row: 2; width: 100%; height: auto; aspect-ratio: 16 / 9; }
     .story h3 { font-size: 16px; }
-    .date { font-size: 10px; }
+    .date b { font-size: 30px; }
+    .date { font-size: 10px; }   /* «листопада» must fit the 62px date column */
     .arrow { width: 28px; height: 28px; }
     .share-card { padding: 24px; }
     .share-body .two { grid-template-columns: 1fr; }
@@ -401,23 +474,27 @@
 </head>
 <body>
 
-<div class="wrap">
-  <div class="strip"><span><b>ПРИМОРСЬК</b> · ЗАПОРІЗЬКА ОБЛАСТЬ</span><span>ЦИФРОВИЙ АРХІВ ГРОМАДИ · 2004—2022</span></div>
-  <header class="masthead">
+<div class="topbar">
+  <a class="skip" href="#main">Перейти до змісту</a>
+  <header class="wrap masthead">
     <a class="brand" href="./"><span class="mark"><img src="coat.png" width="42" height="42" alt="Герб Приморська"></span><span><small>Приморськ</small>Хроніка громади</span></a>
-    <nav aria-label="Розділи">
-      <a href="#chronicle">Хроніка</a>
-      <a href="#years">За роками</a>
-      <a class="keep" href="#map-h">Мапа громади</a>
-      <a href="#footer">Про архів</a>
-      <button class="pill" type="button" onclick="openShare()">Поширити</button>
-      <a class="pill" href="book.html">Книга року ↗</a>
+    <nav aria-label="Розділи" id="sections">
+      <a class="wide" href="./#today-h">Цей день</a>
+      <a href="chronicle.html">Уся хроніка</a>
+      <a class="mid" href="chronicle.html#map-h">Мапа громади</a>
+      <a class="mid" href="book.html">Книга року</a>
+      <a class="wide" href="#footer">Про архів</a>
+      <button class="mid" type="button" onclick="openShare()">Поширити</button>
       <button class="theme" id="theme" type="button" aria-label="Перемкнути тему"></button>
+      <button class="burger" id="burger" type="button" aria-label="Меню" aria-expanded="false" aria-controls="sections">☰</button>
     </nav>
   </header>
+</div>
 
-  <main>
-    <section class="hero" aria-labelledby="hero-h">
+<div class="wrap">
+
+  <main id="main">
+    <section class="hero only-home" aria-labelledby="hero-h">
       <img class="hero-img" src="hero.jpg" srcset="hero-sm.jpg 1000w, hero.jpg 2000w" sizes="(max-width: 760px) 100vw, 1400px" alt="" fetchpriority="high">
       <div>
         <div class="eyebrow rise">Архів громади, що живе в пам'яті</div>
@@ -426,11 +503,13 @@
         <div class="hero-cta rise" style="--i:3">
           <a class="btn btn-amber" href="#today-h">Цей день в історії</a>
           <a class="btn btn-glass" href="book.html">Книга року</a>
+          <a class="btn btn-support" href="#day-donate">Підтримати проєкт</a>
         </div>
       </div>
       <ul class="metrics" id="stats" aria-label="Архів у цифрах"></ul>
     </section>
 
+    <h1 class="sr only-chronicle">Уся хроніка громади Приморська 2004–2022</h1>
     <form class="search" id="search" role="search" onsubmit="return false">
       <label class="sr" for="q">Пошук у хроніці</label>
       <input id="q" type="search" placeholder="Що ви шукаєте? Напр. школа, фестиваль, вулиця…" autocomplete="off">
@@ -441,29 +520,30 @@
   </main>
 </div>
 
-<section class="wrap archive" id="years" aria-labelledby="years-h">
-  <div class="wrap">
-    <div class="section-head">
-      <div><span class="label">Гортайте крізь час</span><h2 class="title" id="years-h">Оберіть свій рік</h2></div>
-      <a class="all" href="#chronicle">Уся хроніка ↗</a>
-    </div>
-    <nav class="river" id="river" aria-label="Роки й місяці"></nav>
-    <p class="river-hint">Натисни рік або стовпчик місяця: висота стовпчика показує, скільки було новин.</p>
-  </div>
+<section class="wrap" id="epilogue-sec" hidden aria-label="Сторінки, яких ще немає">
+  <aside class="epilogue"><div class="eyebrow">Сторінки, яких ще немає</div>
+    <h2>Наступні сторінки ми напишемо самі</h2>
+    <p>Тут хроніка обривається: з 2022 року громада живе в окупації. Нові сторінки в історії громади чекають на свою публікацію.
+    Нові записи обов'язково з'являться саме тут.</p></aside>
 </section>
 
-<section class="wrap today" aria-labelledby="today-h">
+<section class="wrap today only-home" id="today-sec" aria-labelledby="today-h">
   <div class="wrap">
     <div class="today-head">
       <span class="day-pill" id="today-date" aria-hidden="true"></span>
-      <h2 class="title" id="today-h">Цей день в історії</h2>
-      <span class="today-count" id="today-count"></span>
+      <div><h2 class="title" id="today-h">Цей день в історії</h2><span class="today-count" id="today-count"></span></div>
+      <div class="day-nav">
+        <button type="button" class="day-btn" id="day-prev"></button>
+        <label class="day-pick"><span class="sr">Обрати інший день</span><input type="date" id="day-pick"></label>
+        <button type="button" class="day-btn" id="day-next"></button>
+      </div>
     </div>
-    <div class="today-list" id="today"></div>
+    <div class="day-feed" id="today"></div>
+    <div class="day-foot"><a class="btn btn-amber" href="chronicle.html" id="open-all">Уся хроніка з пошуком і фільтрами</a></div>
   </div>
 </section>
 
-<section class="wrap map-sec" aria-labelledby="map-h">
+<section class="wrap map-sec only-chronicle" id="map-sec" aria-labelledby="map-h">
   <div class="section-head">
     <div><span class="label">Мапа громади</span><h2 class="title" id="map-h">Місто і села</h2></div>
   </div>
@@ -477,7 +557,7 @@
   </div>
 </section>
 
-<section class="wrap" id="donate" aria-labelledby="donate-h" hidden>
+<section class="wrap only-chronicle" id="donate" aria-labelledby="donate-h" hidden>
   <div class="share-card">
     <div>
       <span class="label">Підтримати</span>
@@ -492,7 +572,17 @@
   </div>
 </section>
 
-<div class="wrap chronicle" id="chronicle">
+<section class="wrap archive only-chronicle" id="years" aria-labelledby="years-h">
+  <div class="wrap">
+    <div class="section-head">
+      <div><span class="label">Гортайте крізь час</span><h2 class="title" id="years-h">Оберіть свій рік</h2></div>
+    </div>
+    <nav class="river" id="river" aria-label="Роки й місяці"></nav>
+    <p class="river-hint">Натисни рік або стовпчик місяця: висота стовпчика показує, скільки було новин.</p>
+  </div>
+</section>
+
+<div class="wrap chronicle only-chronicle" id="chronicle">
   <aside class="panel" id="panel" aria-label="Фільтри">
     <h3>Знайти історію</h3>
     <p class="hint">Відфільтруйте хроніку за джерелом, темою, місцем чи датою.</p>
@@ -540,7 +630,7 @@
   </section>
 </div>
 
-<section class="wrap" aria-labelledby="share-h">
+<section class="wrap only-chronicle" id="share-sec" aria-labelledby="share-h">
   <div class="share-card">
     <div>
       <span class="label">Спогади</span>
@@ -555,7 +645,20 @@
 <section class="wrap about" aria-labelledby="history-h">
   <div class="section-head">
     <div><span class="label">Історія</span><h2 class="title" id="history-h">Історія міста і краю</h2></div>
+    <a class="all only-home" href="chronicle.html#history-h">Усі історичні матеріали ↗</a>
   </div>
+  <a class="memorial" href="holodomor.html">
+    <svg viewBox="0 0 30 60" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M15 59V8"/><path d="M15 14c-5-2-7-6-7-10 4 1 7 4 7 10zm0 0c5-2 7-6 7-10-4 1-7 4-7 10zM15 25c-5-2-7-6-7-10 4 1 7 4 7 10zm0 0c5-2 7-6 7-10-4 1-7 4-7 10zM15 36c-5-2-7-6-7-10 4 1 7 4 7 10zm0 0c5-2 7-6 7-10-4 1-7 4-7 10z"/></g></svg>
+    <span><small>Голодомор 1932–1933</small><b>2273 людини з нашого краю забрав голод</b><em>Мапа втрат, діти, імена за селами. Знайдіть своїх рідних →</em></span>
+  </a>
+  <a class="memorial dreams" href="memories.html">
+    <svg viewBox="-26 -26 52 52" aria-hidden="true"><circle r="13" fill="#ffd27a" opacity=".45"/><circle r="5" fill="#ffcf6e" stroke="#e0962f"/><path d="M14 -24 L22 -13 L14 -1 L6 -13 Z" fill="#8fb9dc" stroke="#5d8fbd" stroke-linejoin="round"/><path d="M14 -1 q4 4 0 8 q-4 4 0 8" fill="none" stroke="#5d8fbd"/></svg>
+    <span><small>Спогади та мрії</small><b>Наша громада на одній мапі</b><em>Поля, море, села. Залиште свій спогад чи мрію про дім →</em></span>
+  </a>
+  <a class="memorial sculptor" href="mykytenko.html">
+    <img src="mykytenko/portrait.jpg" alt="" width="64" height="64" loading="lazy">
+    <span><small>Пам'яті митця</small><b>Я вернусь до тебе навесні</b><em>Володимир Микитенко: скульптор, поет і лялькар з Приморська. Його життя, вірші й барельєфи в 3D →</em></span>
+  </a>
   <div class="tiles" id="history"></div>
 </section>
 
@@ -663,6 +766,29 @@ const queryStems = () => {
   if (stemsFor !== state.q) { stemsFor = state.q; stems = norm(state.q).split(/\s+/).filter(Boolean).map(stem); }
   return stems;
 };
+// the texts themselves (search.py): the index shards a query needs, then the records in which each query word starts a word;
+// the feed shows the title / excerpt matches at once and adds these when they arrive
+let searchKeys, bodyFor = '', bodyHits = null;
+const shards = {};
+function loadBody() {
+  const q = state.q;
+  if (bodyFor === q) return;
+  bodyFor = q; bodyHits = null;
+  if (!q) return;
+  (async () => {
+    searchKeys ??= await fetch('search/keys.json', { cache: 'no-cache' }).then(r => r.json());
+    const hits = await Promise.all(queryStems().map(async w => {
+      if (w.length < 3) return null;
+      // keys.json: the first letters split by their second letter; a shard's file is named by its code points (search.py)
+      const k = [...(searchKeys.includes(w[0]) ? w.slice(0, 2) : w[0])].map(c => c.codePointAt(0).toString(16)).join('-');
+      const shard = await (shards[k] ??= fetch(`search/${k}.json`, { cache: 'no-cache' }).then(r => r.ok ? r.json() : {}));
+      const set = new Set();
+      for (const [word, ids] of Object.entries(shard)) if (word.startsWith(w)) { let i = 0; for (const d of ids) set.add(i += d); }
+      return set;
+    }));
+    if (bodyFor === q) { bodyHits = hits; renderFeed(); }
+  })().catch(() => {});  // offline or blocked: titles and excerpts still work
+}
 const hl = s => {
   s = esc(s);
   if (!state.q) return s;
@@ -678,7 +804,8 @@ const records = n => `${n.toLocaleString('uk-UA')} ${plural(n, 'запис', 'з
 const pill = a => `<span class="src-pill" style="--c:var(--c-${a.s}, var(--c-school3))">${a.ext ? esc(a.ext) : SOURCES[a.s]}</span>`;
 const badges = a =>
   (a.ph ? `<span class="badge" title="${a.ph} фото у статті">📷 ${a.ph}</span>` : '') +
-  (a.v ? '<span class="badge" title="У статті є відео">▶ відео</span>' : '');
+  (a.v ? '<span class="badge" title="У статті є відео">▶ відео</span>' : '') +
+  (a.ar === 'fb' ? '<span class="badge" title="Допис зі сторінки «Приморськ 24/7» у Facebook">Facebook</span>' : '');
 const tags = a => (a.c || a.vl) ? `<div class="tags">${[
   ...(a.vl || []).map(v => `<span class="tag place">📍 ${esc(v)}</span>`),
   ...(a.c || []).map(c => `<span class="tag" style="--tc:${TOPIC_COLOR[c] || 'var(--sea)'}">${esc(c)}</span>`)].join('')}</div>` : '';
@@ -693,7 +820,11 @@ const card = a => `<a class="card" href="p/${a.n}.html" data-n="${a.n}" style="-
   </div></a>`;
 
 // feed row: date | headline, excerpt, source | photo | arrow
-const dateStack = a => { const f = fmt(a.d, a.e), i = f.lastIndexOf(' '); return `${f.slice(0, i)}<br>${f.slice(i + 1)}`; };
+// the year (and month) already stand in the divider above: a large day number and the month under it
+const dateStack = a => {
+  if (a.e > 31) { const f = fmt(a.d, a.e), i = f.lastIndexOf(' '); return `${f.slice(0, i)}<br>${f.slice(i + 1)}`; }
+  return `<b>${a.e ? '≈' : ''}${+a.d.slice(8)}</b><span>${MONTHS_GEN[a.d.slice(5, 7) - 1]}</span>`;
+};
 const row = a => `<a class="story" href="p/${a.n}.html" data-n="${a.n}" style="--c:var(--c-${a.s}, var(--c-school3))">
   <time class="date" datetime="${a.d}"${approx(a)}>${dateStack(a)}</time>
   <div><h3>${hl(a.t)}</h3><p>${hl(a.x)}</p>
@@ -714,7 +845,7 @@ function matches(a, skip = '') {
     [...state.media].every(k => a[k]) &&
     (!state.topics.size || (a.c || []).some(v => state.topics.has(v))) &&
     (!state.villages.size || (a.vl || []).some(v => state.villages.has(v))) &&
-    (!q || (hay => q.every(w => hay.includes(w)))(a._hay ??= norm(`${a.t} ${a.x} ${a.to || ''}`)));
+    (!q || (hay => q.every((w, k) => hay.includes(w) || bodyHits?.[k]?.has(a._i)))(a._hay ??= norm(`${a.t} ${a.x} ${a.to || ''}`)));
 }
 
 function renderRiver() {
@@ -764,6 +895,7 @@ function renderCalendar() {
 }
 
 function renderFeed() {
+  loadBody();
   renderRiver();
   renderCalendar();
   $('dates-clear').hidden = !(state.month || state.day || state.from || state.to);
@@ -773,10 +905,7 @@ function renderFeed() {
   // above the last record: the pages not written yet
   const pages = Math.ceil(list.length / PAGE);
   state.page = Math.min(state.page, Math.max(pages - 1, 0));
-  let html = !state.page && list[0]?.d >= '2022' ? `<aside class="epilogue"><div class="eyebrow">Сторінки, яких ще немає</div>
-    <h2>Наступні сторінки ми напишемо самі</h2>
-    <p>Тут хроніка обривається: з 2022 року громада живе в окупації. Нові сторінки в історії громади чекають на свою публікацію.
-    Нові записи обов'язково з'являться саме тут.</p></aside>` : '', month = '';
+  let html = !state.page && list[0]?.d >= '2022' ? $('epilogue-sec').innerHTML : '', month = '';
   list.slice(state.page * PAGE, (state.page + 1) * PAGE).forEach(a => {
     const m = a.d.slice(0, 7);
     if (m !== month) {
@@ -808,22 +937,71 @@ function renderPager(pages) {
   $('pager').innerHTML = html + btn(cur + 1, '›', 'Наступна сторінка');
 }
 
-function renderToday() {
-  const now = new Date();
-  const md = `-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-  const hits = news.filter(a => a.d.endsWith(md) && !a.e).sort((a, b) => a.d.localeCompare(b.d));
-  // tear-off calendar leaf: day number over the month, next to the heading
-  $('today-date').innerHTML = `<b>${now.getDate()}</b>${MONTHS_GEN[now.getMonth()]}`;
-  $('today-h').setAttribute('aria-label', `${now.getDate()} ${MONTHS_GEN[now.getMonth()]}: цей день в історії`);
-  const years = hits.map(a => a.d.slice(0, 4));
-  $('today-count').textContent = hits.length ? `${records(hits.length)} · ${years[0]}–${years.at(-1)}` : '';
-  // same-size cards: the year, headline, a bit of text, the source
-  $('today').innerHTML = hits.length
-    ? hits.map(a => `<a class="tcard" href="p/${a.n}.html" data-n="${a.n}" style="--c:var(--c-${a.s}, var(--c-school3))">
-        <span class="t-year">${a.d.slice(0, 4)}${a.v ? '<small>▶ відео</small>' : ''}</span>
-        <h3>${esc(a.t)}</h3><p>${esc(a.x)}</p>${pill(a)}</a>`).join('')
-    : '<p class="today-empty">Цього дня в архіві записів немає, але хроніка нижче чекає.</p>';
+// the day: today, or ?day=MM-DD from a post; ← → and the picker walk through the calendar
+let dayMD = (/^\d\d-\d\d$/.test(new URLSearchParams(location.search).get('day') || '') && new URLSearchParams(location.search).get('day')) || null;
+const mdOf = d => `${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const dayLabel = md => `${+md.slice(3)} ${MONTHS_GEN[+md.slice(0, 2) - 1]}`;
+const shiftMD = (md, k) => { const d = new Date(2024, +md.slice(0, 2) - 1, +md.slice(3) + k); return mdOf(d); };   // 2024: a leap year keeps 29 February
+const dayRecords = async md => (LIGHT ? await fetch(`day/${md}.json`).then(r => r.ok ? r.json() : []).catch(() => [])
+                                       : news.filter(a => a.d.slice(5) === md && !a.e)).sort((a, b) => a.d.localeCompare(b.d));
+const dayHas = md => LIGHT ? home.days[md] > 0 : news.some(a => a.d.slice(5) === md);
+async function renderToday() {
+  const today = mdOf(new Date()), md = dayMD || today;
+  const hits = await dayRecords(md);
+  if (md !== (dayMD || today)) return;   // the reader moved on to another day while this one was loading
+  $('today-date').innerHTML = `<b>${+md.slice(3)}</b>${MONTHS_GEN[+md.slice(0, 2) - 1]}`;
+  $('today-h').textContent = md === today ? 'Цей день в історії' : `${dayLabel(md)} в історії`;
+  const years = [...new Set(hits.map(a => a.d.slice(0, 4)))];
+  $('today-count').textContent = hits.length ? `${records(hits.length)} за ${years.length} ${plural(years.length, 'рік', 'роки', 'років')}, ${years[0]}–${years.at(-1)}` : '';
+  $('day-prev').textContent = `← ${dayLabel(shiftMD(md, -1))}`;
+  $('day-next').textContent = `${dayLabel(shiftMD(md, 1))} →`;
+  $('day-pick').value = `${new Date().getFullYear()}-${md}`;
+  // the asks sit inside the feed: support after the first third, memories after the second (at a year boundary); a short day has them at the end
+  const asks = [DONATE_URL && `<aside class="feed-ask ask-donate" id="day-donate" aria-label="Підтримати"><div>
+      <h3>Допоможіть зберегти пам'ять громади</h3>
+      <p>Хроніку створюють волонтери ГО «Приморськ 24/7»: рятуємо сайти з вебархівів, зберігаємо відео й документи, оплачуємо хостинг.</p>
+      <a class="btn btn-amber" href="${DONATE_URL}" target="_blank" rel="noopener">Підтримати проєкт</a></div>
+      <img class="donate-qr" src="donate-qr.svg" width="140" height="140" alt="QR-код банки monobank «Хроніка громади»"></aside>`,
+    `<aside class="feed-ask ask-share" aria-label="Спогади"><div>
+      <h3>Пам'ятаєш ${dayLabel(md)}?</h3>
+      <p>Маєш фото чи історію з тих подій? Поділися, і ми додамо їх до хроніки після перевірки.</p>
+      <button class="btn btn-amber" type="button" data-memory>Поділитися спогадом</button></div></aside>`].filter(Boolean);
+  const at = hits.length < 6 ? [] : [hits.length / 3, hits.length * 2 / 3];
+  let html = '', year = '', ask = 0;
+  hits.forEach((a, i) => {
+    const y = a.d.slice(0, 4);
+    if (y !== year) {
+      while (ask < at.length && i >= at[ask]) html += asks[ask++];
+      year = y; html += `<div class="month-h"><h2>${y}</h2><span>${records(hits.filter(h => h.d.startsWith(y)).length)}</span></div>`;
+    }
+    html += row(a);
+  });
+  if (!hits.length) {   // an empty day: offer the nearest days that have records
+    const near = [-1, 1, -2, 2, -3, 3].map(k => shiftMD(md, k)).filter(dayHas).slice(0, 2);
+    html = `<p class="day-empty">Цього дня в архіві записів немає.${near.length ? ' Найближчі дні з записами: ' + near.map(m => `<button type="button" data-md="${m}">${dayLabel(m)}</button>`).join(', ') + '.' : ''}</p>`;
+  }
+  html += asks.slice(ask).join('');
+  $('today').innerHTML = html;
+  const q = new URLSearchParams(location.search);
+  if (md === today) q.delete('day'); else q.set('day', md);
+  const qs = q.toString().replace(/=(?=&|$)/g, '');   // ?all, not ?all=
+  history.replaceState(null, '', `${location.pathname}${qs ? '?' + qs : ''}${location.hash}`);
 }
+function goDay(md) { dayMD = md; renderToday(); $('today-sec').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+$('day-prev').onclick = () => goDay(shiftMD(dayMD || mdOf(new Date()), -1));
+$('day-next').onclick = () => goDay(shiftMD(dayMD || mdOf(new Date()), 1));
+$('day-pick').onchange = e => { if (e.target.value) goDay(e.target.value.slice(5)); };
+$('today').addEventListener('click', e => {
+  const b = e.target.closest('[data-md]'); if (b) goDay(b.dataset.md);
+  if (e.target.closest('[data-memory]')) $('share-open').click();
+});
+
+const HOME = document.documentElement.dataset.page === 'home';
+if (HOME) $('search').addEventListener('submit', () => {
+  const q = $('q').value.trim();
+  location.href = `chronicle.html${q ? '?q=' + encodeURIComponent(q) : ''}`;
+});
+else document.title = 'Уся хроніка · Приморськ. Хроніка громади';
 
 function setupFilters() {
   const refresh = () => { state.page = 0; renderFeed(); };
@@ -837,6 +1015,9 @@ function setupFilters() {
     }
     state.day = '';
     refresh();
+    // a year picked: its records, right below; on a phone the year first opens wide so a month can be tapped
+    const wide = !b.dataset.month && state.year && matchMedia('(max-width: 760px)').matches && document.querySelector('.yr[aria-current="true"]:not(.yr-all)');
+    (wide || $('chronicle')).scrollIntoView({ behavior: 'smooth', block: wide ? 'center' : 'start' });
   };
   $('cal').onclick = e => {
     const b = e.target.closest('button[data-day]'); if (!b) return;
@@ -944,6 +1125,27 @@ async function setupMap() {
   if (!window.L) return;  // Leaflet blocked or offline: the list still works
   const map = L.map('map', { scrollWheelZoom: false, attributionControl: true }).setView([46.80, 36.22], 10);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 16, attribution: '© OpenStreetMap' }).addTo(map);
+  // old map sheets tied to today's villages (oldmaps.py): under the village circles, above the street map
+  map.createPane('old').style.zIndex = 350;
+  fetch('maps/maps.json').then(r => r.ok ? r.json() : []).catch(() => []).then(sheets => {
+    if (!sheets.length) return;
+    let opacity = .85;
+    const layers = Object.fromEntries(sheets.map(s => [`${esc(s.title)}`, L.imageOverlay(s.src, s.bounds, { pane: 'old', opacity,
+      attribution: `<a href="${esc(s.page)}" target="_blank" rel="noopener" title="${esc(s.title)}">Мапа ${s.year} · Commons</a>` })]));
+    L.control.layers(null, layers, { collapsed: matchMedia('(max-width: 600px)').matches }).addTo(map);
+    const fade = L.control({ position: 'bottomleft' });
+    fade.onAdd = () => {
+      const d = L.DomUtil.create('label', 'map-fade');
+      d.innerHTML = 'Стара мапа <input type="range" min="10" max="100" value="85" aria-label="Наскільки видно стару мапу">';
+      d.hidden = true;
+      L.DomEvent.disableClickPropagation(d);
+      d.querySelector('input').oninput = e => { opacity = e.target.value / 100; Object.values(layers).forEach(l => l.setOpacity(opacity)); };
+      const sync = () => d.hidden = !Object.values(layers).some(l => map.hasLayer(l));  // the slider shows only while an old sheet is on
+      map.on('overlayadd overlayremove', sync);
+      return d;
+    };
+    fade.addTo(map);
+  });
   const max = Math.max(...rows.map(r => r[1]));
   const pts = [];
   rows.forEach(([v, n]) => {
@@ -1014,23 +1216,20 @@ themeBtn.onclick = () => {
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', showTheme);
 showTheme();
 
+// ☰ on a narrow screen: a pick, a click elsewhere or Esc closes it
+const burger = $('burger'), sections = $('sections');
+const menu = open => { sections.classList.toggle('open', open); burger.setAttribute('aria-expanded', open); burger.textContent = open ? '✕' : '☰'; };
+burger.onclick = () => menu(!sections.classList.contains('open'));
+document.addEventListener('click', e => { if (e.target !== burger && e.target !== themeBtn && sections.classList.contains('open')) menu(false); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && sections.classList.contains('open')) { menu(false); burger.focus(); } });
+
 let videoIndex;
 const localVideos = () => videoIndex ??= fetch('videos.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : {}).catch(() => ({}));
 
 // ── Reader: clean article text, deep-linkable as #<n> ─────────────────────
 const reader = $('reader');
-// where a story comes from: regional media (a live site) or a local site whose consent asked for a credit
-// public copy of the original: Wayback, the still-live site, or none (Common Crawl kept it, it has no public viewer)
-const original = a => !a.u || a.ext || a.ar === 'cc' ? '' : a.ar === 'live' ? a.u : `https://web.archive.org/web/2022/${a.u}`;
-const sourceOf = a => a.ext ? { host: a.ext, href: a.u } : META.CREDIT?.[a.s] && original(a) ? { host: META.CREDIT[a.s], href: original(a) } : null;
-// one standard block under every article: the source, and the archived original
-function originLinks(a) {
-  const src = sourceOf(a), wb = original(a);
-  const link = (href, text) => `<a href="${esc(href)}" target="_blank" rel="noopener">${text} ↗</a>`;
-  return [src && link(src.href, `${a.ext && !a.full ? 'Повний текст' : 'Джерело'}: ${esc(src.host)}`),
-          wb && (!src || src.href !== wb) && link(wb, a.ar === 'live' ? 'Оригінал на сайті' : 'Оригінал у Wayback Machine')].filter(Boolean).join('<span class="sep">·</span>');
-}
-
+// the source credit and the links to the original come from the article's own page (pages.py writes them there), so the
+// chronicle's data carries no addresses: a third lighter
 // prev / next follow the feed as it is filtered now (or the whole chronicle when the article is not in it)
 function neighbours(n) {
   const arr = list.some(a => a.n === n) ? list : news, i = arr.findIndex(a => a.n === n);
@@ -1057,19 +1256,13 @@ async function openArticle(n) {
   if (!a) return;
   window.countView?.(n);
   setPager(n);
-  const src = sourceOf(a);
-  // consented editors asked for the credit on top: their name above the headline links to the original
-  $('r-meta').innerHTML = `<time datetime="${a.d}">${fmt(a.d, a.e)}</time>${src
-    ? `<a class="src-pill" style="--c:var(--c-${a.s}, var(--c-school3))" href="${esc(src.href)}" target="_blank" rel="noopener">${esc(src.host)} ↗</a>` : pill(a)}${badges(a)}`;
+  $('r-meta').innerHTML = `<time datetime="${a.d}">${fmt(a.d, a.e)}</time>${pill(a)}${badges(a)}`;
   $('r-title').textContent = a.t;
   $('r-title').insertAdjacentHTML('beforeend', a.to ? `<small class="orig-title" lang="ru">Оригінал: ${esc(a.to)}</small>` : '');
-  // raw archive copies are not published (full names inside): online the button opens the Wayback original
-  $('r-orig').href = a.ext || LOCAL ? a.p : original(a);  // online the raw copies are not there: only public originals
-  $('r-orig').hidden = !$('r-orig').getAttribute('href');  // Common Crawl only: no public page to open
-  $('r-orig').textContent = a.ext ? 'Читати в джерелі ↗' : 'Архівна сторінка ↗';
-  $('r-origin').innerHTML = originLinks(a);
+  $('r-orig').hidden = true;
+  $('r-origin').innerHTML = '';
   // the article's own page: link previews (Facebook, Telegram) show its title and photo
-  fillShare($('r-sharerow'), new URL(`p/${n}${LOCAL ? '.html' : ''}`, location.href).href, a.t);
+  fillShare($('r-sharerow'), new URL(`p/${n}${LOCAL ? '.html' : ''}`, document.baseURI).href, a.t);
   $('r-hero').hidden = true;
   const body = $('r-body');
   body.textContent = 'Завантаження…';
@@ -1078,6 +1271,14 @@ async function openArticle(n) {
   // the text comes from the article's own page (p/<n>.html, the one search engines index): one copy online, not two
   body.innerHTML = await fetch(`p/${n}.html`, { cache: 'no-cache' }).then(r => r.ok ? r.text() : '').then(t => {
     const doc = new DOMParser().parseFromString(t, 'text/html'), text = doc.querySelector('.article');
+    // consented editors asked for the credit on top: their name above the headline links to the original
+    const src = doc.querySelector('.meta a.src');
+    if (src) $('r-meta').querySelector('.src-pill').outerHTML = `<a class="src-pill" style="--c:var(--c-${a.s}, var(--c-school3))" href="${esc(src.href)}" target="_blank" rel="noopener">${esc(src.textContent.trim())}</a>`;
+    // the top link to the original (Wayback, the source, none for a Facebook post or a Common Crawl copy), and the links under the text
+    const orig = doc.querySelector('.bar a[target]');
+    if (orig) Object.assign($('r-orig'), { href: orig.href, textContent: orig.textContent, hidden: false });
+    $('r-origin').innerHTML = [...doc.querySelectorAll('footer > a[target]')].map(l =>
+      `<a href="${esc(l.href)}" target="_blank" rel="noopener">${esc(l.textContent)}</a>`).join('<span class="sep">·</span>');
     const lead = doc.querySelector('img.hero')?.getAttribute('src');  // the page shows the lead photo above the headline
     return text ? (lead ? `<p><img src="${esc(lead)}" alt="" loading="lazy"></p>` : '') + text.innerHTML : 'Текст не знайдено.';
   });
@@ -1102,29 +1303,43 @@ async function openArticle(n) {
     lead.remove();
   }
 }
+// an open article shows its own address /p/<id> (the page Google indexes and people share), old #id links still open it;
+// a <base> fixed to this page keeps relative links and fetches pointing here while the address says /p/<id>
+document.head.prepend(Object.assign(document.createElement('base'), { href: location.href.split('#')[0] }));
+const ID = /^#[0-9a-f]{10}$/;
+const shownId = () => (location.pathname.match(/\/p\/([0-9a-f]{10})(\.html)?$/) || [])[1] || (ID.test(location.hash) ? location.hash.slice(1) : '');
+let back = location.pathname + location.search;  // where closing the reader returns
 function closeArticle() {
   if (reader.open) reader.close();
-  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  if (shownId()) history.replaceState(null, '', back);
 }
 document.addEventListener('click', e => {
   const c = e.target.closest('a[data-n]');
-  if (!c || e.metaKey || e.ctrlKey) return;
+  if (!c || e.metaKey || e.ctrlKey || !byId[c.dataset.n]) return;
   e.preventDefault();
-  history.pushState(null, '', '#' + c.dataset.n);
+  if (!shownId()) back = location.pathname + location.search;
+  history.pushState(null, '', new URL(`p/${c.dataset.n}${LOCAL ? '.html' : ''}`, document.baseURI).pathname);
   openArticle(c.dataset.n);
 });
 $('r-close').onclick = closeArticle;
-// the article's own page: link previews (Facebook, Telegram) show its title and photo
-reader.addEventListener('close', () => { if (ID.test(location.hash)) history.replaceState(null, '', location.pathname); });
+reader.addEventListener('close', () => { if (shownId()) history.replaceState(null, '', back); });
 reader.addEventListener('click', e => { if (e.target === reader) closeArticle(); });
-const ID = /^#[0-9a-f]{10}$/;
-window.addEventListener('popstate', () => ID.test(location.hash) ? openArticle(location.hash.slice(1)) : reader.open && reader.close());
+window.addEventListener('popstate', () => shownId() ? openArticle(shownId()) : reader.open && reader.close());
 
-fetch('data.json', { cache: 'no-cache' }).then(r => r.json()).then(data => {
+// the home page needs one day of records, the counters and the history pieces: home.json + day/MM-DD.json (written by
+// extract_articles.py) instead of the whole chronicle.json, which only the chronicle page and an open article (#id) need
+const LIGHT = HOME && !ID.test(location.hash);
+let home = { days: {} };
+fetch(LIGHT ? 'home.json' : 'chronicle.json', { cache: 'no-cache' }).then(r => r.json()).then(data => {
+  if (LIGHT) { home = data; data = data.history; }
   all = data;
+  all.forEach((a, i) => a._i = i);  // the position in chronicle.json: the search index points at it
   byId = Object.fromEntries(all.map(a => [a.n, a]));
   news = all.filter(a => !a.k);
-  $('history').innerHTML = all.filter(a => a.k === 'history').map(a => card(a)).join('');
+  // the home page shows one history piece a day, the chronicle page all of them
+  const hist = all.filter(a => a.k === 'history'), dayNo = Math.floor((Date.now() - new Date().getTimezoneOffset() * 6e4) / 864e5);
+  $('history').innerHTML = (HOME ? [hist[dayNo % hist.length]] : hist).map(a => card(a)).join('');
+  $('history').classList.toggle('one', HOME);
   const villages = new Set(news.flatMap(a => a.vl || []));
   function countUp(els, targets) {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -1143,7 +1358,7 @@ fetch('data.json', { cache: 'no-cache' }).then(r => r.json()).then(data => {
     };
     requestAnimationFrame(step);
   }
-  const stats = [
+  const stats = LIGHT ? home.stats : [
     [news.length, 'новин і подій'],
     [news.filter(a => a.v).length, 'відеосюжетів'],
     [news.filter(a => a.ph).length, 'статей з фото'],
@@ -1152,7 +1367,14 @@ fetch('data.json', { cache: 'no-cache' }).then(r => r.json()).then(data => {
   $('stats').innerHTML = stats.map(([b, s]) => `<li><b>${b.toLocaleString('uk-UA')}</b><span>${s}</span></li>`).join('');
   countUp([...$('stats').querySelectorAll('b')], stats.map(([b]) => b));
   if (ID.test(location.hash)) setTimeout(() => openArticle(location.hash.slice(1)));
-  setupFilters(); renderToday(); renderFeed();
+  if (HOME) { renderToday(); return; }
+  // the chronicle page: ?q=, ?y=YYYY&m=MM (from a search on the home page, the book of the year)
+  const p = new URLSearchParams(location.search);
+  state.q = $('q').value = (p.get('q') || '').trim();
+  if (/^\d{4}$/.test(p.get('y'))) state.year = p.get('y');
+  if (state.year && /^\d\d$/.test(p.get('m'))) state.month = p.get('m');
+  setupFilters(); renderFeed();
+  if (state.q || state.year) $('chronicle').scrollIntoView();
   if (window.L) setupMap(); else window.addEventListener('load', setupMap, { once: true });
 });
 </script>

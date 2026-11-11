@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Я вернусь до тебе навесні. Пам'яті Володимира Микитенка</title>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Приморськ. Хроніка громади">
+<meta property="og:title" content="Я вернусь до тебе навесні. Пам'яті Володимира Микитенка">
+<meta property="og:description" content="Скульптор, поет, художник і лялькар з Приморська (1923–2018). Його життя, вірш, алея бюстів і 32 барельєфи в 3D.">
+<meta property="og:image" content="https://prym.mydom.website/mykytenko-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Скульптор, художник, поет і лялькар з Приморська (1923–2018). Тридцять два барельєфи: тисяча років України, від Олега Віщого до Грушевського.">
+<link rel="canonical" href="https://prym.mydom.website/mykytenko">
+<meta property="og:url" content="https://prym.mydom.website/mykytenko">
+<meta name="theme-color" content="#f5efe4">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  /* A sunny workshop: plaster, warm paper, a puppet theatre's red and the sky over the square.
+     Fonts, both Ukrainian and OFL: Mak by Валентин Ткаченко (titles), Fixel by MacPaw (text and numbers).
+     Relief pictures: renders of the 3D scans by ГО «Приморськ 24/7» (sketchfab.com/ngo_prim24), cropped. */
+  @font-face { font-family: 'Mak'; src: url('fonts/Mak-SemiBoldHigh.otf') format('opentype'); font-weight: 600; font-display: swap; }
+  @font-face { font-family: 'Fixel Text'; src: url('fonts/FixelText-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: 'Fixel Text'; src: url('fonts/FixelText-Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+  @font-face { font-family: 'Fixel Text'; src: url('fonts/FixelText-SemiBold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+  @font-face { font-family: 'Fixel Display'; src: url('fonts/FixelDisplay-Light.woff2') format('woff2'); font-weight: 300; font-display: swap; }
+  @font-face { font-family: 'Fixel Display'; src: url('fonts/FixelDisplay-SemiBold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+  :root { --paper: #f5efe4; --paper-2: #ece3d3; --card: #fbf8f2; --line: #ddd2bf; --ink: #2c2620; --ink-dim: #6c6153;
+    --red: #c2512f; --sun: #e3a63c; --sky: #3f6fb0; --leaf: #6f8d58;
+    --title: 'Mak', 'Fixel Display', Georgia, serif; --text: 'Fixel Text', system-ui, sans-serif; --num: 'Fixel Display', system-ui, sans-serif;
+    color-scheme: light; }
+  * { box-sizing: border-box; }
+  html { background: var(--paper); }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 18px/1.65 var(--text); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  :focus-visible { outline: 3px solid var(--sky); outline-offset: 4px; border-radius: 4px; }
+  a { color: var(--red); }
+  img { max-width: 100%; display: block; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding-inline: max(16px, env(safe-area-inset-left, 0px)); }
+  .draft { position: relative; z-index: 6; background: var(--ink); color: var(--paper); font: 13px/1.4 var(--text); text-align: center; padding: 6px 12px; }
+  .kicker { font: 600 13px/1.4 var(--text); letter-spacing: .14em; text-transform: uppercase; color: var(--red); margin: 0; }
+  h1, h2, h3 { font-family: var(--title); font-weight: 600; line-height: 1.04; margin: 0; }
+  h2 { font-size: clamp(40px, 6vw, 80px); }
+  .lead { font-size: clamp(18px, 1.7vw, 21px); color: var(--ink-dim); max-width: 34em; margin: 0; }
+  .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .1em; margin-bottom: -.1em; }
+  .w > span { display: inline-block; }
+
+  .bar { position: absolute; z-index: 5; left: 0; right: 0; }
+  .bar .wrap { display: flex; justify-content: space-between; align-items: center; padding-block: 16px; gap: 16px; }
+  .bar a { color: var(--ink-dim); text-decoration: none; font-size: 15px; }
+  .bar a:hover { color: var(--red); }
+  .bar nav { display: flex; gap: 22px; }
+  @media (max-width: 680px) { .bar nav { display: none; } }
+
+  /* hero: his face in warm light */
+  .hero { position: relative; min-height: 100svh; display: grid; align-items: center; padding-block: 90px 60px;
+    background: radial-gradient(70% 60% at 78% 40%, #fff8e8, transparent 70%); }
+  .hero .wrap { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: 48px; align-items: center; width: 100%; }
+  .hero h1 { font-size: clamp(52px, 6.4vw, 100px); margin: 18px 0 24px; letter-spacing: -.01em; }
+  .hero h1 .w:nth-child(3) > span { color: var(--red); }
+  .hero .lead { margin: 0 0 30px; }
+  .roles { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .roles li { font: 500 14px var(--text); padding: 5px 12px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); }
+  .roles li:nth-child(1) { color: var(--ink); } .roles li:nth-child(2) { color: var(--sky); } .roles li:nth-child(3) { color: var(--leaf); } .roles li:nth-child(4) { color: var(--red); } .roles li:nth-child(5) { color: #9a6a2a; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; border-radius: 999px; font: 600 16px var(--text); text-decoration: none;
+    border: 1.5px solid var(--ink); color: var(--paper); background: var(--ink); transition: background .2s, color .2s, border-color .2s, transform .2s; cursor: pointer; }
+  .btn:hover { background: var(--red); border-color: var(--red); }
+  .btn:active { transform: translateY(1px); }
+  .btn.ghost { background: transparent; color: var(--ink); }
+  .btn.ghost:hover { color: var(--red); border-color: var(--red); background: transparent; }
+  @media (max-width: 860px) {
+    .hero .wrap { grid-template-columns: 1fr; }
+    .hero .portrait { order: -1; }
+    .hero { padding-top: 64px; }
+    .hero .wrap > div { text-align: center; }
+    .hero .lead { margin-inline: auto; }
+    .roles, .sound-ask { justify-content: center; }
+  }
+
+  /* a footnote on the surname: a small «і» in a ring, the note opens as a card beside it */
+  .fn { display: inline-grid; place-items: center; width: 26px; height: 26px; margin-left: 10px; vertical-align: top; border-radius: 50%; border: 1.5px solid var(--red);
+    background: var(--paper); color: var(--red); font: 600 15px/1 var(--text); cursor: pointer; transition: background .2s, color .2s; }
+  .fn:hover, .fn:focus-visible { background: var(--red); color: var(--paper); }
+  .fn-pop { position: fixed; inset: auto; margin: 0; width: min(360px, calc(100vw - 32px)); box-sizing: border-box; padding: 16px 18px; border: 0; border-left: 4px solid var(--red);
+    border-radius: 0 14px 14px 0; background: var(--card); color: var(--ink); font: 400 15px/1.55 var(--text); text-align: left; box-shadow: 0 18px 40px -16px rgba(44, 38, 32, .45); }
+  section { position: relative; }
+  .sect { padding-block: clamp(80px, 11vw, 150px); }
+  .sect-head { display: grid; gap: 18px; margin-bottom: clamp(40px, 6vw, 72px); }
+
+  .life-head { margin-bottom: clamp(48px, 7vw, 88px); }
+  .life-head h2 { font-size: clamp(38px, 4.6vw, 66px); }
+  .portrait { margin: 0; }
+  .pair > img { width: 100%; height: auto; border-radius: 20px; aspect-ratio: 1400 / 1166; object-fit: cover; box-shadow: 0 30px 60px -34px rgba(44, 38, 32, .6); }
+  .portrait > figcaption { font-size: 13px; color: var(--ink-dim); margin-top: 10px; }
+  .pair { position: relative; }
+  @media (max-width: 860px) { .life-head { grid-template-columns: 1fr; } }
+  .mvd { margin: 26px 0 0; padding: 20px 24px; background: var(--card); border-left: 4px solid var(--red); border-radius: 0 14px 14px 0; font-size: 17px; }
+  .mvd p { margin: 0; } .mvd p + p { margin-top: 12px; }
+  .mvd blockquote { margin: 0; }
+  .mvd figcaption { font: 600 12px var(--text); letter-spacing: .14em; text-transform: uppercase; color: var(--red); margin-top: 14px; }
+
+  /* the road: a wooden play of his life, scenes on both sides of the line */
+  .wrap.wide { max-width: 1500px; }
+  .curtain-stage { position: relative; width: 100vw; margin: calc(-1 * clamp(80px, 11vw, 150px)) 0 calc(-1 * min(19vw, 32vh)) calc(50% - 50vw); aspect-ratio: 1400 / 788; max-height: 92vh; display: grid; place-items: start center; text-align: center; overflow: hidden; }
+  .curtain-stage .curtain { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; pointer-events: none;
+    -webkit-mask: linear-gradient(#000 80%, transparent); mask: linear-gradient(#000 80%, transparent); transform-origin: 50% 0; }
+  .curtain-stage .sect-head { position: relative; max-width: 56%; justify-items: center; margin: min(10.5vw, 17vh) 0 0; }
+  .curtain-stage .lead { margin-inline: auto; }
+  .note-ai { font-size: 13px; color: var(--ink-dim); margin: 0; }
+  .road { list-style: none; margin: 0; padding: 0; position: relative; z-index: 1; }
+  .road::before { content: ''; position: absolute; left: calc(50% - 178px); top: 10px; bottom: 10px; width: 2px; background: repeating-linear-gradient(var(--line) 0 8px, transparent 8px 14px); }
+  .road li { display: grid; grid-template-columns: minmax(0, 1fr) 124px 480px minmax(0, 1fr); grid-template-areas: "a time text b"; column-gap: 40px; padding-block: 20px; position: relative; align-items: start; }
+  .road li > time { grid-area: time; } .road li > div { grid-area: text; }
+  .road li::before { content: ''; box-sizing: border-box; position: absolute; left: calc(50% - 185px); top: 31px; width: 16px; height: 16px; border-radius: 50%; background: var(--paper); border: 2px solid var(--sun); z-index: 1; }
+  .road li.red::before { border-color: var(--red); background: var(--red); }
+  .road li.sky::before { border-color: var(--sky); }
+  .road time { font: 300 21px/1.25 var(--num); color: var(--ink-dim); padding-top: 4px; text-align: right; }
+  .road h3 { font-size: clamp(26px, 3vw, 36px); margin-bottom: 6px; }
+  .road p { margin: 0; color: var(--ink-dim); max-width: 40em; }
+  .road q { color: var(--ink); font-style: italic; }
+  /* his own verse, folded inside the moment it belongs to */
+  .poem-in { margin-top: 14px; }
+  /* the folded poem: a small card on the road, its name like a playbill line, a quiet player, the text one click away */
+  .poem-in { padding: 14px 18px 12px; background: rgba(251, 248, 242, .88); border-left: 3px solid var(--sun); border-radius: 0 14px 14px 0; max-width: 520px; }
+  .poem-name { margin: 0 0 10px; font: 600 12px var(--text); letter-spacing: .12em; text-transform: uppercase; color: var(--red); }
+  .poem-in .listen { gap: 12px; }
+  .poem-in .listen-btn { padding: 7px 14px 7px 11px; gap: 7px; font-size: 14px; background: transparent; color: var(--ink); border: 1.5px solid var(--ink); }
+  .poem-in .listen-btn:hover, .poem-in .listen-btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+  .poem-in .listen-btn svg { width: 14px; height: 14px; }
+  .poem-in .listen-time { font-size: 14px; }
+  .poem-in details { margin-top: 10px; }
+  .poem-in summary { font-size: 14px; color: var(--ink-dim); gap: 7px; }
+  .poem-in summary:hover { color: var(--red); }
+  .poem-in summary::before { width: 18px; height: 18px; font-size: 13px; }
+  .poem-in .verse-sm { margin-top: 10px; padding: 10px 0 2px; background: none; border: 0; border-top: 1px solid var(--line); border-radius: 0; }
+  .poem-in summary { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; list-style: none; font: 600 15px var(--text); color: var(--red); }
+  .poem-in summary::-webkit-details-marker { display: none; }
+  .poem-in summary::before { content: '+'; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid currentColor; font: 600 15px/1 var(--text); }
+  .poem-in details[open] summary::before { content: '–'; }
+  .verse-sm { margin-top: 14px; padding: 18px 22px; border-left: 3px solid var(--sun); background: rgba(251, 248, 242, .82); border-radius: 0 14px 14px 0;
+    font: 400 17px/1.6 var(--text); color: var(--ink); }
+  .verse-sm p { margin: 0 0 1em; } .verse-sm p:last-child { margin: 0; } .verse-sm .ln { display: block; }
+  .poem-in .listen { margin-top: 0; }
+  .scene { margin: -10px 0 0; width: 100%; max-width: 440px; filter: drop-shadow(0 18px 24px rgba(44, 38, 32, .28)); }
+  .scene img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; -webkit-mask: url('mykytenko/torn0.png') center / 100% 100%; mask: url('mykytenko/torn0.png') center / 100% 100%; }
+  .road li.L .scene { grid-area: a; justify-self: end; transform: rotate(-1.5deg); }
+  .road li.R .scene { grid-area: b; justify-self: start; transform: rotate(1.5deg); }
+  .road li.R .scene img, .road li.R .scene video { -webkit-mask-image: url('mykytenko/torn1.png'); mask-image: url('mykytenko/torn1.png'); }
+  .scene { position: relative; cursor: pointer; scale: 1; transition: scale .6s cubic-bezier(.2, .7, .2, 1); }
+  .scene video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .7s; pointer-events: none;
+    -webkit-mask: url('mykytenko/torn0.png') center / 100% 100%; mask: url('mykytenko/torn0.png') center / 100% 100%; }
+  .scene.playing { scale: 1.07; z-index: 2; }
+  .scene.playing video { opacity: 1; }
+  .scene:focus-visible { outline: 3px solid var(--sky); outline-offset: 6px; }
+  .sound-ask { margin: 22px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+  .sound-ask small { font-size: 14px; color: var(--ink-dim); }
+  .sound-cta { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; border: 1.5px solid var(--ink); background: transparent; color: var(--ink); font: 600 15px var(--text); cursor: pointer; transition: background .2s, color .2s; }
+  .sound-cta:hover { background: var(--ink); color: var(--paper); }
+  .sound-cta[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+  .sound-toggle { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: max(16px, env(safe-area-inset-bottom, 0px)); z-index: 20; width: 48px; height: 48px; border-radius: 50%;
+    border: 1px solid var(--line); background: var(--card); box-shadow: 0 8px 20px -10px rgba(44, 38, 32, .5); color: var(--ink); cursor: pointer; display: grid; place-items: center; }
+  .sound-toggle[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .sound-toggle:hover { border-color: var(--red); color: var(--red); }
+  .sound-toggle[aria-pressed="true"]:hover { color: var(--paper); }
+  .ico { display: inline-flex; } .ico svg { display: block; }
+  @media (max-width: 1099px) {
+    .road::before { left: 146px; }
+    .road li { grid-template-columns: 124px minmax(0, 1fr); grid-template-areas: "time text" ". scn"; column-gap: 44px; }
+    .road li::before { left: 139px; }
+    .road li.L .scene, .road li.R .scene { grid-area: scn; justify-self: start; margin-top: 16px; max-width: 520px; }
+    .curtain-stage { margin-bottom: 40px; }
+  }
+  @media (max-width: 700px) {
+    .curtain-stage { aspect-ratio: auto; max-height: none; display: block; margin-bottom: 40px; }
+    .curtain-stage .curtain { position: static; height: auto; }
+    .curtain-stage .sect-head { max-width: none; margin-top: 18px; }
+  }
+  @media (max-width: 640px) {
+    .road::before { left: 6px; }
+    .road li { grid-template-columns: minmax(0, 1fr); grid-template-areas: "time" "text" "scn"; gap: 2px; padding-left: 32px; }
+    .road li::before { left: -1px; top: 27px; }
+    .road time { text-align: left; font-size: 20px; }
+  }
+
+  /* the puppet theatre: a playbill */
+  .theatre { background: var(--red); color: #fff6ea; overflow: hidden; }
+  .theatre { padding-block: clamp(48px, 6vw, 84px); }
+  .theatre .wrap { max-width: 1440px; display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(40px, 6vw, 96px); align-items: center; }
+  .theatre .kicker { color: #ffd9a8; }
+  .theatre h2 { margin: 16px 0 22px; }
+  .theatre .lead { color: #ffe9d2; }
+  .bill { background: #fff6ea; color: var(--ink); padding: 34px 30px; text-align: center; border-radius: 4px; transform: rotate(-1.6deg);
+    box-shadow: 0 30px 60px -30px rgba(60, 15, 5, .55); outline: 2px solid var(--ink); outline-offset: -14px; }
+  .bill .small { font: 600 12px var(--text); letter-spacing: .22em; text-transform: uppercase; color: var(--red); margin: 8px 0; }
+  .bill .play { font: 600 clamp(38px, 4.4vw, 58px)/1 var(--title); margin: 14px 0; }
+  .bill .rule { height: 2px; background: var(--ink); margin: 18px 30px; }
+  .bill .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+  .bill .facts b { display: block; font: 600 44px/1 var(--num); color: var(--red); }
+  .bill .facts span { font-size: 14px; color: var(--ink-dim); }
+  @media (max-width: 860px) { .theatre .wrap { grid-template-columns: 1fr; } .bill { transform: rotate(-1deg); } }
+
+  /* the poem: the picture across the page, the verse beside the words about today */
+  .poem { padding-top: 0; }
+  .poem figure { margin: 0 0 clamp(48px, 7vw, 88px); position: relative; overflow: hidden; }
+  .poem figure img { width: 100%; height: min(82svh, 760px); object-fit: cover; object-position: 40% 60%; }
+  .poem figure figcaption { position: absolute; right: 14px; bottom: 12px; font-size: 12px; color: #fff; background: rgba(44, 38, 32, .55); padding: 4px 10px; border-radius: 999px; }
+  .poem .wrap { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 56px; align-items: start; }
+  .poem .side { position: sticky; top: 40px; }
+  .poem .now { margin-top: 26px; padding: 22px 24px; background: var(--card); border-left: 4px solid var(--sky); border-radius: 0 14px 14px 0; color: var(--ink); font-size: 17px; }
+  .poem .now p { margin: 0 0 10px; } .poem .now p:last-child { margin: 0; font-weight: 600; }
+  .verse { font: 400 clamp(22px, 2.2vw, 29px)/1.5 var(--text); margin: 0; }
+  .verse p { margin: 0 0 1.3em; }
+  .verse .ln { display: block; }
+  .poem .note { color: var(--ink-dim); font-size: 17px; margin: 0; }
+  @media (max-width: 860px) { .poem .wrap { grid-template-columns: 1fr; } .poem .side { position: static; } .poem figure img { height: 56svh; } }
+
+  /* a quiet break between chapters: two hairlines and a small red lozenge, like a printer's mark */
+  .divider { display: flex; align-items: center; justify-content: center; gap: 18px; padding: clamp(24px, 4vw, 48px) 16px 0; }
+  .divider::before, .divider::after { content: ''; width: min(160px, 30vw); height: 1px; background: var(--ink-dim); opacity: .45; }
+  .divider span { width: 9px; height: 9px; background: var(--red); transform: rotate(45deg); }
+
+  /* the reading: one button, a thin bar, the line being read lit in the verse */
+  .listen { display: flex; align-items: center; gap: 14px; margin-top: 26px; }
+  .listen-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px; border-radius: 999px; border: 0; background: var(--ink); color: var(--paper); font: 600 16px var(--text); cursor: pointer; transition: background .2s; }
+  .listen-btn:hover { background: var(--red); }
+  .listen-bar { flex: 1; height: 3px; border-radius: 3px; background: var(--line); overflow: hidden; }
+  .listen-bar i { display: block; height: 100%; width: 0; background: var(--red); transition: width .25s linear; }
+  .listen-time { font: 300 16px var(--num); color: var(--ink-dim); min-width: 3ch; }
+  .listening .ln { opacity: 1 !important; color: #b9ad9c; transition: color .4s; }
+  .listening .ln.on { color: var(--ink); }
+
+  /* the reliefs */
+  /* backdrops: the painted village behind the road, the workshop wall behind the reliefs; they stay put while the page
+     moves over them (scroll along on touch screens) and melt into the paper at both ends of their section */
+  #life { background: linear-gradient(var(--paper), transparent 260px, transparent calc(100% - 260px), var(--paper)),
+    linear-gradient(rgba(245, 239, 228, .55), rgba(245, 239, 228, .55)), url('mykytenko/backdrop-road.jpg') center bottom / cover fixed var(--paper); }
+  .reliefs { background: linear-gradient(var(--paper), transparent 220px, transparent calc(100% - 220px), var(--paper)),
+    linear-gradient(rgba(245, 239, 228, .25), rgba(245, 239, 228, .25)), url('mykytenko/backdrop-wall.jpg') center / cover fixed var(--paper); }
+  @media (hover: none), (max-width: 860px) {
+    #life, .reliefs { background-attachment: scroll; background-size: auto, auto, 100% auto; background-repeat: no-repeat, no-repeat, repeat-y; }
+    /* on phones the painted village sits at the end of the road, its sky melting into the paper above */
+    #life { background: linear-gradient(var(--paper), transparent 260px, transparent calc(100% - 200px), var(--paper)),
+      linear-gradient(var(--paper), transparent 55%) center bottom / 100% 56.25vw no-repeat,
+      linear-gradient(rgba(245, 239, 228, .45), rgba(245, 239, 228, .45)),
+      url('mykytenko/backdrop-road.jpg') center bottom / 100% auto no-repeat var(--paper); }
+  }
+  .era { margin-bottom: clamp(56px, 8vw, 96px); }
+  .era:last-child { margin-bottom: 0; }
+  .era-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; border-bottom: 2px solid var(--ink); padding-bottom: 10px; margin-bottom: 22px; }
+  .era-head h3 { font-size: clamp(30px, 3.4vw, 44px); }
+  .era-head span { font: 300 18px var(--num); color: var(--ink-dim); }
+  /* rows are centred, so a short last row sits in the middle instead of hanging on the left */
+  .grid { --n: 6; display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; }
+  .grid > .card { flex: 0 0 calc((100% - (var(--n) - 1) * 16px) / var(--n)); }
+  @media (max-width: 1000px) { .grid { --n: 4; } }
+  @media (max-width: 700px) { .grid { --n: 3; } }
+  .card { position: relative; display: block; width: 100%; padding: 0; border: 0; border-radius: 16px; overflow: hidden; background: #8f8b86;
+    cursor: pointer; text-align: left; color: inherit; font: inherit; --mx: 50%; --my: 30%; transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s; }
+  .card img { aspect-ratio: 2 / 3; width: 100%; height: auto; object-fit: cover; filter: brightness(1.05) sepia(.1); transition: filter .35s; }
+  .card::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .35s;
+    background: radial-gradient(240px circle at var(--mx) var(--my), rgba(255, 236, 190, .55), transparent 62%); mix-blend-mode: soft-light; }
+  .card:hover, .card:focus-visible { transform: translateY(-4px) rotate(-.6deg); box-shadow: 0 22px 40px -22px rgba(44, 38, 32, .6); }
+  .card:hover::after, .card:focus-visible::after { opacity: 1; }
+  .card .cap { position: absolute; inset: auto 8px 8px; padding: 8px 12px; background: rgba(251, 248, 242, .94); border-radius: 10px; font: 500 14px/1.25 var(--text); color: var(--ink); }
+  .card .cap small { display: block; font: 600 11px var(--text); color: var(--red); letter-spacing: .06em; margin-top: 2px; }
+  @media (max-width: 520px) { .grid { --n: 2; gap: 10px; } .grid > .card { flex-basis: calc((100% - 10px) / 2); } }
+
+  dialog { width: min(1100px, 100vw - 24px); height: min(780px, 100svh - 24px); padding: 0; border: 0; border-radius: 20px; background: var(--card); color: var(--ink); overflow: hidden; }
+  dialog::backdrop { background: rgba(44, 38, 32, .55); backdrop-filter: blur(4px); }
+  dialog .top { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px 12px 22px; border-bottom: 1px solid var(--line); }
+  dialog h3 { font-size: 28px; }
+  dialog .x { background: none; border: 1.5px solid var(--ink); color: var(--ink); border-radius: 999px; padding: 8px 16px; font: 500 15px var(--text); cursor: pointer; }
+  dialog .x:hover { border-color: var(--red); color: var(--red); }
+  dialog[open] { display: flex; flex-direction: column; }
+  dialog.fit { height: fit-content; } dialog.fit .stage { flex: none; display: block; }
+  dialog.fit .stage video { height: auto; max-height: calc(100svh - 120px); }
+  dialog .stage { flex: 1; min-height: 0; background: #1d1a17; display: grid; place-items: center; }
+  dialog .stage iframe { display: block; width: 100%; height: 100%; border: 0; }
+  dialog .stage video { display: block; max-width: 100%; max-height: 100%; width: 100%; height: 100%; object-fit: contain; background: #000; }
+  dialog .credit { display: block; font-size: 13px; color: var(--ink-dim); }
+
+  /* the alley */
+  .press-src { margin: -8px 0 0; font-size: 14px; color: var(--ink-dim); }
+  .alley-head { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: 48px; align-items: start; margin-bottom: 48px; }
+  .moth { margin: 0; border-radius: 18px; overflow: hidden; position: relative; }
+  .moth img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; object-position: 50% 30%; }
+  .moth figcaption { position: absolute; inset: auto 10px 10px; background: rgba(251, 248, 242, .95); border-radius: 12px; padding: 10px 14px; font-size: 15px; line-height: 1.4; }
+  .media { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .embed { position: relative; aspect-ratio: 16 / 10; border-radius: 18px; overflow: hidden; background: var(--ink); }
+  .embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .embed .poster { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; padding: 0; cursor: pointer; background: var(--ink) center / cover no-repeat; color: #fff; font: inherit; }
+  .embed .poster::before { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 35%, rgba(20, 16, 12, .78)); }
+  .embed .poster span { position: absolute; left: 20px; right: 20px; bottom: 18px; text-align: left; display: grid; gap: 4px; }
+  .embed .poster b { font: 600 clamp(24px, 2.4vw, 32px)/1.1 var(--title); }
+  .embed .poster small { font-size: 14px; opacity: .85; }
+  .embed .poster i { position: absolute; left: 50%; top: 42%; width: 74px; height: 74px; margin: -37px 0 0 -37px; border-radius: 50%; background: var(--red); display: grid; place-items: center; font-style: normal; font-size: 22px; transition: transform .25s; }
+  .embed .poster:hover i, .embed .poster:focus-visible i { transform: scale(1.1); }
+  .stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; margin-top: 56px; color: var(--ink-dim); }
+  .stats p { text-align: center; }
+  .stats b { display: block; font: 300 clamp(48px, 6vw, 80px)/1 var(--num); color: var(--ink); margin-bottom: 8px; }
+  @media (max-width: 860px) { .alley-head, .media { grid-template-columns: 1fr; } }
+
+  /* saving */
+  .save .wrap { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 56px; align-items: center; }
+  .save img { border-radius: 18px; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 60%; }
+  .save .lead + .lead { margin-top: 16px; }
+  @media (max-width: 860px) { .save .wrap { grid-template-columns: 1fr; } }
+
+  .end { text-align: center; padding-block: clamp(110px, 15vw, 190px); background: linear-gradient(var(--paper), #fbe7c4); }
+  .end h2 { font-size: clamp(46px, 8vw, 116px); }
+  .end .lead { margin: 26px auto 36px; }
+  .end .cta { justify-content: center; }
+  .end .name-ask { max-width: 40em; margin: -14px auto 34px; font-size: 15px; color: var(--ink-dim); }
+  footer { background: var(--ink); color: #cfc5b6; padding-block: 40px 52px; font-size: 14px; }
+  footer a { color: #ffd9a8; }
+  footer .wrap { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; }
+  footer p { margin: 0 0 10px; }
+  @media (max-width: 760px) { footer .wrap { grid-template-columns: 1fr; } }
+
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a href="/">← Приморськ. Хроніка громади</a>
+    <nav aria-label="Розділи сторінки"><a href="#life">Життя</a><a href="#theatre">Театр</a><a href="#poem">Вірш</a><a href="#alley">Алея</a><a href="#reliefs">Барельєфи</a></nav>
+  </div>
+</header>
+
+<button class="sound-toggle" type="button" data-sound aria-pressed="false" aria-label="Звук сцен"><span class="ico" aria-hidden="true"></span></button>
+<main>
+  <section class="hero" aria-labelledby="name">
+    <div class="wrap">
+      <div>
+        <p class="kicker" data-in>1923–2018 · Приморськ</p>
+        <h1 id="name" data-split>Володимир Давидович Микитенко</h1>
+        <button class="fn" type="button" popovertarget="name-note" aria-label="Чому Микитенко, а не Нікітенко">і</button>
+        <div id="name-note" class="fn-pop" popover>Газета «Рідний край» з його рідної Гадяччини пише прізвище як Микитенко, і всі свої роботи скульптор підписував «М.В.Д.», тобто Микитенко Володимир Давидович. Проте приморські джерела подають його як Нікітенка. Будемо вдячні рідним і всім, хто знав Володимира Давидовича, якщо допоможете уточнити.</div>
+        <p class="lead" data-in>Він виліпив тисячу років України, від Олега Віщого до Михайла Грушевського. Робив ляльки для свого театру, писав вірші й малював. І поставив українських поетів у себе у дворі, на тихій околиці Приморська.</p>
+        <ul class="roles" data-in aria-label="Хто він"><li>скульптор</li><li>поет</li><li>художник</li><li>лялькар</li><li>різьбяр</li></ul>
+        <p class="sound-ask" data-in><button class="sound-cta" type="button" data-sound aria-pressed="false"><span class="ico" aria-hidden="true"></span> <span class="lbl">Увімкнути звук</span></button> <small>Сцени його життя оживатимуть зі звуком</small></p>
+      </div>
+      <figure class="portrait" data-in>
+        <div class="pair">
+          <img src="mykytenko/portrait.jpg" alt="Художня реконструкція: літній чоловік у темному піджаку розписує ляльку-козака в майстерні, позаду ляльки у вишиванках і гіпсовий бюст Шевченка" fetchpriority="high" width="1400" height="1166">
+        </div>
+        <figcaption>Художня реконструкція за відеокадром, створена штучним інтелектом. Обличчя за кадром, майстерня уявна.</figcaption>
+        </figure>
+    </div>
+  </section>
+
+  <section class="sect" id="life" aria-labelledby="life-h">
+    <div class="wrap wide">
+      <div class="curtain-stage">
+        <img class="curtain" src="mykytenko/curtains.png" alt="" aria-hidden="true" width="1400" height="788">
+        <div class="sect-head">
+          <p class="kicker">Дорога</p>
+          <h2 id="life-h" data-split>Від Гадяччини до Приморська</h2>
+          <p class="lead">Дев'яносто п'ять років, і майже всі з них з різцем, пензлем чи пером у руках.</p>
+          <p class="note-ai">Сцени його життя як дерев'яна вистава. Ілюстрації, анімація й озвучення віршів створені штучним інтелектом. Наведіть на сцену, і вона оживе.</p>
+        </div>
+      </div>
+      <ol class="road">
+        <li class="L"><figure class="scene" data-v="mykytenko/v1.mp4" tabindex="0" role="button" aria-label="Оживити сцену"><img src="mykytenko/s1.jpg" alt="Дерев'яна фігурка хлопчика у вишиванці малює вугликом за столом у хаті, за вікном соняшники, у дверях батько" loading="lazy" width="1200" height="900"></figure><time>1923</time><div><h3>Біленченківка</h3><p>Народився 9 вересня в сільській родині на Гадяччині. Малював змалку, але батько сказав: <q>Художники і письменники – це старці. Іди вчиться на фельдшера.</q></p></div></li>
+        <li class="R"><figure class="scene" data-v="mykytenko/v2.mp4" tabindex="0" role="button" aria-label="Оживити сцену"><img src="mykytenko/s2.jpg" alt="Юнак у кашкеті розглядає креслення корабля на верфі, позаду каркас судна і крани в тумані" loading="lazy" width="1200" height="900"></figure><time>до війни</time><div><h3>Сімнадцять років і креслення</h3><p>Після училища ФЗУ весь випуск, 460 випускників, поїхав на суднобудівний завод на Далекому Сході. Добре читав креслення, тож став помічником бригадира. У вільний час з хлопцями малював місцеві краєвиди.</p></div></li>
+        <li class="red"><time>війна</time><div><h3>Намальована печатка</h3><p>Рвався на фронт. Хлопці намалювали печатку на довідці, як бачили в інших, і замість фронту опинилися у в'язниці НКВС. Про це він згодом напише поему «Я був двадцятий».</p><div class="poem-in" data-at="[0.5, 2.55, 4.54, 6.3, 8.04, 9.67, 11.29, 12.78, 14.94, 17.06, 18.12, 19.56, 21.06, 22.38, 23.7, 25.29, 27.12, 28.7, 30.15, 32.29, 33.38, 35.01, 36.29, 38.07, 39.58, 40.8, 42.31, 44.28, 45.68, 46.84, 48.42, 49.45, 51.08, 52.04, 53.65, 55.62, 56.96, 59.53, 61.29]"><p class="poem-name">Уривок з поеми «Я був двадцятий»</p><div class="listen"><button class="listen-btn" type="button" aria-pressed="false"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8 5.5v13l10.5-6.5z"/></svg></span><span class="lbl">Слухати</span></button><div class="listen-bar" aria-hidden="true"><i></i></div><span class="listen-time" aria-hidden="true">1:03</span><audio src="mykytenko/poem-war.m4a" preload="none"></audio></div><details><summary>Читати текст</summary><div class="verse-sm"><p><span class="ln">Тож, не взнавши життя,</span><span class="ln">І оцей страшний світ,</span><span class="ln">(О, наївне дитя!)</span><span class="ln">Я пустився в політ.</span></p><p><span class="ln">Бо здавалось мені,</span><span class="ln">Я потрібний війні,</span><span class="ln">Бо без мене вона,</span><span class="ln">Та війна – не війна.</span></p><p><span class="ln">Залишив кімнату,</span><span class="ln">Роботу, завод,</span><span class="ln">Я знехтував бронню –</span><span class="ln">Поїхав на фронт</span></p><p><span class="ln">На даху вагона</span><span class="ln">В зимову годину,</span><span class="ln">З далекого сходу</span><span class="ln">На рідну Вкраїну.</span></p><p><span class="ln">Чи був хто дурніший?</span><span class="ln">Хто скаже мені?</span><span class="ln">Та став я так думать</span><span class="ln">Тепер, у ці дні.</span></p><p><span class="ln">В той час я так думать</span><span class="ln">Про себе не міг,</span><span class="ln">А чорт це підслухав –</span><span class="ln">І враз підстеріг:</span></p><p><span class="ln">В особі закону</span><span class="ln">Він став на путі.</span><span class="ln">Я в нього прошуся,</span><span class="ln">Кажу: – Відпусти,</span></p><p><span class="ln">Там мати у мене</span><span class="ln">І менший мій брат.</span><span class="ln">Ну, хто їх, крім мене,</span><span class="ln">Буде визволять?</span></p><p><span class="ln">В неволі конає</span><span class="ln">Радянський народ…</span><span class="ln">– Стривай, ми ще взнаєм,</span><span class="ln">Що за патріот,</span></p><p><span class="ln">З якої країни до нас залетів,</span><span class="ln">Бо щось в твоїй мові</span><span class="ln">Мало руських слів…</span></p></div></details></div></div></li>
+        <li class="L red"><figure class="scene" data-v="mykytenko/v3.mp4" tabindex="0" role="button" aria-label="Оживити сцену"><img src="mykytenko/s3.jpg" alt="Юнак у тюремній камері пише лист при свічці, за ґратами вікна падає сніг" loading="lazy" width="1200" height="900"></figure><time>1946</time><div><h3>«Я вернусь до тебе»</h3><p>Далеко від дому, у неволі, пише вірш про рідне село і материні очі.</p></div></li>
+        <li class="R sky"><figure class="scene" data-v="mykytenko/v4.mp4" tabindex="0" role="button" aria-label="Оживити сцену"><img src="mykytenko/s4.jpg" alt="Мати в хустці обіймає сина в шинелі біля воріт хати серед квітучих садів" loading="lazy" width="1200" height="900"></figure><time>1947</time><div><h3>Повернення</h3><p>Повертається в Україну і працює в закладах культури: у рідному селі, на Західній Україні, на Чернігівщині, потім на Запоріжжі.</p></div></li>
+        <li class="L"><figure class="scene" data-v="mykytenko/v5.mp4" tabindex="0" role="button" aria-label="Оживити сцену"><img src="mykytenko/s5.jpg" alt="Молодий скульптор на риштуванні ліпить великого цементного Шевченка, внизу дивляться селяни" loading="lazy" width="1200" height="900"></figure><time>1953</time><div><h3>Шевченко з цементу</h3><p>Для рідного села ліпить пам'ятник Тарасові Шевченку заввишки близько трьох метрів.</p></div></li>
+        <li class="R"><figure class="scene" data-v="mykytenko/v6.mp4" tabindex="0" role="button" aria-label="Оживити сцену"><img src="mykytenko/s6.jpg" alt="Він майструє ляльки до казки «Солдат і смерть» у маминій хаті, мама плете біля печі" loading="lazy" width="1200" height="900"></figure><time>потім</time><div><h3>Прометей і двісті рублів</h3><p>Виліпив Прометея в подарунок матері. Хтось доніс, що він продає скульптури без податку, і довелося заплатити 200 рублів. Охота ліпити тоді надовго зникла, зате з'явився театр.</p></div></li>
+        <li class="L"><figure class="scene" data-v="mykytenko/v7.mp4" tabindex="0" role="button" aria-label="Оживити сцену"><img src="mykytenko/s7.jpg" alt="Старий скульптор у вишиванці й піджаку серед білих бюстів поетів у своєму квітучому дворі біля моря" loading="lazy" width="1200" height="900"></figure><time>Приморськ</time><div><h3>Алея у дворі</h3><p>Директор будинку культури на Чернігівщині, потім у Токмаку, і нарешті Приморськ. У його зеленому дворі на околиці стоять Шевченко, Леся Українка, Франко, Стус, Теліга, Олесь, і все це його руками.</p></div></li>
+        <li class="sky"><time>по всьому краю</time><div><h3>Шевченко в Новоолексіївці</h3><p>Єдиний у районі пам'ятник Тарасу Шевченку, в Новоолексіївці, теж його робота. Його бюсти письменників стоять у коридорах філологічного факультету Запорізького університету. А ще він різьбив по дереву, найчастіше козацькі мотиви.</p></div></li>
+        <li class="R"><figure class="scene" data-v="mykytenko/v9.mp4" tabindex="0" role="button" aria-label="Оживити сцену"><img src="mykytenko/s9.jpg" alt="Старий скульптор у вишиванці читає свою щойно видану збірку віршів, поруч дві доньки" loading="lazy" width="1200" height="900"></figure><time>2009</time><div><h3>Дві збірки віршів</h3><p>Доньки вмовили його відібрати вірші до друку, і влітку 2009 року вийшли дві поетичні збірки. Людина скромна й не публічна, він мало кому показував, скільки написав.</p></div></li>
+        <li><time>2013</time><div><h3>Дев'яносто</h3><p>Він і в дев'яносто був повний планів.</p><div class="poem-in" data-at="[0.5, 3.04, 5.01, 6.37, 8.97, 12.0, 15.23, 17.55, 19.72, 22.41, 24.88, 27.02, 29.09, 33.54, 36.04, 38.32, 40.46, 42.44, 44.77, 47.11]"><p class="poem-name">Його вірш «Пролетіли роки, мов в кіно…»</p><div class="listen"><button class="listen-btn" type="button" aria-pressed="false"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8 5.5v13l10.5-6.5z"/></svg></span><span class="lbl">Слухати</span></button><div class="listen-bar" aria-hidden="true"><i></i></div><span class="listen-time" aria-hidden="true">0:49</span><audio src="mykytenko/poem-years.m4a" preload="none"></audio></div><details><summary>Читати текст</summary><div class="verse-sm"><p><span class="ln">Пролетіли роки, мов в кіно,</span><span class="ln">Оглянувся – о Боже, де ж юність?</span><span class="ln">Чую, стукає тихо в вікно</span><span class="ln">Запізніла, без досвіду зрілість.</span></p><p><span class="ln">Ну, заходь і пробач, що не ждав.</span><span class="ln">Та чи в юності наше лиш щастя?</span><span class="ln">Я ж і сам вже не раз так гадав,</span><span class="ln">Що колись прийде час розлучаться.</span></p><p><span class="ln">Хай поплачу й забуду навік.</span><span class="ln">Може, інколи лише присниться</span><span class="ln">Плин весною розбуджених рік</span><span class="ln">І життєва страшна колісниця</span></p><p><span class="ln">Що носила, мене наче в сні,</span><span class="ln">По країнах далеких, дрімучих…</span><span class="ln">Хай співав нескладні я пісні,</span><span class="ln">Та були вони щиро-жагучі.</span></p><p><span class="ln">І лилися із самого дна,</span><span class="ln">Виливаючи біль з душі й горе,</span><span class="ln">Прощавай, моя перша весна,</span><span class="ln">Ми вже більш не зустрінемсь ніколи.</span></p></div></details></div></div></li>
+        <li class="red L"><figure class="scene" data-v="mykytenko/v10.mp4" tabindex="0" role="button" aria-label="Оживити сцену"><img src="mykytenko/s10.jpg" alt="Порожня майстерня: стілець з його піджаком, різці на верстаті, недороблений рельєф, за вікном цвіте яблуня" loading="lazy" width="1200" height="900"></figure><time>2018</time><div><h3>Його не стало</h3><p>Навесні 2018 року. Восени дружина Надія Григорівна, яку він називав своєю музою, передала його роботи краєзнавчому музею: нехай стануть надбанням міста, яке він так любив.</p></div></li>
+        <li class="sky R"><figure class="scene" data-v="mykytenko/v11.mp4" tabindex="0" role="button" aria-label="Оживити сцену"><img src="mykytenko/s11.jpg" alt="Літня жінка в рожевій хустці й чорній кофті перерізає рожеву стрічку на алеї золотих бюстів, люди аплодують" loading="lazy" width="1200" height="900"></figure><time>2020</time><div><h3>Алея в сквері</h3><p>Десять його бюстів переїхали до скверу біля бібліотеки, і на День міста алею урочисто відкрили.</p></div></li>
+        <li class="L red"><figure class="scene" data-v="mykytenko/v8.mp4" tabindex="0" role="button" aria-label="Оживити сцену"><img src="mykytenko/s8.jpg" alt="Порожня лавка на березі Азовського моря на заході сонця, на ній кашкет і білий метелик" loading="lazy" width="1200" height="900"></figure><time>2022</time><div><h3>Окупація</h3><p>Приморськ окупований. Що сьогодні зі сквером, бюстами і музеєм, ми не знаємо. Цифрові копії лишилися з нами.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sect theatre" id="theatre" aria-labelledby="theatre-h">
+    <div class="wrap">
+      <div>
+        <p class="kicker">Львів · Полтавщина · Сумщина</p>
+        <h2 id="theatre-h" data-split>Сім ляльок за два місяці</h2>
+        <p class="lead">Якось, просто щоб згаяти час, він пішов у Львові на ляльковий спектакль. Вийшов із зали і одразу купив квиток ще раз, на ту саму виставу. Дивився на ниточки, а в голові вже складався план.</p>
+        <p class="lead" style="margin-top: 16px">Ляльки робив у мами, бо там найзатишніше. Сам, усі сім. Знайшлися лялькарі, зібралася трупа, і театр поїхав гастролювати.</p>
+      </div>
+      <div class="bill" data-in>
+        <p class="small">Лялькова трупа</p>
+        <div class="rule"></div>
+        <p class="small">казка</p>
+        <p class="play">Солдат і смерть</p>
+        <div class="rule"></div>
+        <div class="facts">
+          <p><b>7</b><span>ляльок, зроблених його руками</span></p>
+          <p><b>2</b><span>місяці роботи</span></p>
+        </div>
+        <p class="small" style="margin-top: 18px">гастролі: Полтавщина та Сумщина</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sect poem" id="poem" aria-labelledby="poem-h">
+    <figure>
+      <img src="mykytenko/poem.jpg" alt="Солдат у пікселі стоїть на колінах і цілує землю біля хати, мати в хустці обіймає його, навколо цвітуть сади, за річкою сходить сонце" loading="lazy" width="1800" height="1014">
+      <figcaption>Ілюстрація до вірша, створена штучним інтелектом</figcaption>
+    </figure>
+    <div class="wrap">
+      <div class="side">
+        <div class="sect-head" style="margin-bottom: 0">
+          <p class="kicker">Вірш, 1946</p>
+          <h2 id="poem-h" data-split>Я вернусь до тебе</h2>
+          <p class="note">Він написав це в неволі, далеко від дому, сумуючи за рідною Біленченківкою, за мамою і садами.</p>
+        </div>
+        <div class="listen">
+          <button class="listen-btn" type="button" aria-pressed="false"><span class="ico" aria-hidden="true"></span><span class="lbl">Слухати вірш</span></button>
+          <div class="listen-bar" aria-hidden="true"><i></i></div>
+          <span class="listen-time" aria-hidden="true">0:39</span>
+          <audio id="poem-audio" src="mykytenko/poem.m4a" preload="none"></audio>
+        </div>
+        <div class="now" data-in>
+          <p>Минуло вісімдесят років, і ці рядки знову про нас. Про тисячі приморців, розкиданих світом, які щодня думають про свій дім біля моря. Про наших захисників, які повертають Україні її землю, і про матерів, які їх чекають.</p>
+          <p>Він вірив, що повернеться, і повернувся. Повернемося і ми.</p>
+        </div>
+      </div>
+      <div>
+        <div class="verse" id="verse">
+          <p><span class="ln">Я вернусь до тебе, Україно,</span><span class="ln">Я вернусь до тебе навесні,</span><span class="ln">Щоб почути пісню солов'їну,</span><span class="ln">Яку чув роками лише в сні.</span></p>
+          <p><span class="ln">Щоб побачить материні очі,</span><span class="ln">Милуватись цвітінням садів</span><span class="ln">І хоч раз почути як дівочий</span><span class="ln">Там лунає вечорами спів.</span></p>
+          <p><span class="ln">Тут душа в неволі наболіла,</span><span class="ln">Так, що й сил немає розказать,</span><span class="ln">Упаду в риданні на коліна,</span><span class="ln">Буду плакать й землю цілувать.</span></p>
+          <p><span class="ln">І молитись, і просити Бога:</span><span class="ln">Захисти нас, Господи від зла,</span><span class="ln">Щоб в Сибір протоптана дорога</span><span class="ln">З України терном поросла.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"><span></span></div>
+
+  <section class="sect" id="alley" aria-labelledby="alley-h">
+    <div class="wrap">
+      <div class="alley-head">
+        <div class="sect-head" style="margin: 0">
+          <h2 id="alley-h" data-split>З його двору в міський сквер</h2>
+          <p class="lead">Після смерті Володимира Давидовича його дружина, помічник і муза Надія Григорівна, враховуючи безмежну любов Володимира Давидовича до Приморська, на вшанування його пам'яті та для реалізації його давньої мрії, передала Приморській громаді його творчий спадок: 10 авторських бюстів відомих українських діячів, письменників, поетів.</p>
+        </div>
+        <figure class="moth" data-in>
+          <img src="mykytenko/stus.jpg" alt="Білий бюст Василя Стуса в сквері, з метеликом на голові" loading="lazy" width="569" height="586">
+          <figcaption>З першого дня на бюст Стуса щодня прилітав метелик.</figcaption>
+        </figure>
+      </div>
+      <figure class="mvd" data-in>
+        <blockquote>
+          <p>Спершу громада планувала роздати роботи по різних навчальних закладах. А ми виступили з ініціативою поставити їх разом, в оновленому сквері у дворі бібліотеки, щоб його мрія збулася.</p>
+          <p>Близько року молодь центру «Портал» готувала цю подію: як зробити цю алею, пошук меценатів, залучення волонтерів всеукраїнського проєкту «БУР». Все це допомогло реалізувати мрію скульптора. На День міста, 19 вересня 2020 року, стрічку на відкритті алеї робіт Володимира Давидовича перерізала Надія Григорівна.</p>
+        </blockquote>
+        <figcaption>За спогадами учасників створення алеї</figcaption>
+      </figure>
+      <div class="media" data-stagger style="padding-top: 70px">
+        <div class="embed" id="video">
+          <button class="poster" type="button" style="background-image: url('mykytenko/alley-poster.jpg')" data-video="mykytenko/alley.mp4" data-title="Відкриття алеї авторських бюстів" data-credit="Відео ТРК «ЮГ», Приморськ, 23 вересня 2020">
+            <i aria-hidden="true">▶</i><span><b>Відкриття алеї</b><small>Відео ТРК «ЮГ», вересень 2020</small></span>
+          </button>
+        </div>
+        <div class="embed" id="pano">
+          <button class="poster" type="button" style="background-image: url('mykytenko/stus.jpg')" data-src="https://www.google.com/maps/embed?pb=!4v1793139244637!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJREtocmVLeVFF!2m2!1d46.7312204019359!2d36.34596728678806!3f20!4f0!5f0.7820865974627469" data-title="Алея бюстів, панорама 360°" data-credit="Знято на телефон, Google Карти">
+            <i aria-hidden="true">360°</i><span><b>Пройтися алеєю</b><small>Панорама 360°, знята на телефон</small></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sect save" aria-labelledby="save-h" style="padding-top: 25px">
+    <div class="wrap">
+      <img src="mykytenko/scan.jpg" alt="Гіпсовий барельєф Петра Григоренка на столі під час 3D-сканування в молодіжному центрі «Портал»" loading="lazy" width="1100" height="1000" data-in>
+      <div class="sect-head" style="margin: 0">
+        <h2 id="save-h" data-split>Збереження робіт</h2>
+        <p class="lead">Декілька днів поспіль тривало сканування барельєфів, створених Володимиром Давидовичем. Роботи були надані Приморським краєзнавчим музеєм, сканування виконували учасники Спілки краєзнавців Приморська. Один за одним, під студійним світлом і технікою, роботи було оцифровано.</p>
+        <p class="lead">Тоді це був проєкт про віртуальну галерею. Тепер це єдиний спосіб побачити його роботи.</p>
+        <div class="stats">
+          <p><b>10</b>бюстів на алеї</p>
+          <p><b>32</b>барельєфи в 3D</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sect reliefs" id="reliefs" aria-labelledby="reliefs-h">
+    <div class="wrap">
+      <div class="sect-head">
+        <p class="kicker">32 барельєфи · 3D-скани</p>
+        <h2 id="reliefs-h" data-split>Тисяча років в одних руках</h2>
+        <p class="lead" style="max-width: 45em">Віртуальна алея робіт Володимира Микитенка. Барельєфи українських князів, гетьманів, поетів і художників, виконані з гіпсу та цементу. Кожен елемент нижче представлений у 3D-візуалізації.</p>
+      </div>
+      <div id="eras"></div>
+      <noscript><p class="lead">Усі барельєфи є на <a href="https://sketchfab.com/ngo_prim24">sketchfab.com/ngo_prim24</a>.</p></noscript>
+    </div>
+  </section>
+
+  <section class="end" aria-labelledby="end-h">
+    <div class="wrap">
+      <h2 id="end-h" data-split>Я вернусь до тебе навесні</h2>
+      <p class="lead">Ви знали Володимира Давидовича, бачили його двір чи були на відкритті алеї? Розкажіть, і ми додамо це до історії.</p>
+      <p class="name-ask">Газета «Рідний край» з його рідної Гадяччини пише прізвище як Микитенко, і всі свої роботи скульптор підписував «М.В.Д.», тобто Микитенко Володимир Давидович. Проте приморські джерела подають його як Нікітенка. Будемо вдячні рідним і всім, хто знав Володимира Давидовича, якщо допоможете уточнити.</p>
+      <div class="cta">
+        <a class="btn" href="/memories">Розповісти спогад</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <p>Джерела: <a href="/p/6e167a7cf0">«А роки летять…»</a>, «Приморська степ», 29.08.2013; <a href="/p/cd326b8f65">«В Приморську відкрили Алею авторських бюстів»</a>, «ПРО Приморськ», 23.09.2020 ; <a href="/p/cd543bc0b4">06137.com.ua</a>, 22.09.2020; <a href="/p/59f103d547">«Приморськ 24/7»</a>, 31.08.2020; <a href="https://web.archive.org/web/2019/http://pro.primorsk.biz/content.php?id=4007">«Скульптури приморського митця Володимира Нікітенка складуть нову експозицію»</a>, «ПРО Приморськ», 06.11.2018; <a href="/p/ae41a33044">«Вишивала я узори…»</a>, primorsk.in.ua, 2009; <a href="https://web.archive.org/web/2010/http://primorsk.in.ua/duxovnost/talant-ot-boga">«Талант от Бога»</a>, primorsk.in.ua, 27.06.2009; відео ТРК «ЮГ», 2020; «Митці-земляки: короткий словничок», газета «Рідний край» (Гадяч), 2023.</p>
+      <p>3D-сканування: ГО «Приморськ 24/7» спільно з ГО «Спілка краєзнавців Приморська» за сприяння Приморського краєзнавчого музею, проєкт «Смарт-підтримка молодіжного центру Портал», Програма ООН із відновлення та розбудови миру за підтримки ЄС, урядів Данії, Швейцарії та Швеції.</p>
+    </div>
+    <div>
+      <p>Шрифти: Mak (Валентин Ткаченко), Fixel (MacPaw), обидва OFL.</p>
+      <p><a href="/">Приморськ. Хроніка громади</a></p>
+    </div>
+  </div>
+</footer>
+
+<dialog id="viewer" aria-labelledby="viewer-h">
+  <div class="top"><div><h3 id="viewer-h"></h3><small class="credit"></small></div><button class="x" type="button" data-close>Закрити</button></div>
+  <div class="stage"></div>
+</dialog>
+
+<script>
+// The reliefs: Sketchfab ids and names, in the order of history.
+const ERAS = [
+  ['Княжа доба', 'IX–XIV ст.', [['d6c95045178e46a694a2813876ad383e', 'Олег Віщий'], ['9b0d1d019b1b43798905014bef474d63', 'Князь Ігор'], ['bd9c2a3572e245abbf8a9c103bb5c4bd', 'Княгиня Ольга'],
+    ['b93a30bc850d442f888850254cce2ef5', 'Святослав Ігорович'], ['cdf5243a44734313a1eaa839d3a94fe9', 'Володимир Святославич'], ['fdf9373231bc4da2ac61576a024aeaa2', 'Володимир Мономах'],
+    ['f8923f82bd1a481cb6690a1cb45cbeb7', 'Данило Галицький'], ['b957d713bffd4bf99a29993985bc3ce1', 'Юрій I Львович']]],
+  ['Козацька доба', 'XVI–XVIII ст.', [['7f775fb731e44cee88e8361aa7982388', 'Дмитро «Байда» Вишневецький'], ['4ea1925b47334cb79bfa94fb8d67af58', 'Іван Підкова'], ['556fce7a74964508bb3a74880ce2903b', 'Северин Наливайко'],
+    ['b081e913289f4b2fb875ae9255007847', 'Петро Конашевич-Сагайдачний'], ['30afd448c04e4818a6fbee6661fe23b8', 'Михайло Дорошенко'], ['191420f8334245e3a75e248eff33294d', 'Богдан Хмельницький'],
+    ['30c91590cffb423598e0d5a91b2b7d08', 'Павло Тетеря'], ['a4ee26370dda495384ca4305b82b8ebe', 'Степан Пободайло'], ['0edb13504feb4d4da5cb566708ddc70e', 'Іван Брюховецький'],
+    ['643fb8ddae2d4d22b8d4bbcb7b75d96b', "Дем'ян Многогрішний"], ['7e886bc8a9604c93bed0386f3ea1c0d8', 'Іван Сірко'], ['8a56f9100d1941aa8dab1c8095779fa8', 'Іван Мазепа'],
+    ['13886aecfcb14a7bbddf9c6a8a2660a9', 'Іван Скоропадський'], ['92702237a6264237aa61966734d18849', 'Пилип Орлик'], ['6982bee59f9a4ac2ae12f6de1a378d7c', 'Данило Апостол'],
+    ['009d250efa144b93aa6615a94d8767c7', 'Кирило Розумовський']]],
+  ['Слово і пензель', 'XVIII–XX ст.', [['65e05fe1ded0427f8c28af8075b5af0e', 'Володимир Боровиковський'], ['cf7b4c5a3c604247bd33b1c9ba8542c3', 'Семен Гулак-Артемовський'],
+    ['b57f52af795b4eb8b0d3644bd2e7e84b', 'Євген Гребінка'], ['b240f6e36d40463fbe69048fd7398d8d', 'Амвросій Метлинський'], ['821d9e2a97b546278f75e39613ac5ddf', 'Амвросій Метлинський, інший барельєф'],
+    ['7e88a58a3d4548b7a66b8d705c59086c', 'Тарас Шевченко'], ['d008ecb3f8f144a3b78eb5d81c85e35d', 'Павло Чубинський'], ['83c4cd215db742f68910b3656ed5b7a8', 'Леся Українка'],
+    ['9320d26617b645a5a0de07026d3778ef', 'Михайло Грушевський']]],
+];
+const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+document.getElementById('eras').innerHTML = ERAS.map(([name, years, list]) => `
+  <div class="era"><div class="era-head"><h3>${name}</h3><span>${years} · ${list.length}</span></div>
+  <div class="grid" data-stagger>${list.map(([u, n]) => `<button class="card" type="button" data-u="${u}" data-n="${esc(n)}">
+    <img src="mykytenko/${u.slice(0, 8)}.jpg" alt="" loading="lazy" width="640" height="888"><span class="cap">${esc(n)}<small>відкрити в 3D</small></span></button>`).join('')}</div></div>`).join('');
+
+// the sunlight on the cards follows the pointer
+document.addEventListener('pointermove', e => {
+  const c = e.target.closest && e.target.closest('.card');
+  if (!c) return;
+  const r = c.getBoundingClientRect();
+  c.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+  c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+}, { passive: true });
+
+// living scenes: one shared <video> (so a single tap unlocks sound on iPhone too) moves into the scene in focus,
+// plays its moment once and fades back to the still, which is the clip's own first frame
+const live = Object.assign(document.createElement('video'), { muted: true, playsInline: true, preload: 'none' });
+live.setAttribute('aria-hidden', 'true');
+let sound = false, current = null;
+try { sound = localStorage.getItem('mvd-sound') === '1'; } catch (e) {}
+// line icons drawn in the text colour, like the rest of the page
+const SPEAKER = '<path d="M4 9.5h3.2L12 5.5v13l-4.8-4H4z"/>';
+const ICON_ON = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${SPEAKER}<path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>`;
+const ICON_OFF = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${SPEAKER}<path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>`;
+const paintSound = () => document.querySelectorAll('[data-sound]').forEach(b => {
+  b.setAttribute('aria-pressed', sound);
+  b.querySelector('.ico').innerHTML = sound ? ICON_ON : ICON_OFF;
+  const l = b.querySelector('.lbl'); if (l) l.textContent = sound ? 'Звук увімкнено' : 'Увімкнути звук';
+});
+paintSound();
+document.querySelectorAll('[data-sound]').forEach(b => b.addEventListener('click', () => {
+  sound = !sound;
+  try { localStorage.setItem('mvd-sound', sound ? '1' : '0'); } catch (e) {}
+  paintSound();
+  live.muted = !sound;
+  if (sound && !current) {  // the click itself unlocks the shared player for the whole visit
+    if (!live.src) live.src = document.querySelector('.scene[data-v]').dataset.v;
+    live.play().then(() => live.pause()).catch(() => {});
+  }
+}));
+const rest = () => { if (current) current.classList.remove('playing'); current = null; };
+live.addEventListener('ended', rest);
+// out of focus: the picture fades back to the still and the sound dies away instead of cutting off
+let fadeT = 0;
+const stopScene = fig => {
+  if (current !== fig) return;
+  rest();
+  clearInterval(fadeT);
+  fadeT = setInterval(() => {
+    live.volume = Math.max(0, live.volume - .1);
+    if (live.volume === 0 || current) { clearInterval(fadeT); if (!current) live.pause(); live.volume = 1; }
+  }, 40);
+};
+const playScene = fig => {
+  if (current === fig) return;
+  rest();
+  clearInterval(fadeT); live.volume = 1;
+  current = fig;
+  fig.append(live);
+  live.src = fig.dataset.v;
+  live.muted = !sound;
+  const go = () => live.play().then(() => current === fig && fig.classList.add('playing'));
+  go().catch(() => { live.muted = true; go().catch(rest); });  // sound not allowed yet: play silently
+};
+const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (!calm) {
+  // a scene comes alive when it reaches the middle of the screen, or under the pointer
+  const centred = new Set();
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { centred.add(e.target); playScene(e.target); }
+    else { centred.delete(e.target); if (!e.target.matches(':hover')) stopScene(e.target); }
+  }), { rootMargin: '-38% 0px -38% 0px' });
+  document.querySelectorAll('.scene[data-v]').forEach(f => {
+    io.observe(f);
+    f.addEventListener('mouseenter', () => playScene(f));
+    f.addEventListener('mouseleave', () => centred.has(f) || stopScene(f));
+  });
+  // a scene that leaves the screen entirely always stops, whatever else is going on
+  const offscreen = new IntersectionObserver(es => es.forEach(e => e.isIntersecting || stopScene(e.target)));
+  document.querySelectorAll('.scene[data-v]').forEach(f => offscreen.observe(f));
+  document.addEventListener('visibilitychange', () => document.hidden && live.pause());
+}
+
+// the surname footnote: sits right after «Микитенко», its card opens just below it, kept inside the screen
+(() => {
+  const h1 = document.getElementById('name'), btn = document.querySelector('.fn'), pop = document.getElementById('name-note');
+  if (!btn || !pop.showPopover) return;
+  const place = () => {
+    const r = btn.getBoundingClientRect(), w = pop.offsetWidth;
+    pop.style.left = Math.max(16, Math.min(innerWidth - w - 16, r.left + r.width / 2 - w / 2)) + 'px';
+    pop.style.top = (r.bottom + 10) + 'px';
+  };
+  pop.addEventListener('toggle', e => e.newState === 'open' && place());
+  addEventListener('scroll', () => pop.matches(':popover-open') && pop.hidePopover(), { passive: true });
+  btn.addEventListener('mouseenter', () => matchMedia('(hover: hover)').matches && !pop.matches(':popover-open') && pop.showPopover());
+  window.attachFootnote = () => h1.append(btn);  // called after the heading is split into words
+  attachFootnote();
+})();
+
+// his poems read aloud: the lines light up as the reader reaches them; one reading at a time
+const reading = (box, verse, AT) => {
+  const au = box.querySelector('audio'), btn = box.querySelector('.listen-btn');
+  const bar = box.querySelector('.listen-bar i'), time = box.querySelector('.listen-time');
+  const lines = [...verse.querySelectorAll('.ln')], idle = btn.querySelector('.lbl').textContent;
+  const PLAY = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8 5.5v13l10.5-6.5z"/></svg>';
+  const PAUSE = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>';
+  const fmt = t => Math.floor(t / 60) + ':' + String(Math.floor(t % 60)).padStart(2, '0');
+  const paint = () => {
+    const on = !au.paused, begun = au.currentTime > 0 && !au.ended;
+    btn.setAttribute('aria-pressed', on);
+    btn.querySelector('.ico').innerHTML = on ? PAUSE : PLAY;
+    btn.querySelector('.lbl').textContent = on ? 'Пауза' : (begun ? 'Слухати далі' : idle);
+    verse.classList.toggle('listening', on || begun);
+  };
+  paint();
+  btn.addEventListener('click', () => {
+    if (!au.paused) return au.pause();
+    document.querySelectorAll('audio').forEach(a => a !== au && a.pause());
+    live.pause();
+    au.play();
+  });
+  au.addEventListener('play', paint); au.addEventListener('pause', paint);
+  au.addEventListener('ended', () => { au.currentTime = 0; lines.forEach(l => l.classList.remove('on')); bar.style.width = '0'; paint(); });
+  au.addEventListener('timeupdate', () => {
+    const t = au.currentTime, d = au.duration || 1;
+    bar.style.width = (t / d * 100) + '%';
+    time.textContent = fmt(Math.max(0, d - t));
+    let k = -1; AT.forEach((s, i) => { if (t >= s) k = i; });
+    lines.forEach((l, i) => l.classList.toggle('on', i === k));
+  });
+};
+// when each line starts, in seconds (found from the pauses in the recordings)
+reading(document.querySelector('#poem .listen'), document.getElementById('verse'), [0.5, 3.07, 5.13, 7.65, 10.21, 12.67, 14.81, 17.5, 19.89, 22.0, 24.42, 26.75, 29.46, 31.94, 34.26, 36.72]);
+document.querySelectorAll('.poem-in').forEach(d => {
+  reading(d.querySelector('.listen'), d.querySelector('.verse-sm'), JSON.parse(d.dataset.at));  // the text may stay folded while it plays
+});
+
+// one viewer in the middle of the screen for the 3D reliefs, the video and the panorama; nothing loads until asked
+const dlg = document.getElementById('viewer'), stage = dlg.querySelector('.stage');
+const show = (title, credit, el) => {
+  dlg.querySelector('h3').textContent = title;
+  dlg.querySelector('.credit').textContent = credit || '';
+  stage.replaceChildren(el);
+  dlg.classList.toggle('fit', el.tagName === 'VIDEO');  // a clip sizes the window to itself, 3D and the panorama fill it
+  dlg.showModal();
+  window.lenis && lenis.stop();
+};
+const frame = (src, title) => Object.assign(document.createElement('iframe'), { src, title, allowFullscreen: true, allow: 'autoplay; fullscreen; xr-spatial-tracking; accelerometer; gyroscope', referrerPolicy: 'strict-origin-when-cross-origin' });
+document.addEventListener('click', e => {
+  const sc = e.target.closest('.scene[data-v]');
+  if (sc) {
+    live.pause(); rest();
+    const v = Object.assign(document.createElement('video'), { src: sc.dataset.v, controls: true, autoplay: true, playsInline: true, muted: !sound, poster: sc.querySelector('img').src });
+    return show(sc.closest('li').querySelector('h3').textContent, 'Анімація створена штучним інтелектом', v);
+  }
+  const c = e.target.closest('.card, .embed .poster');
+  if (!c) return;
+  if (c.dataset.u) return show(c.dataset.n, '3D-скан ГО «Приморськ 24/7»', frame(`https://sketchfab.com/models/${c.dataset.u}/embed?autostart=1&ui_infos=0&ui_watermark=0&dnt=1`, '3D-модель барельєфа ' + c.dataset.n));
+  if (c.dataset.video) {
+    const v = Object.assign(document.createElement('video'), { src: c.dataset.video, controls: true, autoplay: true, playsInline: true, poster: c.style.backgroundImage.slice(5, -2) });
+    return show(c.dataset.title, c.dataset.credit, v);
+  }
+  show(c.dataset.title, c.dataset.credit, frame(c.dataset.src, c.dataset.title));
+});
+dlg.addEventListener('close', () => { stage.replaceChildren(); window.lenis && lenis.start(); });
+dlg.querySelector('[data-close]').addEventListener('click', () => dlg.close());
+document.addEventListener('keydown', e => { const sc = e.target.closest && e.target.closest('.scene[data-v]'); if (sc && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); sc.click(); } });
+dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" integrity="sha384-B2WBjDzEjJpYvhmi2UyEn7rektqkf5suS6sNoyyrf0EBAwBHdkiXxIlU0V5Ru2ed" crossorigin="anonymous"></script>
+<script>
+// Motion: GSAP for everything, Lenis as the one smooth scroll. Under reduced motion nothing moves: final states only.
+(() => {
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (still || !window.gsap) return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  window.lenis = new Lenis({ lerp: 0.1 });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(t => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+  document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) { e.preventDefault(); lenis.scrollTo(t, { offset: -20 }); history.replaceState(null, '', a.getAttribute('href')); }
+  }));
+  document.fonts && document.fonts.ready.then(() => ScrollTrigger.refresh());
+  addEventListener('load', () => ScrollTrigger.refresh());
+  document.querySelectorAll('.poem-in details').forEach(d => d.addEventListener('toggle', () => ScrollTrigger.refresh()));
+
+  // headings word by word: the heading keeps its whole text as its name
+  const split = el => {
+    el.querySelector('.fn')?.remove();  // the surname footnote is put back after the split
+    const text = el.textContent.trim();
+    el.setAttribute('aria-label', text);
+    el.innerHTML = text.split(/\s+/).map(w => `<span class="w" aria-hidden="true"><span>${w}</span></span>`).join(' ');
+    return el.querySelectorAll('.w > span');
+  };
+
+  const nameWords = split(document.getElementById('name'));
+  window.attachFootnote && attachFootnote();
+  const hero = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  hero.from('.hero .kicker', { y: 14, opacity: 0, duration: .7 })
+      .from(nameWords, { yPercent: 110, duration: 1.1, stagger: .1 }, '-=.3')
+      .from('.hero .fn', { scale: 0, duration: .5, ease: 'back.out(2)' }, '-=.4')
+      .from('.hero .lead, .hero .roles li', { y: 18, opacity: 0, duration: .8, stagger: .07 }, '-=.6')
+      .from('.hero .portrait', { scale: .96, opacity: 0, duration: 1.6, ease: 'power2.out' }, .2);
+
+  document.querySelectorAll('[data-split]:not(#name)').forEach(h => {
+    gsap.from(split(h), { yPercent: 110, duration: 1, stagger: .08, ease: 'power3.out', scrollTrigger: { trigger: h, start: 'top 85%' } });
+  });
+  document.querySelectorAll('.sect-head .lead, .sect-head .note, .poem .now, .road li, .theatre .lead, .save .stats p').forEach(el => {
+    gsap.from(el, { y: 26, opacity: 0, duration: .9, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 90%' } });
+  });
+  document.querySelectorAll('.bill, .moth, .save img, .mvd').forEach(el => {
+    gsap.from(el, { y: 40, opacity: 0, rotate: 0, duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 85%' } });
+  });
+  document.querySelectorAll('[data-stagger]').forEach(g => {
+    gsap.from(g.children, { y: 30, opacity: 0, duration: .8, stagger: .05, ease: 'power2.out', scrollTrigger: { trigger: g, start: 'top 88%' } });
+  });
+  // the curtains part as the stage comes into view
+  // the curtains come into focus and settle as the stage comes up
+  gsap.fromTo('.curtain-stage .curtain', { scale: 1.14, filter: 'blur(12px)', opacity: .4 }, { scale: 1, filter: 'blur(0px)', opacity: 1, ease: 'none', scrollTrigger: { trigger: '.curtain-stage', start: 'top 95%', end: 'top 10%', scrub: true } });
+  gsap.utils.toArray('.scene').forEach(f => {
+    gsap.from(f, { y: 50, opacity: 0, duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: f, start: 'top 88%' } });
+  });
+  // the poem: each line comes out of the shade as it is reached
+  gsap.utils.toArray('#verse .ln').forEach(l => {
+    gsap.fromTo(l, { opacity: .2 }, { opacity: 1, ease: 'none', scrollTrigger: { trigger: l, start: 'top 80%', end: 'top 55%', scrub: true } });
+  });
+  gsap.from('.end .lead, .end .cta', { y: 20, opacity: 0, duration: .9, stagger: .12, scrollTrigger: { trigger: '.end', start: 'top 70%' } });
+
+  addEventListener('pagehide', () => { lenis.destroy(); ScrollTrigger.getAll().forEach(t => t.kill()); }, { once: true });
+})();
+</script>
+
+</body>
+</html>

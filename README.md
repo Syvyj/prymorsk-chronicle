@@ -18,7 +18,7 @@ This project brings that life back from web archives and turns it into one chron
 
 ### In numbers
 
-- **9,700+** news items and events, **2004–2022**, from **30+** lost sites (town council, local media, NGO, schools, district administration, regional press)
+- **10,300+** news items and events, **2004–2022**, from **30+** lost sites (town council, local media, NGO, schools, district administration, regional press)
 - **29** settlements, each with its own page
 - **1,800+** video stories (local copies preserved in the Internet Archive), **1,900+** articles with photos
 - a printed local-history almanac (2021) turned into readable articles
@@ -44,11 +44,14 @@ sites still online ────┘                                   │        
   apostrophes and Roman numerals in Ukrainian text, and resolves links to files that no longer exist.
 - **Protect.** `names.py` shortens private people's names in any case form (Ukrainian and Russian) while keeping public and historical
   figures whole; `mask_private` hides phones and e-mails. Raw mirrors are never published.
-- **Build.** `extract_articles.py` → `timeline/data.json` (stable ids `md5(path)[:10]`); `pages.py` → one static page per article with
-  Open Graph previews, village pages, a sitemap; `publish.py` copies only what pages reference.
-- **Serve.** Static files on Cloudflare Workers; `worker.js` adds two endpoints backed by D1: readers' corrections (select a fragment →
-  suggest a fix; rate-limited by a daily hash, no IP stored) and an article view counter (article id + day, nothing about the reader).
-  No cookies, no third-party trackers.
+- **Build.** `extract_articles.py` → `timeline/data.json` (stable ids `md5(path)[:10]`) and a light `chronicle.json` for the browser with
+  feed thumbnails; `search.py` → a full-text index split by first letter, so a search loads only the files it needs; `pages.py` → one static
+  page per article with Open Graph previews, village pages, a sitemap; `publish.py` copies only what pages reference and refuses to
+  publish a full name, a phone, a private e-mail, a raw archive copy or a person's name in a photo's file name.
+- **Serve.** Static files on Cloudflare Workers with a strict Content-Security-Policy and self-hosted fonts; `worker.js` adds endpoints
+  backed by D1: readers' corrections (select a fragment → suggest a fix) and memories for the community map, both behind Cloudflare
+  Turnstile, Origin checks and daily limits keyed by a salted daily hash (no IP stored); an article view counter (article id + day,
+  nothing about the reader); and a password-protected `/admin` page to moderate them. No cookies, no third-party trackers.
 - **Share.** `social/` renders square videos for Facebook from the chronicle itself («This day in history» for any date, archive updates)
   with a small sound kit synthesized from scratch (`sound.py`, stdlib only), and the page cover.
 
@@ -66,7 +69,8 @@ npx wrangler deploy                                   # needs your own D1 id in 
 .venv/bin/python social/day_video.py 10-16            # a 30 s «this day» video + its post text
 ```
 
-Self-checks: `python3 names.py`, `python3 clean_article.py`, `python3 pages.py`, `python3 translations.py`.
+Self-checks: `python3 names.py`, `python3 clean_article.py`, `python3 search.py`, `python3 translations.py`, `node test_worker.mjs`.
+Paths outside the repo: `PRYM_ARCHIVE`, `PRYM_PUBLISH` (`paths.py`); a Facebook export for `fb_posts.py`: `FB_EXPORT`.
 
 ### Licence
 
@@ -87,7 +91,7 @@ A project of the NGO «Приморськ 24/7».
 
 ### У цифрах
 
-- **понад 9 700** новин і подій, **2004–2022**, з **понад 30** зниклих сайтів (міська рада, місцеві медіа, ГО, школи, РДА, обласна преса)
+- **понад 10 300** новин і подій, **2004–2022**, з **понад 30** зниклих сайтів (міська рада, місцеві медіа, ГО, школи, РДА, обласна преса)
 - **29** населених пунктів, у кожного своя сторінка
 - **понад 1 800** відеосюжетів (локальні копії збережено в Internet Archive), **понад 1 900** статей із фото
 - друкований краєзнавчий альманах (2021), перетворений на статті для читання
@@ -101,10 +105,13 @@ A project of the NGO «Приморськ 24/7».
   й римські цифри, обробляє посилання на файли, яких більше немає.
 - **Захист.** `names.py` скорочує імена приватних людей до «Ірина Д.» у будь-якому відмінку (українською й російською), а публічних
   та історичних постатей лишає повністю; телефони й email-и приховуються. Сирі копії сайтів ніколи не публікуються.
-- **Збірка.** `extract_articles.py` → `timeline/data.json` (стабільні id); `pages.py` → окрема сторінка для кожної статті з прев'ю
-  для соцмереж, сторінки сіл, sitemap; `publish.py` копіює лише те, на що посилаються сторінки.
-- **Сайт.** Статичні файли на Cloudflare Workers; `worker.js` — правки від читачів і лічильник переглядів у D1. Без cookies і
-  сторонніх трекерів.
+- **Збірка.** `extract_articles.py` → `timeline/data.json` (стабільні id) і легкий `chronicle.json` із мініатюрами для браузера;
+  `search.py` → повнотекстовий індекс, поділений за першою літерою; `pages.py` → окрема сторінка для кожної статті з прев'ю
+  для соцмереж, сторінки сіл, sitemap; `publish.py` копіює лише те, на що посилаються сторінки, і не публікує повних імен, телефонів,
+  приватних email, сирих копій та імен у назвах фото.
+- **Сайт.** Статичні файли на Cloudflare Workers зі строгою CSP і власними шрифтами; `worker.js` — правки від читачів і спогади для
+  мапи громади (Turnstile, перевірка Origin, денні ліміти за солоним хешем без IP), лічильник переглядів у D1 і закрита сторінка
+  модерації `/admin`. Без cookies і сторонніх трекерів.
 - **Соцмережі.** `social/` рендерить квадратні відео для Facebook із самої хроніки («Цей день в історії» на будь-яку дату, апдейти
   архіву) з набором звуків, синтезованих з нуля, і обкладинку сторінки.
 
